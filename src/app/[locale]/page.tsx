@@ -34,6 +34,16 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-3xl px-6 py-28">
+        {isEn && (
+          <div className="mb-8">
+            <p className="font-heading font-bold not-italic text-[clamp(32px,4vw,40px)] leading-tight text-ivory">
+              {t("statementHeadline")}
+            </p>
+            <p className="display-serif text-[clamp(18px,2vw,20px)] text-sage mt-3">
+              {t("statementTagline")}
+            </p>
+          </div>
+        )}
         {isEn ? (
           <p className="text-body text-ivory/90">{t("introBody")}</p>
         ) : (

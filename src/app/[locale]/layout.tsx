@@ -17,7 +17,7 @@ const manrope = Manrope({
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
   subsets: ["latin"],
-  weight: ["300", "400"],
+  weight: ["300", "400", "700"],
 });
 
 const bodoniModa = Bodoni_Moda({
