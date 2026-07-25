@@ -41,6 +41,7 @@
 
   --font-sans: var(--font-manrope), var(--font-pretendard), sans-serif;
   --font-heading: var(--font-bricolage), var(--font-manrope), sans-serif;
+  --font-display: var(--font-bodoni), "Bodoni Moda", serif;
 
   --text-h1: 2.5rem;
   --text-h1--line-height: 1.2;
@@ -74,6 +75,17 @@ body {
 .logotype {
   font-family: var(--font-heading);
   font-weight: 300;
+}
+
+/*
+ * Page-level H1 titles and their subtitles (Home hero, About hero,
+ * PageHeader). Not applied to other text-h2 uses (section headings,
+ * quotes, video item titles), which stay in the sans display face.
+ */
+.display-serif {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
 }
 
 .photo-frame {

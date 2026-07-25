@@ -23,10 +23,12 @@ export default async function Home() {
         <div className="absolute inset-0 bg-black/25" aria-hidden />
         <div className="relative z-10 mx-auto max-w-6xl w-full px-6 pb-20">
           <p className="label text-xs text-sage mb-3">{t("kicker")}</p>
-          <h1 className="logotype text-on-photo text-5xl md:text-7xl font-light leading-tight">
+          <h1 className="display-serif text-on-photo text-5xl md:text-7xl leading-tight">
             Mijung IM
           </h1>
-          <p className="text-h2 text-on-photo/80 mt-2">{t("heroTitle")}</p>
+          <p className="display-serif text-h2 text-on-photo/80 mt-2">
+            {t("heroTitle")}
+          </p>
         </div>
       </section>
 

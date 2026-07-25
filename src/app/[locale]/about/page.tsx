@@ -12,15 +12,12 @@ export default async function AboutPage() {
   return (
     <div className="pt-16">
       <section className="relative h-[60vh] min-h-[420px] flex items-end overflow-hidden">
-        <div
-          className="absolute inset-0 bg-gradient-to-br from-ink-deep via-ink to-ink"
-          aria-hidden
-        />
-        <div className="absolute inset-0 bg-black/25" aria-hidden />
         <div className="relative z-10 mx-auto max-w-6xl w-full px-6 pb-14">
           <p className="label text-xs text-sage mb-3">{t("eyebrow")}</p>
-          <h1 className="text-h1 text-ivory">{t("title")}</h1>
-          <p className="text-h2 text-grey-muted mt-2">{t("subtitle")}</p>
+          <h1 className="display-serif text-h1 text-ivory">{t("title")}</h1>
+          <p className="display-serif text-h2 text-grey-muted mt-2">
+            {t("subtitle")}
+          </p>
         </div>
       </section>
 

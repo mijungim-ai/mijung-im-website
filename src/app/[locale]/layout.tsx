@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { Manrope, Bricolage_Grotesque } from "next/font/google";
+import { Manrope, Bricolage_Grotesque, Bodoni_Moda } from "next/font/google";
 import localFont from "next/font/local";
 import { routing } from "@/i18n/routing";
 import { Nav } from "@/components/Nav";
@@ -18,6 +18,13 @@ const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
   subsets: ["latin"],
   weight: ["300"],
+});
+
+const bodoniModa = Bodoni_Moda({
+  variable: "--font-bodoni",
+  subsets: ["latin"],
+  weight: ["500"],
+  style: ["italic"],
 });
 
 const pretendard = localFont({
@@ -52,7 +59,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${manrope.variable} ${pretendard.variable} ${bricolage.variable} h-full antialiased`}
+      className={`${manrope.variable} ${pretendard.variable} ${bricolage.variable} ${bodoniModa.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ink text-ivory">
         <NextIntlClientProvider>
