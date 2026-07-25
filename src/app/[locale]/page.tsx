@@ -95,7 +95,7 @@ export default async function Home() {
           </Link>
         </div>
         {isEn && (
-          <p className="absolute bottom-3 right-4 z-10 text-[12px] text-on-photo/70">
+          <p className="caption-scrim absolute bottom-3 right-4 z-10 text-[12px] text-on-photo/70">
             {t("projectImageCaption")}
           </p>
         )}

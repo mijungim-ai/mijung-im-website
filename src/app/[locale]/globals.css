@@ -79,3 +79,14 @@ body {
 .photo-frame {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
+
+/*
+ * Reusable scrim for a caption sitting on a photo. Guarantees
+ * contrast for text-on-photo regardless of the photo's brightness
+ * at that spot, independent of any section-level overlay/gradient.
+ */
+.caption-scrim {
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 4px;
+  padding: 4px 10px;
+}
