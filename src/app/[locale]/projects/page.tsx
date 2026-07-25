@@ -53,7 +53,9 @@ export default async function ProjectsPage() {
                 {project.imageCaption}
               </p>
             )}
-            <h2 className="text-h2 text-ivory mb-6">{project.title}</h2>
+            <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+              {project.title}
+            </h2>
             {project.final ? (
               <p className="text-body text-ivory/90">{project.body}</p>
             ) : (

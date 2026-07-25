@@ -27,6 +27,13 @@ const bodoniModa = Bodoni_Moda({
   style: ["italic"],
 });
 
+const bodoniModaBold = Bodoni_Moda({
+  variable: "--font-bodoni-bold",
+  subsets: ["latin"],
+  weight: ["700"],
+  style: ["normal"],
+});
+
 const pretendard = localFont({
   src: "../../fonts/PretendardVariable.woff2",
   variable: "--font-pretendard",
@@ -59,7 +66,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${manrope.variable} ${pretendard.variable} ${bricolage.variable} ${bodoniModa.variable} h-full antialiased`}
+      className={`${manrope.variable} ${pretendard.variable} ${bricolage.variable} ${bodoniModa.variable} ${bodoniModaBold.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ink text-ivory">
         <NextIntlClientProvider>
