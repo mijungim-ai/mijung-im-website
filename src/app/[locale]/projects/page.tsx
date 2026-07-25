@@ -33,11 +33,11 @@ export default async function ProjectsPage() {
         subtitle={t("subtitle")}
       />
 
-      <div className="mx-auto max-w-3xl px-6 py-20 space-y-16">
+      <div className="mx-auto max-w-3xl px-6 py-28 space-y-20">
         {projects.map((project) => (
           <section key={project.title}>
             {project.image && (
-              <div className="photo-frame relative aspect-video mb-6 overflow-hidden">
+              <div className="photo-frame relative aspect-video mb-8 overflow-hidden">
                 <Image
                   src={project.image}
                   alt={project.imageAlt ?? ""}
@@ -49,11 +49,11 @@ export default async function ProjectsPage() {
               </div>
             )}
             {project.imageCaption && (
-              <p className="text-[12px] text-grey-muted mb-6">
+              <p className="text-caption text-grey-muted mb-6">
                 {project.imageCaption}
               </p>
             )}
-            <h2 className="text-h2 text-ivory mb-4">{project.title}</h2>
+            <h2 className="text-h2 text-ivory mb-6">{project.title}</h2>
             {project.final ? (
               <p className="text-body text-ivory/90">{project.body}</p>
             ) : (

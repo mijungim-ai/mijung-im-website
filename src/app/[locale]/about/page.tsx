@@ -18,20 +18,20 @@ export default async function AboutPage() {
         subtitle={t("subtitle")}
       />
 
-      <section className="mx-auto max-w-3xl px-6 py-20">
-        <div className="flex flex-col sm:flex-row gap-8 sm:items-start mb-12">
-          <div className="photo-frame relative w-40 sm:w-48 aspect-[3/4] shrink-0 overflow-hidden">
+      <section className="mx-auto max-w-3xl px-6 py-28">
+        <div className="flex flex-col sm:flex-row gap-10 sm:items-start mb-16">
+          <div className="photo-frame relative w-48 sm:w-60 aspect-[3/4] shrink-0 overflow-hidden">
             <Image
               src="/images/about_headshot.jpg"
               alt="Portrait of Mijung IM"
               fill
-              sizes="(min-width: 640px) 12rem, 10rem"
+              sizes="(min-width: 640px) 15rem, 12rem"
               className="object-cover"
             />
             <div className="absolute inset-0 bg-black/25" aria-hidden />
           </div>
           <div>
-            <p className="label text-xs text-sage mb-2">The Artist</p>
+            <p className="label text-xs text-sage mb-3">The Artist</p>
             <h2 className="label text-xs text-grey-muted">Biography</h2>
           </div>
         </div>
@@ -39,8 +39,8 @@ export default async function AboutPage() {
       </section>
 
       <section className="bg-ink-deep border-y border-hairline">
-        <div className="mx-auto max-w-3xl px-6 py-20">
-          <h2 className="text-h2 text-ivory mb-4">{t("visionTitle")}</h2>
+        <div className="mx-auto max-w-3xl px-6 py-28">
+          <h2 className="text-h2 text-ivory mb-6">{t("visionTitle")}</h2>
           {isEn ? (
             <p className="text-body text-ivory/90">{t("visionBody")}</p>
           ) : (
@@ -54,14 +54,14 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-3xl px-6 py-20 text-center">
+      <section className="mx-auto max-w-3xl px-6 py-28 text-center">
         <a
           href="/epk/mijung-im-epk.pdf"
-          className="label text-xs inline-flex items-center border border-sage text-sage px-6 py-4 hover:bg-sage hover:text-ink transition-colors"
+          className="label text-xs inline-flex items-center border border-sage text-sage px-[28px] py-[12px] hover:bg-sage hover:text-ink transition-colors"
         >
           {t("epkLabel")}
         </a>
-        <p className="text-caption text-grey-muted mt-3">{t("epkNote")}</p>
+        <p className="text-caption text-grey-muted mt-4">{t("epkNote")}</p>
       </section>
     </div>
   );

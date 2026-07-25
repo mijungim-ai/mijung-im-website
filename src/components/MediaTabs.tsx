@@ -53,7 +53,7 @@ export function MediaTabs() {
       <div
         role="tablist"
         aria-label="Media category"
-        className="flex gap-6 border-b border-hairline mb-6 flex-wrap"
+        className="flex gap-6 border-b border-hairline mb-8 flex-wrap"
       >
         {TABS.map((tab) => (
           <button
@@ -73,15 +73,15 @@ export function MediaTabs() {
       </div>
 
       {videoItems && talkItems ? (
-        <div className="space-y-16">
+        <div className="space-y-20">
           <div>
-            <h3 className="label text-xs text-grey-muted mb-6">
+            <h3 className="label text-xs text-grey-muted mb-8">
               {t("videoGroups.performancesTitle")}
             </h3>
-            <div className="space-y-10">
+            <div className="space-y-12">
               {videoItems.map((item) => (
                 <div key={item.title}>
-                  <div className="aspect-video mb-3">
+                  <div className="aspect-video mb-4">
                     <iframe
                       className="w-full h-full"
                       src={item.embedUrl}
@@ -90,7 +90,7 @@ export function MediaTabs() {
                       allowFullScreen
                     />
                   </div>
-                  <h4 className="text-h2 text-ivory mb-2">{item.title}</h4>
+                  <h4 className="text-h2 text-ivory mb-3">{item.title}</h4>
                   <p className="text-body text-ivory/90">{item.body}</p>
                 </div>
               ))}
@@ -98,10 +98,10 @@ export function MediaTabs() {
           </div>
 
           <div>
-            <h3 className="label text-xs text-grey-muted mb-6">
+            <h3 className="label text-xs text-grey-muted mb-8">
               {t("videoGroups.talksTitle")}
             </h3>
-            <div className="grid gap-8 sm:grid-cols-2">
+            <div className="grid gap-10 sm:grid-cols-2">
               {talkItems.map((item, i) => (
                 <div key={`${item.title}-${i}`}>
                   <div className="aspect-video mb-3">
@@ -122,7 +122,7 @@ export function MediaTabs() {
           </div>
         </div>
       ) : isEn && active === "gallery" ? (
-        <div className="grid gap-6 sm:grid-cols-2">
+        <div className="grid gap-8 sm:grid-cols-2">
           {galleryImages.map((img) => (
             <div key={img.src}>
               <div className="photo-frame relative aspect-[4/3] overflow-hidden">
@@ -136,7 +136,7 @@ export function MediaTabs() {
                 <div className="absolute inset-0 bg-black/25" aria-hidden />
               </div>
               {img.caption && (
-                <p className="text-[12px] text-grey-muted mt-2">
+                <p className="text-caption text-grey-muted mt-3">
                   {img.caption}
                 </p>
               )}
@@ -170,7 +170,7 @@ export function MediaTabs() {
               />
               <div className="absolute inset-0 bg-black/25" aria-hidden />
             </div>
-            <p className="text-[12px] text-grey-muted px-5 py-4">
+            <p className="text-caption text-grey-muted px-5 py-4">
               {t("nytCaption")}
             </p>
           </div>

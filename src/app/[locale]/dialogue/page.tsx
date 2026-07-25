@@ -14,7 +14,7 @@ export default async function DialoguePage() {
         subtitle={t("subtitle")}
       />
 
-      <div className="mx-auto max-w-3xl px-6 py-20">
+      <div className="mx-auto max-w-3xl px-6 py-28">
         <Placeholder label={tc("placeholderLabel")}>
           <p className="text-body text-ivory/90">{t("entriesBody")}</p>
         </Placeholder>

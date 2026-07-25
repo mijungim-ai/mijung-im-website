@@ -43,18 +43,28 @@
   --font-heading: var(--font-bricolage), var(--font-manrope), sans-serif;
   --font-display: var(--font-bodoni), "Bodoni Moda", serif;
 
-  --text-h1: 2.5rem;
-  --text-h1--line-height: 1.2;
+  /*
+   * Editorial type scale. Hero (Home only) and H1 (PageHeader/About)
+   * are deliberately two different steps; H1 sits below hero.
+   */
+  --text-hero: 4rem; /* 64px */
+  --text-hero--line-height: 1.05;
+  --text-h1: 3.25rem; /* 52px, was 2.5rem/40px */
+  --text-h1--line-height: 1.15;
   --text-h1--font-weight: 300;
-  --text-h2: 1.5rem;
-  --text-h2--line-height: 1.35;
-  --text-h2--font-weight: 300;
-  --text-body: 1rem;
+  --text-h2: 2.25rem; /* 36px, was 1.5rem/24px */
+  --text-h2--line-height: 1.25;
+  --text-h2--font-weight: 400; /* was 300 */
+  --text-body: 1.125rem; /* 18px, was 1rem/16px */
   --text-body--line-height: 1.7;
   --text-body--font-weight: 400;
-  --text-caption: 0.8125rem;
+  --text-caption: 0.875rem; /* 14px, was 0.8125rem/13px */
   --text-caption--line-height: 1.5;
   --text-caption--font-weight: 400;
+
+  /* Nav/eyebrow/tab/footer micro-copy — all route through text-xs. */
+  --text-xs: 0.8125rem; /* 13px, was Tailwind default 0.75rem/12px */
+  --text-xs--line-height: 1.4;
 }
 
 body {
@@ -65,6 +75,7 @@ body {
   font-family: var(--font-manrope), sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 600;
 }
 
 .text-h1,
@@ -85,7 +96,7 @@ body {
 .display-serif {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .photo-frame {

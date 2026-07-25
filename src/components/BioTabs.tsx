@@ -25,7 +25,7 @@ export function BioTabs() {
       <div
         role="tablist"
         aria-label="Biography length"
-        className="flex gap-6 border-b border-hairline mb-6"
+        className="flex gap-6 border-b border-hairline mb-8"
       >
         {TABS.map((tab) => (
           <button

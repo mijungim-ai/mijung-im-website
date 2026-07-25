@@ -19,9 +19,9 @@ export default async function PerformancesPage() {
         subtitle={t("subtitle")}
       />
 
-      <div className="mx-auto max-w-3xl px-6 py-20 space-y-16">
+      <div className="mx-auto max-w-3xl px-6 py-28 space-y-20">
         <section>
-          <h2 className="text-h2 text-ivory mb-4">{t("engagementsTitle")}</h2>
+          <h2 className="text-h2 text-ivory mb-6">{t("engagementsTitle")}</h2>
           {engagementsList ? (
             <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2">
               {(engagementsList as string[]).map((item) => (
@@ -43,14 +43,14 @@ export default async function PerformancesPage() {
         </section>
 
         <section>
-          <h2 className="text-h2 text-ivory mb-4">{t("archiveTitle")}</h2>
+          <h2 className="text-h2 text-ivory mb-6">{t("archiveTitle")}</h2>
           <Placeholder label={tc("placeholderLabel")}>
             <p className="text-body text-ivory/90">{t("archiveBody")}</p>
           </Placeholder>
         </section>
 
         <section>
-          <h2 className="text-h2 text-ivory mb-4">{t("repertoireTitle")}</h2>
+          <h2 className="text-h2 text-ivory mb-6">{t("repertoireTitle")}</h2>
           {repertoireList ? (
             <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-3">
               {(repertoireList as string[]).map((item) => (

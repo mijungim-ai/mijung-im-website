@@ -24,10 +24,10 @@ export default async function ContactPage() {
         subtitle={t("subtitle")}
       />
 
-      <div className="mx-auto max-w-3xl px-6 py-20 grid gap-8 sm:grid-cols-2">
+      <div className="mx-auto max-w-3xl px-6 py-28 grid gap-10 sm:grid-cols-2">
         {categories.map((category) => (
           <div key={category}>
-            <h2 className="label text-xs text-grey-muted mb-3">{category}</h2>
+            <h2 className="label text-xs text-grey-muted mb-4">{category}</h2>
             {isEn ? (
               <div className="border border-hairline px-4 py-3">
                 <a
@@ -53,8 +53,8 @@ export default async function ContactPage() {
       </div>
 
       {isEn && (
-        <div className="mx-auto max-w-3xl px-6 pb-20">
-          <h2 className="label text-xs text-grey-muted mb-3">
+        <div className="mx-auto max-w-3xl px-6 pb-28">
+          <h2 className="label text-xs text-grey-muted mb-4">
             {t("followTitle")}
           </h2>
           <ul className="flex flex-wrap gap-x-6 gap-y-2">

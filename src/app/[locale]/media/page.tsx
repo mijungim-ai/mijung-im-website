@@ -13,7 +13,7 @@ export default async function MediaPage() {
         subtitle={t("subtitle")}
       />
 
-      <div className="mx-auto max-w-3xl px-6 py-20">
+      <div className="mx-auto max-w-3xl px-6 py-28">
         <MediaTabs />
       </div>
     </div>
