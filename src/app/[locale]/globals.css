@@ -44,11 +44,11 @@
   --font-display: var(--font-bodoni), "Bodoni Moda", serif;
 
   /*
-   * Editorial type scale. Hero (Home only) and H1 (PageHeader/About)
-   * are deliberately two different steps; H1 sits below hero.
+   * Editorial type scale. The Home hero's H1/subtitle use a fluid
+   * clamp() size directly (see page.tsx) instead of a fixed step,
+   * so it can shrink with the viewport; H1 below is the fixed step
+   * used everywhere else (PageHeader/About).
    */
-  --text-hero: 4rem; /* 64px */
-  --text-hero--line-height: 1.05;
   --text-h1: 3.25rem; /* 52px, was 2.5rem/40px */
   --text-h1--line-height: 1.15;
   --text-h1--font-weight: 300;

@@ -11,7 +11,7 @@ export default async function Home() {
 
   return (
     <div>
-      <section className="photo-frame relative h-screen min-h-[560px] flex items-end overflow-hidden">
+      <section className="photo-frame relative w-full aspect-[3/2] max-h-[800px] overflow-hidden flex items-start">
         <Image
           src="/images/hero_home_conducting.jpg"
           alt="Mijung IM performing at the piano"
@@ -21,14 +21,15 @@ export default async function Home() {
           className="object-cover"
         />
         <div className="absolute inset-0 bg-black/25" aria-hidden />
-        <div className="relative z-10 mx-auto max-w-6xl w-full px-6 pb-24">
-          <p className="label text-xs text-sage mb-4">{t("kicker")}</p>
-          <h1 className="display-serif text-on-photo text-6xl md:text-hero leading-[1.05]">
-            Mijung IM
-          </h1>
-          <p className="display-serif text-h2 text-on-photo/80 mt-3">
-            {t("heroTitle")}
-          </p>
+        <div className="relative z-10 mx-auto max-w-6xl w-full px-6 pt-20 md:pt-32">
+          <div className="max-w-[9rem] sm:max-w-none">
+            <h1 className="display-serif text-on-photo text-[clamp(32px,6vw,64px)] leading-[1.05]">
+              Mijung IM
+            </h1>
+            <p className="display-serif text-on-photo/80 text-[clamp(18px,3vw,32px)] mt-3">
+              {t("heroTitle")}
+            </p>
+          </div>
         </div>
       </section>
 
@@ -91,16 +92,11 @@ export default async function Home() {
           )}
           <Link
             href="/projects"
-            className="label text-xs text-sage hover:text-on-photo transition-colors mt-6 inline-block"
+            className="label text-xs text-on-photo hover:text-sage transition-colors mt-6 inline-block"
           >
             {t("projectLink")} →
           </Link>
         </div>
-        {isEn && (
-          <p className="caption-scrim absolute bottom-3 right-4 z-10 text-caption text-on-photo/70">
-            {t("projectImageCaption")}
-          </p>
-        )}
       </section>
 
       <section className="mx-auto max-w-3xl px-6 py-28">
