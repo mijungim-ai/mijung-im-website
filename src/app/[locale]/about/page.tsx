@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
 import { BioTabs } from "@/components/BioTabs";
+import { PageHeader } from "@/components/PageHeader";
 import { Placeholder } from "@/components/Placeholder";
 
 export default async function AboutPage() {
@@ -10,16 +11,12 @@ export default async function AboutPage() {
   const isEn = locale === "en";
 
   return (
-    <div className="pt-16">
-      <section className="relative h-[60vh] min-h-[420px] flex items-end overflow-hidden">
-        <div className="relative z-10 mx-auto max-w-6xl w-full px-6 pb-14">
-          <p className="label text-xs text-sage mb-3">{t("eyebrow")}</p>
-          <h1 className="display-serif text-h1 text-ivory">{t("title")}</h1>
-          <p className="display-serif text-h2 text-grey-muted mt-2">
-            {t("subtitle")}
-          </p>
-        </div>
-      </section>
+    <div>
+      <PageHeader
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
 
       <section className="mx-auto max-w-3xl px-6 py-20">
         <div className="flex flex-col sm:flex-row gap-8 sm:items-start mb-12">
