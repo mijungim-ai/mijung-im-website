@@ -20,6 +20,23 @@ export default async function PerformancesPage() {
       />
 
       <div className="mx-auto max-w-3xl px-6 py-28 space-y-20">
+        {isEn && (
+          <section>
+            <p className="font-display-bold font-bold not-italic text-[clamp(32px,4vw,40px)] leading-tight text-ivory mb-6">
+              {t("introHeadline")}
+            </p>
+            <div className="space-y-4">
+              {t("introBody")
+                .split("\n\n")
+                .map((paragraph, i) => (
+                  <p key={i} className="text-body text-ivory/90">
+                    {paragraph}
+                  </p>
+                ))}
+            </div>
+          </section>
+        )}
+
         <section>
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
             {t("engagementsTitle")}

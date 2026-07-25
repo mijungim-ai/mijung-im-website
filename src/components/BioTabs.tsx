@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Placeholder } from "@/components/Placeholder";
 
-const TABS = ["short", "medium", "full"] as const;
+const TABS = ["short", "medium"] as const;
 type Tab = (typeof TABS)[number];
 
 export function BioTabs() {
@@ -12,13 +12,12 @@ export function BioTabs() {
   const tc = useTranslations("common");
   const locale = useLocale();
   const [active, setActive] = useState<Tab>("medium");
-  const isFinal = locale === "en" && active !== "full";
+  const isFinal = locale === "en";
 
   const bodyKey = {
     short: "bioShort",
     medium: "bioMedium",
-    full: "bioFull",
-  }[active] as "bioShort" | "bioMedium" | "bioFull";
+  }[active] as "bioShort" | "bioMedium";
 
   return (
     <div>
