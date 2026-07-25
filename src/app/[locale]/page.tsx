@@ -11,7 +11,7 @@ export default async function Home() {
 
   return (
     <div>
-      <section className="relative h-screen min-h-[560px] flex items-end overflow-hidden">
+      <section className="photo-frame relative h-screen min-h-[560px] flex items-end overflow-hidden">
         <Image
           src="/images/hero_home_conducting.jpg"
           alt="Mijung IM performing at the piano"
@@ -23,10 +23,10 @@ export default async function Home() {
         <div className="absolute inset-0 bg-black/25" aria-hidden />
         <div className="relative z-10 mx-auto max-w-6xl w-full px-6 pb-20">
           <p className="label text-xs text-sage mb-3">{t("kicker")}</p>
-          <h1 className="logotype text-ivory text-5xl md:text-7xl font-light leading-tight">
+          <h1 className="logotype text-on-photo text-5xl md:text-7xl font-light leading-tight">
             Mijung IM
           </h1>
-          <p className="text-h2 text-grey-muted mt-2">{t("heroTitle")}</p>
+          <p className="text-h2 text-on-photo/80 mt-2">{t("heroTitle")}</p>
         </div>
       </section>
 
@@ -61,7 +61,7 @@ export default async function Home() {
         )}
       </section>
 
-      <section className="relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[520px] flex items-center">
+      <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[520px] flex items-center">
         <Image
           src="/images/dmz_barbed_wire_beach.jpg"
           alt={
@@ -79,23 +79,23 @@ export default async function Home() {
           aria-hidden
         />
         <div className="relative z-10 mx-auto max-w-3xl w-full px-6 py-20">
-          <h2 className="text-h2 text-ivory mb-4">{t("projectTitle")}</h2>
+          <h2 className="text-h2 text-on-photo mb-4">{t("projectTitle")}</h2>
           {isEn ? (
-            <p className="text-body text-ivory/90">{t("projectBody")}</p>
+            <p className="text-body text-on-photo/90">{t("projectBody")}</p>
           ) : (
             <Placeholder label={tc("placeholderLabel")} surfaceClassName="bg-ink-deep">
-              <p className="text-body text-ivory/90">{t("projectBody")}</p>
+              <p className="text-body text-on-photo/90">{t("projectBody")}</p>
             </Placeholder>
           )}
           <Link
             href="/projects"
-            className="label text-xs text-sage hover:text-ivory transition-colors mt-4 inline-block"
+            className="label text-xs text-sage hover:text-on-photo transition-colors mt-4 inline-block"
           >
             {t("projectLink")} →
           </Link>
         </div>
         {isEn && (
-          <p className="absolute bottom-3 right-4 z-10 text-[12px] text-grey-muted">
+          <p className="absolute bottom-3 right-4 z-10 text-[12px] text-on-photo/70">
             {t("projectImageCaption")}
           </p>
         )}

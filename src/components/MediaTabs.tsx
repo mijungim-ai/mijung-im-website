@@ -125,7 +125,7 @@ export function MediaTabs() {
         <div className="grid gap-6 sm:grid-cols-2">
           {galleryImages.map((img) => (
             <div key={img.src}>
-              <div className="relative aspect-[4/3] overflow-hidden">
+              <div className="photo-frame relative aspect-[4/3] overflow-hidden">
                 <Image
                   src={img.src}
                   alt={img.alt}
@@ -159,7 +159,7 @@ export function MediaTabs() {
               </p>
             </a>
           ))}
-          <div className="border border-hairline overflow-hidden">
+          <div className="photo-frame border border-hairline overflow-hidden">
             <div className="relative aspect-[4/3]">
               <Image
                 src="/images/nyt_frontpage_jejin_station.jpg"

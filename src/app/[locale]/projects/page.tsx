@@ -37,7 +37,7 @@ export default async function ProjectsPage() {
         {projects.map((project) => (
           <section key={project.title}>
             {project.image && (
-              <div className="relative aspect-video mb-6 overflow-hidden">
+              <div className="photo-frame relative aspect-video mb-6 overflow-hidden">
                 <Image
                   src={project.image}
                   alt={project.imageAlt ?? ""}

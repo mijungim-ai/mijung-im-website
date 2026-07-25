@@ -26,7 +26,7 @@ export default async function AboutPage() {
 
       <section className="mx-auto max-w-3xl px-6 py-20">
         <div className="flex flex-col sm:flex-row gap-8 sm:items-start mb-12">
-          <div className="relative w-40 sm:w-48 aspect-[3/4] shrink-0 overflow-hidden">
+          <div className="photo-frame relative w-40 sm:w-48 aspect-[3/4] shrink-0 overflow-hidden">
             <Image
               src="/images/about_headshot.jpg"
               alt="Portrait of Mijung IM"
