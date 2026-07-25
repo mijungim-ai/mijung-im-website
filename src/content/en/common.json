@@ -1,0 +1,176 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "performances": "Performances",
+    "media": "Media",
+    "dialogue": "Dialogue",
+    "projects": "Projects",
+    "contact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "footer": {
+    "tagline": "Pianist of Peace & Nature",
+    "language": "Language",
+    "rights": "All rights reserved."
+  },
+  "common": {
+    "placeholderLabel": "Content coming soon"
+  },
+  "about": {
+    "eyebrow": "About",
+    "title": "Mijung IM",
+    "subtitle": "Pianist of Peace & Nature",
+    "tabs": {
+      "short": "Short",
+      "medium": "Medium",
+      "full": "Full"
+    },
+    "bioShort": "Mijung IM is an international concert pianist known for bringing performance into dialogue with the natural world — from concert halls to the DMZ.",
+    "bioMedium": "Mijung IM is an international concert pianist whose work moves between the traditional concert stage and unconventional sites of performance — forests, borderlands, and spaces marked by conflict. Her recitals are shaped as much by the acoustics of a hall as by the quiet of a landscape, and she is recognized for a repertoire that pairs canonical works with new music written in response to place. She has appeared with orchestras and in recital across North America, Europe, and Asia.",
+    "bioFull": "Mijung IM is an international concert pianist whose work moves between the traditional concert stage and unconventional sites of performance — forests, borderlands, and spaces marked by conflict. Her recitals are shaped as much by the acoustics of a hall as by the quiet of a landscape, and she is recognized for a repertoire that pairs canonical works with new music written in response to place.\n\nHer performances at the DMZ and in other natural settings have become a signature of her artistic identity, framing the piano recital as an act of reconciliation between people, history, and land. She has appeared with orchestras and in recital across North America, Europe, and Asia, and her work has drawn the attention of presenters and press interested in the intersection of music, peacebuilding, and environmental awareness.\n\nBeyond the stage, she is active in education and community initiatives, working with young musicians and civic organizations to extend the reach of her artistic vision. This section will be replaced with the final approved biography copy.",
+    "visionTitle": "Artistic Vision",
+    "visionBody": "For Mijung IM, musical excellence is not an end in itself. Virtuosity becomes meaningful when it serves listening, attentiveness, and human connection. Her performances invite audiences into a space of attentive listening. Rather than projecting emotion outward, she draws listeners inward, allowing musical meaning to emerge through nuance, pacing, resonance, and silence.",
+    "epkLabel": "Download EPK",
+    "epkNote": "PDF, Electronic Press Kit"
+  },
+  "performances": {
+    "eyebrow": "Performances",
+    "title": "Performances",
+    "subtitle": "Selected engagements, concert archive, and repertoire",
+    "engagementsTitle": "Selected Engagements",
+    "engagementsBody": "Upcoming and recent performance dates will be listed here, including presenter, venue, and program details.",
+    "engagementsList": [
+      "Avery Fisher Hall",
+      "Carnegie Recital Hall",
+      "Kennedy Center",
+      "Pyongyang Concert",
+      "One Nation Project",
+      "PLZ Festival",
+      "DMZ OPEN Festival"
+    ],
+    "archiveTitle": "Concert Archive",
+    "archiveBody": "A year-by-year archive of past performances will be compiled here.",
+    "repertoireTitle": "Repertoire",
+    "repertoireBody": "A detailed repertoire list, organized by composer and work, will be provided here.",
+    "repertoireList": [
+      "Bach",
+      "Beethoven",
+      "Schubert",
+      "Schumann",
+      "Mozart",
+      "Chopin",
+      "Rachmaninoff",
+      "Philip Glass",
+      "Arvo Pärt"
+    ]
+  },
+  "media": {
+    "eyebrow": "Media",
+    "title": "Media",
+    "subtitle": "Gallery, video, audio, and press",
+    "tabs": {
+      "gallery": "Gallery",
+      "video": "Video",
+      "audio": "Audio",
+      "press": "Press"
+    },
+    "galleryBody": "A curated photo gallery from performances and projects will be presented here.",
+    "jeilChurchCaption": "Mijung IM performing at the historic war-damaged Jeil Church in Cheorwon, near the Korean DMZ",
+    "videoBody": "Featured performance videos will be embedded here.",
+    "videoGroups": {
+      "performancesTitle": "Performances",
+      "talksTitle": "Talks & Interviews"
+    },
+    "videoItems": [
+      {
+        "title": "Mozart",
+        "body": "A performance demonstrating her clarity of musical structure, tonal imagination, and ability to move naturally between intimacy and dramatic breadth.",
+        "embedUrl": "https://www.youtube.com/embed/K5szUe81A_c"
+      },
+      {
+        "title": "Chopin",
+        "body": "A performance revealing Mijung IM's affinity for Chopin's inward lyricism, emotional ambiguity, and expansive sense of time.",
+        "embedUrl": "https://www.youtube.com/embed/cMkheKmwu6c"
+      },
+      {
+        "title": "Performance at the Korean DMZ",
+        "body": "A performance that brings music into direct conversation with landscape, history, and the continuing memory of division on the east sea of the Korean Peninsula.",
+        "embedUrl": "https://www.youtube.com/embed/QLA9hIY6gv4"
+      }
+    ],
+    "talkItems": [
+      { "title": "Talk", "embedUrl": "https://www.youtube.com/embed/WBDHRLvgeSs" },
+      { "title": "Interview", "embedUrl": "https://www.youtube.com/embed/wzIBs-jVN1M" },
+      { "title": "Talk", "embedUrl": "https://www.youtube.com/embed/-zHnMgmeOPM" },
+      { "title": "Interview", "embedUrl": "https://www.youtube.com/embed/KTEHqzXg-CI" }
+    ],
+    "audioBody": "Selected audio recordings will be made available here.",
+    "pressBody": "Press coverage and review excerpts will be collected here.",
+    "nytCaption": "Mijung IM performing at Jejin Station near the Korean DMZ, featured on the front page of The New York Times, July 27, 2023.",
+    "pressItems": [
+      {
+        "title": "[Culture Interview] 임미정 2023 DMZ오픈국제음악제 예술감독(피아니스트) \"다시는 전쟁 일어나지 않기 바라는 염원, 음악제에 담고 싶었다\"",
+        "source": "sctoday.co.kr",
+        "url": "http://www.sctoday.co.kr/news/articleView.html?idxno=41826"
+      }
+    ]
+  },
+  "dialogue": {
+    "eyebrow": "Dialogue",
+    "title": "Dialogue",
+    "subtitle": "Essays and interviews",
+    "entriesBody": "Essays and interview features will be listed here as they are published."
+  },
+  "projects": {
+    "eyebrow": "Projects",
+    "title": "Projects",
+    "subtitle": "Festivals, foundations, and educational initiatives",
+    "plzTitle": "PLZ Festival",
+    "plzBody": "Founded in 2019 with the support of Gangwon Province, the PLZ Festival reimagines Korea's DMZ border region not only as a symbol of division, but as a Peace and Life Zone. Under Mijung IM's artistic direction, performances were created in railway stations, beaches, forests, churches, botanical gardens, and historic locations.",
+    "plzImageCaption": "Mijung IM performing on the shore of Korea's East Sea",
+    "dmzTitle": "DMZ OPEN International Music Festival",
+    "dmzBody": "Appointed as General Director of Gyeonggi Province's DMZ OPEN Festival, Mijung IM curated and led its International Music Festival, bringing together distinguished soloists, major orchestras, and laureates of leading international competitions.",
+    "foundationTitle": "Music for One Foundation",
+    "foundationBody": "Founded by Mijung IM in 2005, the Music for One Foundation develops artistic and educational programs that connect music with dignity, cultural dialogue, and human development. Its initiatives have included music education and international exchange projects in Cambodia, Myanmar, Tanzania, and India.",
+    "educationTitle": "Educational Initiatives",
+    "educationBody": "Details about educational and community initiatives will be presented here."
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Contact",
+    "subtitle": "Booking, media, and general inquiries",
+    "concertTitle": "Concert & Residency",
+    "masterclassTitle": "Masterclass",
+    "mediaTitle": "Media",
+    "generalTitle": "General",
+    "emailPlaceholder": "Email address to be added",
+    "email": "pianist629@gmail.com",
+    "contactPerson": "Jinyoung Lee (Artist Relations)",
+    "phone": "+1 630-518-1399",
+    "followTitle": "Follow"
+  },
+  "home": {
+    "kicker": "Mijung IM",
+    "heroTitle": "Pianist of Peace & Nature",
+    "introBody": "Some performances are remembered for their virtuosity. Others remain with us because of the place they create within the listener. Pianist Mijung IM brings these two dimensions together. Her playing combines clarity of tone, technical command, contemplative depth, and a deeply personal sense of musical presence. Whether performing in an established concert hall or in a landscape shaped by history, she approaches music as a living encounter—between sound and silence, memory and hope, the individual and the wider human experience. Through a career spanning the United States, Europe, and Asia, she has developed an artistic identity that is both classically grounded and unmistakably her own.",
+    "videoTitle": "Featured Performance",
+    "videoBody": "A featured performance video will be embedded here.",
+    "videoEmbedUrl": "https://www.youtube.com/embed/QLA9hIY6gv4",
+    "projectTitle": "PLZ Festival",
+    "projectBody": "Founded in 2019 with the support of Gangwon Province, the PLZ Festival reimagines Korea's DMZ border region not only as a symbol of division, but as a Peace and Life Zone. Under Mijung IM's artistic direction, performances were created in railway stations, beaches, forests, churches, botanical gardens, and historic locations.",
+    "projectImageCaption": "Mijung IM performing by the sea in front of the North Korean frontline barbed-wire fence.",
+    "projectLink": "View Projects",
+    "newsTitle": "Latest News",
+    "newsBody": "Recent news and announcements will be listed here.",
+    "quoteTitle": "In Review",
+    "quoteBody": "A citation and excerpt from Maurice Hinson's review will be added here.",
+    "quoteText": "One of the most important pianists of our time.",
+    "quoteAttribution": "Maurice Hinson, American pianist, pedagogue, and critic",
+    "ctaTitle": "Get in Touch",
+    "ctaBody": "For concert bookings, residencies, or media inquiries.",
+    "ctaContact": "Contact",
+    "ctaEpk": "Download EPK"
+  }
+}

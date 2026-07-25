@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+  --color-ink: #1a1a1a;
+  --color-ink-deep: #242422;
+  --color-ivory: #f5f1e8;
+  --color-grey-muted: #b5b3ac;
+  --color-hairline: #3a3a38;
+  --color-sage: #6e7a5e;
+  --color-brass: #b08d57;
+}
+
+@theme inline {
+  --color-ink: var(--color-ink);
+  --color-ink-deep: var(--color-ink-deep);
+  --color-ivory: var(--color-ivory);
+  --color-grey-muted: var(--color-grey-muted);
+  --color-hairline: var(--color-hairline);
+  --color-sage: var(--color-sage);
+  --color-brass: var(--color-brass);
+
+  --font-sans: var(--font-manrope), var(--font-pretendard), sans-serif;
+  --font-heading: var(--font-bricolage), var(--font-manrope), sans-serif;
+
+  --text-h1: 2.5rem;
+  --text-h1--line-height: 1.2;
+  --text-h1--font-weight: 300;
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 1.35;
+  --text-h2--font-weight: 300;
+  --text-body: 1rem;
+  --text-body--line-height: 1.7;
+  --text-body--font-weight: 400;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.5;
+  --text-caption--font-weight: 400;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+.label {
+  font-family: var(--font-manrope), sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.text-h1,
+.text-h2 {
+  font-family: var(--font-heading);
+}
+
+.logotype {
+  font-family: var(--font-heading);
+  font-weight: 300;
+}

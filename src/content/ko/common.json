@@ -1,0 +1,111 @@
+{
+  "nav": {
+    "home": "홈",
+    "about": "소개",
+    "performances": "공연",
+    "media": "미디어",
+    "dialogue": "다이얼로그",
+    "projects": "프로젝트",
+    "contact": "연락처",
+    "openMenu": "메뉴 열기",
+    "closeMenu": "메뉴 닫기"
+  },
+  "footer": {
+    "tagline": "평화와 자연의 피아니스트",
+    "language": "언어",
+    "rights": "All rights reserved."
+  },
+  "common": {
+    "placeholderLabel": "콘텐츠 준비 중"
+  },
+  "about": {
+    "eyebrow": "소개",
+    "title": "임미정",
+    "subtitle": "평화와 자연의 피아니스트",
+    "tabs": {
+      "short": "짧게",
+      "medium": "중간",
+      "full": "전체"
+    },
+    "bioShort": "임미정은 콘서트홀을 넘어 DMZ를 비롯한 자연 현장에서 연주하는 것으로 알려진 국제 콘서트 피아니스트입니다.",
+    "bioMedium": "임미정은 전통적인 공연장과 숲, 접경지대 등 갈등의 흔적이 남은 장소를 오가며 활동하는 국제 콘서트 피아니스트입니다. 그의 리사이틀은 홀의 음향만큼이나 풍경의 고요함에 의해 형성되며, 장소에 응답하여 쓰인 신작과 정통 레퍼토리를 함께 선보이는 프로그램으로 알려져 있습니다. 북미, 유럽, 아시아 전역의 오케스트라 및 독주 무대에 섰습니다.",
+    "bioFull": "임미정은 전통적인 공연장과 숲, 접경지대 등 갈등의 흔적이 남은 장소를 오가며 활동하는 국제 콘서트 피아니스트입니다. 그의 리사이틀은 홀의 음향만큼이나 풍경의 고요함에 의해 형성되며, 장소에 응답하여 쓰인 신작과 정통 레퍼토리를 함께 선보이는 프로그램으로 알려져 있습니다.\n\nDMZ 및 다른 자연 현장에서의 연주는 그의 예술적 정체성을 상징하는 활동이 되었으며, 피아노 리사이틀을 사람과 역사, 땅 사이의 화해 행위로 재구성합니다. 북미, 유럽, 아시아 전역의 오케스트라 및 독주 무대에 섰으며, 음악과 평화 구축, 환경 인식이 교차하는 지점에 관심을 가진 기획자와 언론의 주목을 받아왔습니다.\n\n무대 밖에서는 교육 및 커뮤니티 활동에도 참여하여 청년 음악가 및 시민단체와 함께 작업하며 예술적 비전의 지평을 넓히고 있습니다. 이 섹션은 최종 승인된 소개글로 교체될 예정입니다.",
+    "visionTitle": "예술적 비전",
+    "visionBody": "임미정에게 음악은 좀처럼 귀 기울여지지 않는 장소 — 접경지대, 숲, 침묵 — 를 듣는 방식입니다. 그의 프로그램은 피아노 리사이틀이 아름다움만큼이나 평화를 위한 자리를 마련할 수 있다는 생각을 바탕으로 구성됩니다.",
+    "epkLabel": "EPK 다운로드",
+    "epkNote": "PDF, 전자 프레스킷"
+  },
+  "performances": {
+    "eyebrow": "공연",
+    "title": "공연",
+    "subtitle": "선정 공연, 공연 아카이브, 레퍼토리",
+    "engagementsTitle": "선정 공연",
+    "engagementsBody": "예정 및 최근 공연 일정이 기획사, 공연장, 프로그램 정보와 함께 이곳에 게시될 예정입니다.",
+    "archiveTitle": "공연 아카이브",
+    "archiveBody": "연도별 과거 공연 아카이브가 이곳에 정리될 예정입니다.",
+    "repertoireTitle": "레퍼토리",
+    "repertoireBody": "작곡가 및 작품별로 정리된 상세 레퍼토리 목록이 이곳에 제공될 예정입니다."
+  },
+  "media": {
+    "eyebrow": "미디어",
+    "title": "미디어",
+    "subtitle": "갤러리, 영상, 오디오, 프레스",
+    "tabs": {
+      "gallery": "갤러리",
+      "video": "영상",
+      "audio": "오디오",
+      "press": "프레스"
+    },
+    "galleryBody": "공연 및 프로젝트 현장의 엄선된 사진 갤러리가 이곳에 제공될 예정입니다.",
+    "videoBody": "대표 연주 영상이 이곳에 삽입될 예정입니다.",
+    "audioBody": "선정 오디오 녹음이 이곳에 제공될 예정입니다.",
+    "pressBody": "언론 보도 및 리뷰 발췌가 이곳에 정리될 예정입니다."
+  },
+  "dialogue": {
+    "eyebrow": "다이얼로그",
+    "title": "다이얼로그",
+    "subtitle": "에세이 및 인터뷰",
+    "entriesBody": "에세이와 인터뷰 콘텐츠가 발행되는 대로 이곳에 게시될 예정입니다."
+  },
+  "projects": {
+    "eyebrow": "프로젝트",
+    "title": "프로젝트",
+    "subtitle": "페스티벌, 재단, 교육 프로그램",
+    "plzTitle": "PLZ 페스티벌",
+    "plzBody": "PLZ 페스티벌의 취지와 역사에 대한 상세 내용이 이곳에 제공될 예정입니다.",
+    "dmzTitle": "DMZ OPEN 국제음악제",
+    "dmzBody": "DMZ OPEN 국제음악제에 대한 개요가 이곳에 제공될 예정입니다.",
+    "foundationTitle": "Music for One Foundation",
+    "foundationBody": "Music for One Foundation 및 관련 프로그램에 대한 정보가 이곳에 제공될 예정입니다.",
+    "educationTitle": "교육 프로그램",
+    "educationBody": "교육 및 커뮤니티 프로그램에 대한 상세 내용이 이곳에 제공될 예정입니다."
+  },
+  "contact": {
+    "eyebrow": "연락처",
+    "title": "연락처",
+    "subtitle": "섭외, 미디어, 일반 문의",
+    "concertTitle": "공연 및 레지던시",
+    "masterclassTitle": "마스터클래스",
+    "mediaTitle": "미디어",
+    "generalTitle": "일반 문의",
+    "emailPlaceholder": "이메일 주소 추가 예정"
+  },
+  "home": {
+    "kicker": "임미정",
+    "heroTitle": "평화와 자연의 피아니스트",
+    "introBody": "콘서트홀과 자연 및 비전통적 공연 현장을 오가며, 음악을 자연과 기억, 장소와의 대화로 확장하는 국제 콘서트 피아니스트입니다.",
+    "videoTitle": "대표 연주 영상",
+    "videoBody": "대표 연주 영상이 이곳에 삽입될 예정입니다.",
+    "projectTitle": "PLZ 페스티벌",
+    "projectBody": "언론 보도를 포함한 PLZ 페스티벌의 하이라이트가 이곳에 제공될 예정입니다.",
+    "projectLink": "프로젝트 보기",
+    "newsTitle": "최신 소식",
+    "newsBody": "최근 소식과 공지사항이 이곳에 게시될 예정입니다.",
+    "quoteTitle": "리뷰",
+    "quoteBody": "Maurice Hinson의 리뷰 인용과 출처가 이곳에 추가될 예정입니다.",
+    "ctaTitle": "문의하기",
+    "ctaBody": "공연 섭외, 레지던시, 미디어 문의를 환영합니다.",
+    "ctaContact": "연락처",
+    "ctaEpk": "EPK 다운로드"
+  }
+}
