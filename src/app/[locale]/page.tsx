@@ -54,7 +54,29 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-3xl px-6 py-28">
-        <h2 className="text-h2 text-ivory mb-6">{t("videoTitle")}</h2>
+        <p className="label text-xs text-brass mb-6">{t("quoteTitle")}</p>
+        {isEn ? (
+          <blockquote className="border-l-2 border-brass pl-4">
+            <p className="text-h2 font-display! font-semibold italic text-ivory">
+              &ldquo;{t("quoteText")}&rdquo;
+            </p>
+            <cite className="text-caption text-grey-muted mt-4 block not-italic">
+              — {t("quoteAttribution")}
+            </cite>
+          </blockquote>
+        ) : (
+          <Placeholder label={tc("placeholderLabel")}>
+            <p className="text-body text-ivory/90 border-l-2 border-brass pl-4">
+              {t("quoteBody")}
+            </p>
+          </Placeholder>
+        )}
+      </section>
+
+      <section className="mx-auto max-w-3xl px-6 py-28">
+        <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+          {t("videoTitle")}
+        </h2>
         {isEn ? (
           <div className="aspect-video">
             <iframe
@@ -92,7 +114,9 @@ export default async function Home() {
           aria-hidden
         />
         <div className="relative z-10 mx-auto max-w-3xl w-full px-6 py-28">
-          <h2 className="text-h2 text-on-photo mb-6">{t("projectTitle")}</h2>
+          <h2 className="text-h2 font-display-bold! font-bold not-italic text-on-photo mb-6">
+            {t("projectTitle")}
+          </h2>
           {isEn ? (
             <p className="text-body text-on-photo/90">{t("projectBody")}</p>
           ) : (
@@ -110,34 +134,18 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-3xl px-6 py-28">
-        <h2 className="text-h2 text-ivory mb-6">{t("newsTitle")}</h2>
+        <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+          {t("newsTitle")}
+        </h2>
         <Placeholder label={tc("placeholderLabel")}>
           <p className="text-body text-ivory/90">{t("newsBody")}</p>
         </Placeholder>
       </section>
 
-      <section className="mx-auto max-w-3xl px-6 py-28">
-        <p className="label text-xs text-brass mb-6">{t("quoteTitle")}</p>
-        {isEn ? (
-          <blockquote className="border-l-2 border-brass pl-4">
-            <p className="text-h2 text-ivory italic">
-              &ldquo;{t("quoteText")}&rdquo;
-            </p>
-            <cite className="text-caption text-grey-muted mt-4 block not-italic">
-              — {t("quoteAttribution")}
-            </cite>
-          </blockquote>
-        ) : (
-          <Placeholder label={tc("placeholderLabel")}>
-            <p className="text-body text-ivory/90 border-l-2 border-brass pl-4">
-              {t("quoteBody")}
-            </p>
-          </Placeholder>
-        )}
-      </section>
-
       <section className="mx-auto max-w-3xl px-6 py-32 text-center">
-        <h2 className="text-h2 text-ivory mb-4">{t("ctaTitle")}</h2>
+        <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-4">
+          {t("ctaTitle")}
+        </h2>
         <p className="text-body text-grey-muted mb-10">{t("ctaBody")}</p>
         <div className="flex flex-wrap items-center justify-center gap-6">
           <Link
