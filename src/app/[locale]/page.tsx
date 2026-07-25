@@ -146,7 +146,7 @@ export default async function Home() {
         <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-4">
           {t("ctaTitle")}
         </h2>
-        <p className="text-body text-grey-muted mb-10">{t("ctaBody")}</p>
+        <p className="text-body text-ivory/90 mb-10">{t("ctaBody")}</p>
         <div className="flex flex-wrap items-center justify-center gap-6">
           <Link
             href="/contact"
