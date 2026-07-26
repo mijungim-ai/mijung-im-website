@@ -24,7 +24,6 @@ export default async function AboutPage() {
               sizes="(min-width: 640px) 15rem, 12rem"
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-black/25" aria-hidden />
           </div>
           <div>
             <p className="label text-xs text-sage mb-3">The Artist</p>

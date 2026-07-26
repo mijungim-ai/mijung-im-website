@@ -135,7 +135,6 @@ export function MediaTabs() {
                   sizes="(min-width: 640px) 50vw, 100vw"
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-black/25" aria-hidden />
               </div>
               {img.caption && (
                 <p className="text-caption text-grey-muted mt-2.5">
@@ -170,7 +169,6 @@ export function MediaTabs() {
                 sizes="(min-width: 640px) 50vw, 100vw"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-black/25" aria-hidden />
             </div>
             <p className="text-caption text-grey-muted px-5 py-4">
               {t("nytCaption")}

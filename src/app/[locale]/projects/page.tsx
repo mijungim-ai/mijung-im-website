@@ -45,7 +45,6 @@ export default async function ProjectsPage() {
                   sizes="(min-width: 768px) 48rem, 100vw"
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-black/25" aria-hidden />
               </div>
             )}
             {project.imageCaption && (
