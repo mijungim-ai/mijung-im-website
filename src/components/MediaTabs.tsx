@@ -90,7 +90,9 @@ export function MediaTabs() {
                       allowFullScreen
                     />
                   </div>
-                  <h4 className="text-h2 text-ivory mb-3">{item.title}</h4>
+                  <h4 className="font-sans font-bold text-[22px] text-ivory mb-3">
+                    {item.title}
+                  </h4>
                   <p className="text-body text-ivory/90">{item.body}</p>
                 </div>
               ))}

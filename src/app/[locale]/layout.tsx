@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { Manrope, Bricolage_Grotesque, Bodoni_Moda } from "next/font/google";
+import { Manrope, Bricolage_Grotesque, Merriweather } from "next/font/google";
 import localFont from "next/font/local";
 import { routing } from "@/i18n/routing";
 import { Nav } from "@/components/Nav";
@@ -11,7 +11,7 @@ import "./globals.css";
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const bricolage = Bricolage_Grotesque({
@@ -20,14 +20,14 @@ const bricolage = Bricolage_Grotesque({
   weight: ["300", "400", "700"],
 });
 
-const bodoniModa = Bodoni_Moda({
+const merriweatherItalic = Merriweather({
   variable: "--font-bodoni",
   subsets: ["latin"],
-  weight: ["600"],
+  weight: ["700"],
   style: ["italic"],
 });
 
-const bodoniModaBold = Bodoni_Moda({
+const merriweatherBold = Merriweather({
   variable: "--font-bodoni-bold",
   subsets: ["latin"],
   weight: ["700"],
@@ -66,7 +66,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${manrope.variable} ${pretendard.variable} ${bricolage.variable} ${bodoniModa.variable} ${bodoniModaBold.variable} h-full antialiased`}
+      className={`${manrope.variable} ${pretendard.variable} ${bricolage.variable} ${merriweatherItalic.variable} ${merriweatherBold.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ink text-ivory">
         <NextIntlClientProvider>

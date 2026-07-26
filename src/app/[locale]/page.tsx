@@ -57,7 +57,7 @@ export default async function Home() {
         <p className="label text-xs text-brass mb-6">{t("quoteTitle")}</p>
         {isEn ? (
           <blockquote className="border-l-2 border-brass pl-4">
-            <p className="text-h2 font-display! font-semibold italic text-ivory">
+            <p className="text-h2 font-display! font-bold italic text-ivory">
               &ldquo;{t("quoteText")}&rdquo;
             </p>
             <cite className="text-caption text-grey-muted mt-4 block not-italic">
