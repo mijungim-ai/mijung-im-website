@@ -19,7 +19,6 @@
     "placeholderLabel": "Content coming soon"
   },
   "about": {
-    "eyebrow": "About",
     "title": "Mijung IM",
     "subtitle": "Pianist of Peace & Nature",
     "tabs": {
@@ -34,7 +33,6 @@
     "epkNote": "PDF, Electronic Press Kit"
   },
   "performances": {
-    "eyebrow": "Performances",
     "title": "Performances",
     "subtitle": "Selected engagements, concert archive, and repertoire",
     "introHeadline": "An Artist of Clarity, Depth, and Presence",
@@ -70,7 +68,6 @@
     ]
   },
   "media": {
-    "eyebrow": "Media",
     "title": "Media",
     "subtitle": "Gallery, video, audio, and press",
     "tabs": {
@@ -121,13 +118,11 @@
     ]
   },
   "dialogue": {
-    "eyebrow": "Dialogue",
     "title": "Dialogue",
     "subtitle": "Essays and interviews",
     "entriesBody": "Essays and interview features will be listed here as they are published."
   },
   "projects": {
-    "eyebrow": "Projects",
     "title": "Projects",
     "subtitle": "Festivals, foundations, and educational initiatives",
     "plzTitle": "PLZ Festival",
@@ -141,7 +136,6 @@
     "educationBody": "Details about educational and community initiatives will be presented here."
   },
   "contact": {
-    "eyebrow": "Contact",
     "title": "Contact",
     "subtitle": "Booking, media, and general inquiries",
     "concertTitle": "Concert & Residency",

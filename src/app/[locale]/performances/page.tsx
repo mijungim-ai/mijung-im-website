@@ -13,11 +13,7 @@ export default async function PerformancesPage() {
 
   return (
     <div>
-      <PageHeader
-        eyebrow={t("eyebrow")}
-        title={t("title")}
-        subtitle={t("subtitle")}
-      />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       <div className="mx-auto max-w-3xl px-6 py-28 space-y-20">
         {isEn && (

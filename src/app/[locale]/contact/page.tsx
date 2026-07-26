@@ -18,11 +18,7 @@ export default async function ContactPage() {
 
   return (
     <div>
-      <PageHeader
-        eyebrow={t("eyebrow")}
-        title={t("title")}
-        subtitle={t("subtitle")}
-      />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       <div className="mx-auto max-w-3xl px-6 py-28 grid gap-10 sm:grid-cols-2">
         {categories.map((category) => (

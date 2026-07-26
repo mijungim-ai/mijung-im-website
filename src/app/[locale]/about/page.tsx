@@ -12,11 +12,7 @@ export default async function AboutPage() {
 
   return (
     <div>
-      <PageHeader
-        eyebrow={t("eyebrow")}
-        title={t("title")}
-        subtitle={t("subtitle")}
-      />
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       <section className="mx-auto max-w-3xl px-6 py-28">
         <div className="flex flex-col sm:flex-row gap-10 sm:items-start mb-16">
