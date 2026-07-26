@@ -138,7 +138,7 @@ export function MediaTabs() {
                 <div className="absolute inset-0 bg-black/25" aria-hidden />
               </div>
               {img.caption && (
-                <p className="text-caption text-grey-muted mt-3">
+                <p className="text-caption text-grey-muted mt-2.5">
                   {img.caption}
                 </p>
               )}
