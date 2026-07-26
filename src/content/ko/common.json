@@ -57,6 +57,14 @@
       "press": "프레스"
     },
     "galleryBody": "공연 및 프로젝트 현장의 엄선된 사진 갤러리가 이곳에 제공될 예정입니다.",
+    "enlargeLabel": "크게 보기: {alt}",
+    "lightbox": {
+      "dialogLabel": "사진 보기",
+      "close": "닫기",
+      "previous": "이전 이미지",
+      "next": "다음 이미지",
+      "counter": "{current} / {total}"
+    },
     "videoBody": "대표 연주 영상이 이곳에 삽입될 예정입니다.",
     "audioBody": "선정 오디오 녹음이 이곳에 제공될 예정입니다.",
     "pressBody": "언론 보도 및 리뷰 발췌가 이곳에 정리될 예정입니다."

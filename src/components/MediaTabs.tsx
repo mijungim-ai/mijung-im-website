@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Placeholder } from "@/components/Placeholder";
+import { Lightbox } from "@/components/Lightbox";
+import { galleryImages, pressImages, type MediaImage } from "@/data/media";
 
 const TABS = ["gallery", "video", "audio", "press"] as const;
 type Tab = (typeof TABS)[number];
@@ -19,20 +21,29 @@ export function MediaTabs() {
   const [active, setActive] = useState<Tab>("gallery");
   const isEn = locale === "en";
 
-  const galleryImages = [
-    {
-      src: "/images/dmz_dome_beach.jpg",
-      alt: "Performance inside a dome on the DMZ coastline",
-      caption: undefined as string | undefined,
-    },
-    {
-      src: "/images/jeil_church_cheorwon.jpg",
-      alt: isEn
-        ? t("jeilChurchCaption")
-        : "Performance at the Jeil Church ruins, Cheorwon",
-      caption: isEn ? t("jeilChurchCaption") : undefined,
-    },
-  ];
+  const [lightbox, setLightbox] = useState<{
+    images: MediaImage[];
+    index: number;
+  } | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+  function openLightbox(
+    images: MediaImage[],
+    index: number,
+    trigger: HTMLButtonElement,
+  ) {
+    triggerRef.current = trigger;
+    setLightbox({ images, index });
+  }
+
+  function closeLightbox() {
+    triggerRef.current?.focus();
+    setLightbox(null);
+  }
+
+  function navigateLightbox(index: number) {
+    setLightbox((prev) => (prev ? { ...prev, index } : prev));
+  }
 
   const bodyKey = {
     gallery: "galleryBody",
@@ -125,17 +136,24 @@ export function MediaTabs() {
         </div>
       ) : isEn && active === "gallery" ? (
         <div className="grid gap-8 sm:grid-cols-2">
-          {galleryImages.map((img) => (
+          {galleryImages.map((img, i) => (
             <div key={img.src}>
-              <div className="photo-frame relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  sizes="(min-width: 640px) 50vw, 100vw"
-                  className="object-cover"
-                />
-              </div>
+              <button
+                type="button"
+                onClick={(e) => openLightbox(galleryImages, i, e.currentTarget)}
+                aria-label={t("enlargeLabel", { alt: img.alt })}
+                className="block w-full group"
+              >
+                <div className="photo-frame relative aspect-[4/3] overflow-hidden">
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    sizes="(min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                  />
+                </div>
+              </button>
               {img.caption && (
                 <p className="text-caption text-grey-muted mt-2.5">
                   {img.caption}
@@ -160,26 +178,47 @@ export function MediaTabs() {
               </p>
             </a>
           ))}
-          <div className="photo-frame border border-hairline overflow-hidden">
-            <div className="relative aspect-[4/3]">
-              <Image
-                src="/images/nyt_frontpage_jejin_station.jpg"
-                alt={t("nytCaption")}
-                fill
-                sizes="(min-width: 640px) 50vw, 100vw"
-                className="object-cover"
-              />
+          {pressImages.map((img, i) => (
+            <div
+              key={img.src}
+              className="photo-frame border border-hairline overflow-hidden"
+            >
+              <button
+                type="button"
+                onClick={(e) => openLightbox(pressImages, i, e.currentTarget)}
+                aria-label={t("enlargeLabel", { alt: img.alt })}
+                className="block w-full group"
+              >
+                <div className="relative aspect-[3/2]">
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    sizes="(min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                  />
+                </div>
+              </button>
+              {img.caption && (
+                <p className="text-caption text-grey-muted px-5 py-4">
+                  {img.caption}
+                </p>
+              )}
             </div>
-            <p className="text-caption text-grey-muted px-5 py-4">
-              {t("nytCaption")}
-            </p>
-          </div>
+          ))}
         </div>
       ) : (
         <Placeholder label={tc("placeholderLabel")}>
           <p className="text-body text-ivory/90">{t(bodyKey)}</p>
         </Placeholder>
       )}
+
+      <Lightbox
+        images={lightbox?.images ?? []}
+        index={lightbox?.index ?? null}
+        onClose={closeLightbox}
+        onNavigate={navigateLightbox}
+      />
     </div>
   );
 }

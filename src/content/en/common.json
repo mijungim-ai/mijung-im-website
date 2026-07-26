@@ -77,7 +77,14 @@
       "press": "Press"
     },
     "galleryBody": "A curated photo gallery from performances and projects will be presented here.",
-    "jeilChurchCaption": "Mijung IM performing at the historic war-damaged Jeil Church in Cheorwon, near the Korean DMZ",
+    "enlargeLabel": "Enlarge: {alt}",
+    "lightbox": {
+      "dialogLabel": "Photo viewer",
+      "close": "Close",
+      "previous": "Previous image",
+      "next": "Next image",
+      "counter": "{current} / {total}"
+    },
     "videoBody": "Featured performance videos will be embedded here.",
     "videoGroups": {
       "performancesTitle": "Performances",
@@ -108,7 +115,6 @@
     ],
     "audioBody": "Selected audio recordings will be made available here.",
     "pressBody": "Press coverage and review excerpts will be collected here.",
-    "nytCaption": "Mijung IM performing at Jejin Station near the Korean DMZ, featured on the front page of The New York Times, July 27, 2023.",
     "pressItems": [
       {
         "title": "[Culture Interview] 임미정 2023 DMZ오픈국제음악제 예술감독(피아니스트) \"다시는 전쟁 일어나지 않기 바라는 염원, 음악제에 담고 싶었다\"",
