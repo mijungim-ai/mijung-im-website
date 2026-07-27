@@ -81,7 +81,7 @@ export default async function Home() {
           }
           fill
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-bottom"
         />
         <div
           className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/55 to-transparent"
