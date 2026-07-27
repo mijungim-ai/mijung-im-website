@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Placeholder } from "@/components/Placeholder";
+import { HeroRotator } from "@/components/HeroRotator";
 
 export default async function Home() {
   const t = await getTranslations("home");
@@ -12,24 +13,18 @@ export default async function Home() {
   return (
     <div>
       <section className="photo-frame relative w-full aspect-[3/2] max-h-[800px] overflow-hidden flex items-start">
-        <Image
-          src="/images/hero_home_conducting.jpg"
-          alt="Mijung IM performing at the piano"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
+        <HeroRotator />
+        <div
+          className="absolute inset-x-0 bottom-0 h-[38%] bg-gradient-to-t from-black/70 to-transparent"
+          aria-hidden
         />
-        <div className="absolute inset-0 bg-black/25" aria-hidden />
         <div className="relative z-10 mx-auto max-w-6xl w-full px-6 pt-20 md:pt-32">
-          <div className="max-w-[9rem] sm:max-w-none">
-            <h1 className="display-serif text-on-photo text-[clamp(32px,6vw,64px)] leading-[1.05]">
-              Mijung IM
-            </h1>
-            <p className="display-serif text-on-photo/80 text-[clamp(18px,3vw,32px)] mt-3">
-              {t("heroTitle")}
-            </p>
-          </div>
+          <h1 className="display-serif text-on-photo text-[clamp(40px,7.5vw,88px)] leading-[1.05] [text-shadow:0_2px_12px_rgba(0,0,0,0.6)]">
+            Mijung IM
+          </h1>
+          <p className="display-serif text-on-photo/80 text-[clamp(16px,2.4vw,26px)] mt-3 [text-shadow:0_1px_8px_rgba(0,0,0,0.6)]">
+            {t("heroTitle")}
+          </p>
         </div>
       </section>
 
@@ -49,26 +44,6 @@ export default async function Home() {
         ) : (
           <Placeholder label={tc("placeholderLabel")}>
             <p className="text-body text-ivory/90">{t("introBody")}</p>
-          </Placeholder>
-        )}
-      </section>
-
-      <section className="mx-auto max-w-3xl px-6 py-28">
-        <p className="label text-xs text-brass mb-6">{t("quoteTitle")}</p>
-        {isEn ? (
-          <blockquote className="border-l-2 border-brass pl-4">
-            <p className="text-h2 font-display! font-bold italic text-ivory">
-              &ldquo;{t("quoteText")}&rdquo;
-            </p>
-            <cite className="text-caption text-grey-muted mt-4 block not-italic">
-              — {t("quoteAttribution")}
-            </cite>
-          </blockquote>
-        ) : (
-          <Placeholder label={tc("placeholderLabel")}>
-            <p className="text-body text-ivory/90 border-l-2 border-brass pl-4">
-              {t("quoteBody")}
-            </p>
           </Placeholder>
         )}
       </section>
@@ -96,32 +71,31 @@ export default async function Home() {
         )}
       </section>
 
-      <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[520px] flex items-center">
+      <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[420px] flex items-center">
         <Image
-          src="/images/dmz_barbed_wire_beach.jpg"
+          src="/images/home/plz_goseong_hwajinpo_beach_2020.jpg"
           alt={
             isEn
               ? t("projectImageCaption")
-              : "Piano performance at the DMZ coastline, PLZ Festival"
+              : "Piano performance inside a transparent dome on the beach at Hwajinpo, Goseong"
           }
           fill
           sizes="100vw"
-          className="object-cover object-[90%_100%]"
+          className="object-cover"
         />
-        <div className="absolute inset-0 bg-black/25" aria-hidden />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/25 to-transparent"
+          className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/55 to-transparent"
           aria-hidden
         />
-        <div className="relative z-10 mx-auto max-w-3xl w-full px-6 py-28">
-          <h2 className="text-h2 font-display-bold! font-bold not-italic text-on-photo mb-6">
+        <div className="relative z-10 mx-auto max-w-3xl w-full px-6 py-20">
+          <h2 className="text-h2 font-display-bold! font-bold not-italic text-on-photo mb-3">
             {t("projectTitle")}
           </h2>
           {isEn ? (
-            <p className="text-body text-on-photo/90">{t("projectBody")}</p>
+            <p className="text-body text-on-photo/90">{t("projectSubtitle")}</p>
           ) : (
             <Placeholder label={tc("placeholderLabel")} surfaceClassName="bg-ink-deep">
-              <p className="text-body text-on-photo/90">{t("projectBody")}</p>
+              <p className="text-body text-on-photo/90">{t("projectSubtitle")}</p>
             </Placeholder>
           )}
           <Link

@@ -46,3 +46,8 @@
 - KO pages (Home, About, Performances, Projects, Media) are all currently
   in placeholder state behind their `isEn` gates. Once real KO content is
   ready, these gates need to be lifted together, page by page.
+
+- About 상단 도입부로 이동 예정 — Hinson 인용구: "One of the most important
+  pianists of our time." — Maurice Hinson, American pianist, pedagogue,
+  and critic. (Home 페이지에서는 제거됨; 기존 스타일은 brass 라벨 "In Review" +
+  border-l-2 border-brass 인용구 + not-italic 출처 표기였음.)
