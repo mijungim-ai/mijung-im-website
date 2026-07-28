@@ -47,7 +47,22 @@
   in placeholder state behind their `isEn` gates. Once real KO content is
   ready, these gates need to be lifted together, page by page.
 
-- About 상단 도입부로 이동 예정 — Hinson 인용구: "One of the most important
+- About 상단도입부로 이동 완료 — Hinson 인용구: "One of the most important
   pianists of our time." — Maurice Hinson, American pianist, pedagogue,
   and critic. (Home 페이지에서는 제거됨; 기존 스타일은 brass 라벨 "In Review" +
-  border-l-2 border-brass 인용구 + not-italic 출처 표기였음.)
+  border-l-2 border-brass 인용구 + not-italic 출처 표기였음. About에서는
+  제목-부제-인용구 순서로 배치, 인용구 전체 이탤릭체.) `about.quoteText`/
+  `about.quoteAttribution` 키는 현재 EN `common.json`에만 있고 KO에는 없음 —
+  About 헤더의 인용구는 `isEn`으로 감싸서 KO에서는 아예 렌더링하지 않음
+  (다른 섹션처럼 Placeholder로 감싸면 존재하지 않는 키를 그대로 문자열로
+  출력해버려서 깨짐). KO 번역 작업 때 이 두 키도 함께 추가할 것.
+
+- About > Artistic Vision 섹션: 내용 미정, 이탤릭체로 작성 예정. 현재는
+  프로필 사진 다음·Bio 앞에 자리만 예약된 상태(`[Content pending — see
+  docs/TODO.md]` placeholder). 기존에 초안으로 있던 텍스트(참고용, 확정 아님):
+  "For Mijung IM, musical excellence is not an end in itself. Virtuosity
+  becomes meaningful when it serves listening, attentiveness, and human
+  connection. Her performances invite audiences into a space of attentive
+  listening. Rather than projecting emotion outward, she draws listeners
+  inward, allowing musical meaning to emerge through nuance, pacing,
+  resonance, and silence."

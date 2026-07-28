@@ -1,7 +1,5 @@
 import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
-import { BioTabs } from "@/components/BioTabs";
-import { PageHeader } from "@/components/PageHeader";
 import { Placeholder } from "@/components/Placeholder";
 
 export default async function AboutPage() {
@@ -12,25 +10,44 @@ export default async function AboutPage() {
 
   return (
     <div>
-      <PageHeader title={t("title")} subtitle={t("subtitle")} />
+      <section className="pt-16">
+        <div className="mx-auto max-w-6xl px-6 py-28 border-b border-hairline">
+          <h1 className="display-serif text-h1 text-ivory">{t("title")}</h1>
+          <p className="display-serif text-h2 text-grey-muted mt-3">
+            {t("subtitle")}
+          </p>
+          {isEn && (
+            <p className="display-serif text-[clamp(16px,1.8vw,20px)] text-grey-muted mt-6 max-w-xl">
+              &ldquo;{t("quoteText")}&rdquo;
+              <br />
+              &mdash; {t("quoteAttribution")}
+            </p>
+          )}
+        </div>
+      </section>
 
       <section className="mx-auto max-w-3xl px-6 py-28">
-        <div className="flex flex-col sm:flex-row gap-10 sm:items-start mb-16">
-          <div className="photo-frame relative w-48 sm:w-60 aspect-[3/4] shrink-0 overflow-hidden">
+        <p className="label text-xs text-sage mb-6">The Artist</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+          <div className="photo-frame relative aspect-[3/4] overflow-hidden">
             <Image
               src="/images/about_headshot.jpg"
               alt="Portrait of Mijung IM"
               fill
-              sizes="(min-width: 640px) 15rem, 12rem"
+              sizes="(min-width: 640px) 22rem, 100vw"
               className="object-cover"
             />
           </div>
-          <div>
-            <p className="label text-xs text-sage mb-3">The Artist</p>
-            <h2 className="label text-xs text-grey-muted">Biography</h2>
+          <div className="photo-frame relative aspect-[3/4] overflow-hidden">
+            <Image
+              src="/images/about/studio_portrait_piano_profile.jpg"
+              alt="Mijung IM in a formal studio portrait at the piano"
+              fill
+              sizes="(min-width: 640px) 22rem, 100vw"
+              className="object-cover"
+            />
           </div>
         </div>
-        <BioTabs />
       </section>
 
       <section className="bg-ink-deep border-y border-hairline">
@@ -39,7 +56,9 @@ export default async function AboutPage() {
             {t("visionTitle")}
           </h2>
           {isEn ? (
-            <p className="text-body text-ivory/90">{t("visionBody")}</p>
+            <p className="display-serif italic text-body text-ivory/70">
+              {t("visionBody")}
+            </p>
           ) : (
             <Placeholder
               label={tc("placeholderLabel")}
@@ -49,6 +68,33 @@ export default async function AboutPage() {
             </Placeholder>
           )}
         </div>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-6 py-28">
+        <h2 className="label text-xs text-grey-muted mb-6">Biography</h2>
+        {isEn ? (
+          <div className="space-y-4">
+            {t("bioMedium")
+              .split("\n\n")
+              .map((paragraph, i) => (
+                <p key={i} className="text-body text-ivory/90">
+                  {paragraph}
+                </p>
+              ))}
+          </div>
+        ) : (
+          <Placeholder label={tc("placeholderLabel")}>
+            <div className="space-y-4">
+              {t("bioMedium")
+                .split("\n\n")
+                .map((paragraph, i) => (
+                  <p key={i} className="text-body text-ivory/90">
+                    {paragraph}
+                  </p>
+                ))}
+            </div>
+          </Placeholder>
+        )}
       </section>
 
       <section className="mx-auto max-w-3xl px-6 py-28 text-center">
