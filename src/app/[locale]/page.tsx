@@ -93,7 +93,7 @@ export default async function Home() {
             </p>
           ) : (
             <Placeholder label={tc("placeholderLabel")} surfaceClassName="bg-ink-deep">
-              <p className="text-body text-on-photo/90">{t("projectSubtitle")}</p>
+              <p className="text-body text-on-photo/90">{t("projectBody")}</p>
             </Placeholder>
           )}
           <Link
