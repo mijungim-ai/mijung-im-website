@@ -12,13 +12,13 @@ export default async function Home() {
 
   return (
     <div>
-      <section className="photo-frame relative w-full aspect-[3/2] max-h-[800px] overflow-hidden flex items-start">
+      <section className="photo-frame relative w-full aspect-[3/2] max-h-[735px] overflow-hidden flex items-start mt-[65px]">
         <HeroRotator />
         <div
           className="absolute inset-x-0 bottom-0 h-[38%] bg-gradient-to-t from-black/70 to-transparent"
           aria-hidden
         />
-        <div className="relative z-10 mx-auto max-w-6xl w-full px-6 pt-20 md:pt-32">
+        <div className="relative z-10 mx-auto max-w-6xl w-full px-6 pt-10 md:pt-16">
           <h1 className="display-serif text-on-photo text-[clamp(40px,7.5vw,88px)] leading-[1.05] [text-shadow:0_2px_12px_rgba(0,0,0,0.6)]">
             Mijung IM
           </h1>
