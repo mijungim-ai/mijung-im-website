@@ -80,3 +80,25 @@
     않는 장소 — 접경지대, 숲, 침묵 — 를 듣는 방식입니다. 그의 프로그램은
     피아노 리사이틀이 아름다움만큼이나 평화를 위한 자리를 마련할 수
     있다는 생각을 바탕으로 구성됩니다."
+
+- Performances 페이지 개편 (2026-07-28): 상단도입부를 시각적 제목/부제에서
+  sr-only `<h1>` + 이탤릭 3문장 statement(`performances.headerStatement`)로
+  교체, "An Artist of Clarity, Depth, and Presence" 섹션(`introHeadline`/
+  `introBody`) 삭제, Repertoire 섹션 전체 삭제(`repertoireTitle`/
+  `repertoireBody`/`repertoireList`). Selected Engagements는 이제
+  `src/data/engagements.ts`의 실제 데이터(3건, 배열 순서 = 표시 순서)로
+  렌더링 — 기존 `engagementsList`/`engagementsBody` 번역 키는 더 이상
+  쓰이지 않음. Concert Archive는 `src/data/concertArchive.ts`(현재 빈
+  배열)를 기준으로 렌더링, 비어 있으면 `archiveBody` 문구를 절제된 빈
+  상태 안내로 사용하고, 나중에 포스터가 추가되면 카드 그리드(이미지+연도
+  +공연명)로 자동 전환됨.
+
+  KO 쪽 영향: `performances.title`/`subtitle`는 계속 사용 중(새 헤더에서
+  KO는 이탤릭 3문장 대신 기존 `subtitle`을 그대로 표시) — 단, 이 subtitle
+  텍스트("선정 공연, 공연 아카이브, 레퍼토리")가 이제 없어진 레퍼토리
+  섹션을 언급하고 있어 정확하지 않음; KO 번역 작업 재개 시 함께 손볼 것.
+  `introHeadline`/`introBody`/`repertoireTitle`/`repertoireBody`/
+  `engagementsBody` KO 키들은 (KO 파일 미수정 규칙에 따라) 그대로
+  남아있지만 이제 어떤 코드에서도 참조되지 않음 — KO 정리 시 같이 처리.
+  Selected Engagements/Concert Archive는 EN 데이터를 KO에도 그대로
+  Placeholder로 감싸 노출함(Bio와 동일 패턴).

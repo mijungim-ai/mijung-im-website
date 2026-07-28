@@ -30,37 +30,10 @@
   "performances": {
     "title": "Performances",
     "subtitle": "Selected engagements, concert archive, and repertoire",
-    "introHeadline": "An Artist of Clarity, Depth, and Presence",
-    "introBody": "Mijung IM's performances are distinguished by a refined tonal palette, structural clarity, and an unusual ability to create stillness through music. Her interpretations reveal both the architecture of a work and its inner emotional life.\n\nHer musical approach brings intellectual discipline and spiritual depth into quiet dialogue. Precision, imagination, and silence coexist naturally, creating performances that are powerful without excess, intimate without sentimentality, and deeply expressive without sacrificing formal clarity.\n\nHer repertoire ranges from the Classical and Romantic traditions to the meditative sound worlds of contemporary composers. In Schubert and Schumann, she explores memory, vulnerability, and the unfolding of time. In Rachmaninoff, she seeks the profound sorrow that transcends the complexities of life. In the music of Philip Glass, she finds a pathway to deep attention, where an inner space for reflection quietly unfolds.",
+    "headerStatement": "Every performance is an invitation to enter the music's own sense of time.\n\nListening becomes an act of presence, where sound, silence, and resonance unfold with quiet clarity.\n\nWithin that shared moment, music reveals its inner life—awakening a deeper awareness of ourselves, one another, and the mystery that quietly connects us.",
     "engagementsTitle": "Selected Engagements",
-    "engagementsBody": "Upcoming and recent performance dates will be listed here, including presenter, venue, and program details.",
-    "engagementsList": [
-      "David Geffen Hall at Lincoln Center",
-      "Carnegie Recital Hall",
-      "Kennedy Center",
-      "Pyongyang Concert",
-      "One Nation Project",
-      "PLZ Festival",
-      "DMZ OPEN Festival",
-      "Major venues across New York, Chicago, and Washington, D.C.",
-      "Concert tours in Austria, Hungary, Bulgaria, and Switzerland",
-      "Numerous cities throughout China"
-    ],
     "archiveTitle": "Concert Archive",
-    "archiveBody": "A year-by-year archive of past performances will be compiled here.",
-    "repertoireTitle": "Repertoire",
-    "repertoireBody": "A detailed repertoire list, organized by composer and work, will be provided here.",
-    "repertoireList": [
-      "Bach",
-      "Beethoven",
-      "Schubert",
-      "Schumann",
-      "Mozart",
-      "Chopin",
-      "Rachmaninoff",
-      "Philip Glass",
-      "Arvo Pärt"
-    ]
+    "archiveBody": "A year-by-year archive of past performances will be compiled here."
   },
   "media": {
     "title": "Media",
