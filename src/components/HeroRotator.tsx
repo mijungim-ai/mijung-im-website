@@ -7,6 +7,12 @@ import { heroImages } from "@/data/hero";
 const ROTATION_INTERVAL_MS = 5500;
 const FADE_MS = 1000;
 
+const OBJECT_POSITION_CLASS = {
+  center: "object-center",
+  top: "object-top",
+  bottom: "object-bottom",
+} as const;
+
 export function HeroRotator() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -52,7 +58,7 @@ export function HeroRotator() {
             fill
             priority={i === 0}
             sizes="100vw"
-            className="object-cover"
+            className={`object-cover ${OBJECT_POSITION_CLASS[img.objectPosition]}`}
           />
         </div>
       ))}
