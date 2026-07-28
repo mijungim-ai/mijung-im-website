@@ -7,7 +7,11 @@ import { Placeholder } from "@/components/Placeholder";
 import { Lightbox } from "@/components/Lightbox";
 import { galleryImages, pressImages, type MediaImage } from "@/data/media";
 
-const TABS = ["gallery", "video", "audio", "press"] as const;
+// Internal key stays "video" even though its label is now "YouTube" —
+// KO common.json already has a translated tabs.video entry, and
+// renaming the key would need a new KO key this codebase can't add
+// without an explicit translation pass (see docs/TODO.md).
+const TABS = ["video", "press", "gallery"] as const;
 type Tab = (typeof TABS)[number];
 
 type VideoItem = { title: string; body: string; embedUrl: string };
@@ -18,7 +22,7 @@ export function MediaTabs() {
   const t = useTranslations("media");
   const tc = useTranslations("common");
   const locale = useLocale();
-  const [active, setActive] = useState<Tab>("gallery");
+  const [active, setActive] = useState<Tab>("video");
   const isEn = locale === "en";
 
   const [lightbox, setLightbox] = useState<{
@@ -48,9 +52,8 @@ export function MediaTabs() {
   const bodyKey = {
     gallery: "galleryBody",
     video: "videoBody",
-    audio: "audioBody",
     press: "pressBody",
-  }[active] as "galleryBody" | "videoBody" | "audioBody" | "pressBody";
+  }[active] as "galleryBody" | "videoBody" | "pressBody";
 
   const videoItems: VideoItem[] | null =
     isEn && active === "video" ? (t.raw("videoItems") as VideoItem[]) : null;

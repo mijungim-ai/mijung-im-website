@@ -102,3 +102,46 @@
   남아있지만 이제 어떤 코드에서도 참조되지 않음 — KO 정리 시 같이 처리.
   Selected Engagements/Concert Archive는 EN 데이터를 KO에도 그대로
   Placeholder로 감싸 노출함(Bio와 동일 패턴).
+
+- Media 페이지 개편 (2026-07-28): 상단도입부를 시각적 제목/부제에서 sr-only
+  `<h1>Media</h1>` + 굵은 큰 제목("An Artist of Clarity, Depth, and
+  Presence", `media.headerTitle`) + 이탤릭 2문장(`media.headerStatement`,
+  `PageHeaderStatement` 재사용)으로 교체. KO는 (About/Performances와 동일
+  패턴으로) 새 콘텐츠 대신 기존 `subtitle`을 그대로 표시 — 단 이 subtitle
+  ("갤러리, 영상, 오디오, 프레스")도 Audio 탭 삭제로 이제 부정확함; KO
+  번역 작업 재개 시 Performances의 subtitle과 함께 손볼 것.
+
+  탭: Audio 탭 완전 삭제(`tabs.audio`, `audioBody` EN에서 삭제, KO에는
+  그대로 남아있지만 미참조). Video 탭은 내부 키를 그대로 "video"로
+  유지하되 라벨만 "YouTube"로 변경 — KO가 이미 `tabs.video`: "영상"을
+  갖고 있어서 키를 실제로 바꾸면 존재하지 않는 새 키(`tabs.youtube`)를
+  모든 로케일에서 무조건 호출하게 되어(탭 버튼은 `isEn` 게이트가 없음)
+  About 인용구 때와 같은 "번역 키 문자열이 그대로 출력되는" 버그가
+  재발했을 것 — 그래서 내부 식별자는 안 건드리고 라벨 문자열만 바꿈. 탭
+  순서를 YouTube → Press → Gallery로 재배열.
+
+  작업 전 확인 결과: Video(YouTube) 탭은 더미 데이터가 아니라 이미 실제
+  콘텐츠였음 — `videoItems`(연주 3건: Mozart/Chopin/DMZ 공연)과
+  `talkItems`(토크·인터뷰 4건) 전부 실제 YouTube embed URL 보유. 사용자
+  프롬프트의 "실제 링크가 없으면 Concert Archive처럼 빈 배열로
+  스캐폴딩" 조건은 해당 없어 그대로 유지함 — Concert Archive 방식으로
+  바꾸지 않았음.
+
+  Press 탭 구조 확인: `media.pressItems`(EN 번역 배열, `{title, source,
+  url}`)에 항목을 추가하면 "제목+하이퍼링크" 카드가 그대로 늘어나는
+  구조 — 이미 요구사항 충족, 코드 변경 불필요. Gallery는 기존 2장 그대로.
+
+  SNS 아이콘: 상단도입부에 `SocialIconRow`(`src/components/
+  SocialIconRow.tsx`)로 5개 배치, `src/data/socials.ts`의 `SOCIALS`를
+  그대로 재사용(Footer/Contact와 데이터 소스 공유, `icon` 필드만 추가).
+  Instagram/Facebook/YouTube 3개는 실제 링크, Spotify/Apple Music
+  2개는 `href: null`(기존 값 유지) → Media 페이지에서만 `href="#"` +
+  `preventDefault`로 렌더링(Footer/Contact의 "흐리게 표시" 방식과는
+  다르게, 실제 링크와 시각적으로 구분 안 되게). **Spotify/Apple Music
+  실제 URL 필요.**
+
+  아이콘 라이브러리: `lucide-react`를 설치해 확인했으나 설치된 버전
+  (1.27.0)에 Instagram/Facebook/YouTube/Spotify 브랜드 아이콘이 전혀
+  없음(트레이드마크 정리로 제거된 것으로 보임 — "apple"과 "x"(트위터)만
+  남아있음). 그래서 다시 제거하고 `src/components/icons/
+  SocialGlyphs.tsx`에 직접 만든 단색 SVG 5종을 대신 사용.

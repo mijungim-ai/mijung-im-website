@@ -38,10 +38,11 @@
   "media": {
     "title": "Media",
     "subtitle": "Gallery, video, audio, and press",
+    "headerTitle": "An Artist of Clarity, Depth, and Presence",
+    "headerStatement": "Every performance is an invitation—to listen beyond sound, to discover stillness within music, and to encounter music as a living presence.\n\nWhether on stage, in conversation, or through recordings, each encounter reflects an artistic journey shaped by clarity, depth, and attentive listening.",
     "tabs": {
       "gallery": "Gallery",
-      "video": "Video",
-      "audio": "Audio",
+      "video": "YouTube",
       "press": "Press"
     },
     "galleryBody": "A curated photo gallery from performances and projects will be presented here.",
@@ -81,7 +82,6 @@
       { "title": "Talk", "embedUrl": "https://www.youtube.com/embed/-zHnMgmeOPM" },
       { "title": "Interview", "embedUrl": "https://www.youtube.com/embed/KTEHqzXg-CI" }
     ],
-    "audioBody": "Selected audio recordings will be made available here.",
     "pressBody": "Press coverage and review excerpts will be collected here.",
     "pressItems": [
       {
