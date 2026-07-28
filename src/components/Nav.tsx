@@ -55,10 +55,10 @@ export function Nav() {
               <li key={item.key}>
                 <Link
                   href={item.href}
-                  className={`nav-label text-xs transition-colors ${
+                  className={`nav-label text-xs pb-1 border-b transition-colors ${
                     isActive(item.href)
-                      ? "text-sage"
-                      : "text-grey-muted hover:text-ivory"
+                      ? "text-sage border-sage"
+                      : "text-grey-muted border-transparent hover:text-ivory"
                   }`}
                 >
                   {t(item.key)}
