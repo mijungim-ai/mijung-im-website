@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
 import { Placeholder } from "@/components/Placeholder";
+import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { engagements } from "@/data/engagements";
 import { concertArchive } from "@/data/concertArchive";
 
@@ -38,12 +39,9 @@ export default async function PerformancesPage() {
               {t("headerStatement")
                 .split("\n\n")
                 .map((sentence, i) => (
-                  <p
-                    key={i}
-                    className="display-serif italic text-h2 text-ivory"
-                  >
+                  <PageHeaderStatement key={i} className="text-ivory">
                     {sentence}
-                  </p>
+                  </PageHeaderStatement>
                 ))}
             </div>
           ) : (

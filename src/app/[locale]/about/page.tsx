@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
 import { Placeholder } from "@/components/Placeholder";
+import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 
 export default async function AboutPage() {
   const t = await getTranslations("about");
@@ -17,11 +18,11 @@ export default async function AboutPage() {
             {t("subtitle")}
           </p>
           {isEn && (
-            <p className="display-serif text-[clamp(16px,1.8vw,20px)] text-grey-muted mt-6 max-w-xl">
+            <PageHeaderStatement className="text-grey-muted mt-6 max-w-xl">
               &ldquo;{t("quoteText")}&rdquo;
               <br />
               &mdash; {t("quoteAttribution")}
-            </p>
+            </PageHeaderStatement>
           )}
         </div>
       </section>
