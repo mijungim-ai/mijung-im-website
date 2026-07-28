@@ -21,8 +21,9 @@ export const galleryImages: MediaImage[] = [
   },
 ];
 
-// Press tab lightbox covers the NYT front-page photo only — the
-// sctoday.co.kr article card is an external link, not part of this list.
+// Press tab featured photo — rendered above the bulletin-style article
+// list (see src/data/pressArticles.ts). Array of one so it can still be
+// passed to the shared Lightbox component.
 export const pressImages: MediaImage[] = [
   {
     src: "/images/press/nyt_frontpage_jejin_station.jpg",

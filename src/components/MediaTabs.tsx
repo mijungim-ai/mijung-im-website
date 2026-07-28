@@ -5,7 +5,9 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Placeholder } from "@/components/Placeholder";
 import { Lightbox } from "@/components/Lightbox";
+import { LinkEntry } from "@/components/LinkEntry";
 import { galleryImages, pressImages, type MediaImage } from "@/data/media";
+import { pressArticles } from "@/data/pressArticles";
 
 // Internal key stays "video" even though its label is now "YouTube" —
 // KO common.json already has a translated tabs.video entry, and
@@ -16,7 +18,6 @@ type Tab = (typeof TABS)[number];
 
 type VideoItem = { title: string; body: string; embedUrl: string };
 type TalkItem = { title: string; embedUrl: string };
-type PressItem = { title: string; source: string; url: string };
 
 export function MediaTabs() {
   const t = useTranslations("media");
@@ -59,8 +60,7 @@ export function MediaTabs() {
     isEn && active === "video" ? (t.raw("videoItems") as VideoItem[]) : null;
   const talkItems: TalkItem[] | null =
     isEn && active === "video" ? (t.raw("talkItems") as TalkItem[]) : null;
-  const pressItems: PressItem[] | null =
-    isEn && active === "press" ? (t.raw("pressItems") as PressItem[]) : null;
+  const nytPhoto = pressImages[0];
 
   return (
     <div>
@@ -165,50 +165,37 @@ export function MediaTabs() {
             </div>
           ))}
         </div>
-      ) : pressItems ? (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {pressItems.map((item) => (
-            <a
-              key={item.url}
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block border border-hairline px-5 py-4 hover:border-sage transition-colors"
+      ) : isEn && active === "press" ? (
+        <div>
+          <div className="photo-frame border border-hairline overflow-hidden mb-16">
+            <button
+              type="button"
+              onClick={(e) => openLightbox(pressImages, 0, e.currentTarget)}
+              aria-label={t("enlargeLabel", { alt: nytPhoto.alt })}
+              className="block w-full group"
             >
-              <p className="text-body text-ivory/90">{item.title}</p>
-              <p className="text-caption text-grey-muted mt-2">
-                {item.source}
+              <div className="relative aspect-[3/2]">
+                <Image
+                  src={nytPhoto.src}
+                  alt={nytPhoto.alt}
+                  fill
+                  sizes="(min-width: 768px) 48rem, 100vw"
+                  className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                />
+              </div>
+            </button>
+            {nytPhoto.caption && (
+              <p className="text-caption text-grey-muted px-5 py-4">
+                {nytPhoto.caption}
               </p>
-            </a>
-          ))}
-          {pressImages.map((img, i) => (
-            <div
-              key={img.src}
-              className="photo-frame border border-hairline overflow-hidden"
-            >
-              <button
-                type="button"
-                onClick={(e) => openLightbox(pressImages, i, e.currentTarget)}
-                aria-label={t("enlargeLabel", { alt: img.alt })}
-                className="block w-full group"
-              >
-                <div className="relative aspect-[3/2]">
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    sizes="(min-width: 640px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-                  />
-                </div>
-              </button>
-              {img.caption && (
-                <p className="text-caption text-grey-muted px-5 py-4">
-                  {img.caption}
-                </p>
-              )}
-            </div>
-          ))}
+            )}
+          </div>
+
+          <div>
+            {pressArticles.map((article) => (
+              <LinkEntry key={article.url} title={article.title} href={article.url} />
+            ))}
+          </div>
         </div>
       ) : (
         <Placeholder label={tc("placeholderLabel")}>
