@@ -57,12 +57,26 @@
   (다른 섹션처럼 Placeholder로 감싸면 존재하지 않는 키를 그대로 문자열로
   출력해버려서 깨짐). KO 번역 작업 때 이 두 키도 함께 추가할 것.
 
-- About > Artistic Vision 섹션: 내용 미정, 이탤릭체로 작성 예정. 현재는
-  프로필 사진 다음·Bio 앞에 자리만 예약된 상태(`[Content pending — see
-  docs/TODO.md]` placeholder). 기존에 초안으로 있던 텍스트(참고용, 확정 아님):
-  "For Mijung IM, musical excellence is not an end in itself. Virtuosity
-  becomes meaningful when it serves listening, attentiveness, and human
-  connection. Her performances invite audiences into a space of attentive
-  listening. Rather than projecting emotion outward, she draws listeners
-  inward, allowing musical meaning to emerge through nuance, pacing,
-  resonance, and silence."
+- About > Artistic Vision 섹션: 내용 미정 — About 페이지에서는 제외하기로
+  결정 (2026-07-28). 다른 배치 위치는 미정, 별도 지시 대기. 예약해뒀던 자리
+  (프로필 사진 다음·Bio 앞, `[Content pending — see docs/TODO.md]`
+  placeholder)와 관련 코드는 모두 제거함; `visionTitle`/`visionBody` 키도
+  EN `common.json`에서 삭제. KO `common.json`의 `about.visionTitle`/
+  `about.visionBody`는 (KO 파일은 명시 지시 없이 건드리지 않는다는 규칙에
+  따라) 그대로 남아있지만 더 이상 어떤 코드에서도 참조되지 않음 — KO 번역
+  작업 재개 시 함께 정리할 것.
+
+  참고용으로 보존해둔 초안 텍스트(둘 다 확정 아님, 재사용 시 About 외
+  다른 배치를 고려):
+
+  - EN 초안: "For Mijung IM, musical excellence is not an end in itself.
+    Virtuosity becomes meaningful when it serves listening, attentiveness,
+    and human connection. Her performances invite audiences into a space
+    of attentive listening. Rather than projecting emotion outward, she
+    draws listeners inward, allowing musical meaning to emerge through
+    nuance, pacing, resonance, and silence."
+
+  - KO 초안 (제목 "예술적 비전"): "임미정에게 음악은 좀처럼 귀 기울여지지
+    않는 장소 — 접경지대, 숲, 침묵 — 를 듣는 방식입니다. 그의 프로그램은
+    피아노 리사이틀이 아름다움만큼이나 평화를 위한 자리를 마련할 수
+    있다는 생각을 바탕으로 구성됩니다."

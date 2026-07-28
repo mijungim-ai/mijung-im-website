@@ -50,26 +50,6 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-ink-deep border-y border-hairline">
-        <div className="mx-auto max-w-3xl px-6 py-28">
-          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-            {t("visionTitle")}
-          </h2>
-          {isEn ? (
-            <p className="display-serif italic text-body text-ivory/70">
-              {t("visionBody")}
-            </p>
-          ) : (
-            <Placeholder
-              label={tc("placeholderLabel")}
-              surfaceClassName="bg-ink-deep"
-            >
-              <p className="text-body text-ivory/90">{t("visionBody")}</p>
-            </Placeholder>
-          )}
-        </div>
-      </section>
-
       <section className="mx-auto max-w-3xl px-6 py-28">
         <h2 className="label text-xs text-grey-muted mb-6">Biography</h2>
         {isEn ? (
