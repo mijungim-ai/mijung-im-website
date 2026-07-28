@@ -145,3 +145,47 @@
   없음(트레이드마크 정리로 제거된 것으로 보임 — "apple"과 "x"(트위터)만
   남아있음). 그래서 다시 제거하고 `src/components/icons/
   SocialGlyphs.tsx`에 직접 만든 단색 SVG 5종을 대신 사용.
+
+- Dialogue 페이지 개편 (2026-07-29): 상단도입부를 sr-only `<h1>Dialogue</h1>`
+  + 이탤릭 4문장(`dialogue.headerStatement`, `PageHeaderStatement` 재사용)
+  으로 교체, 기존 `entriesBody` 키 삭제. KO는 다른 페이지와 동일하게
+  기존 `subtitle`("에세이 및 인터뷰")로 폴백.
+
+  Essays/Artistic Director's Letter 실제 데이터를 `src/data/dialogue.ts`에
+  분리(`EssayLink[]`, `DirectorLetterEntry[]` — 후자는 `type: "link" |
+  "text"` 판별 유니온, 지금은 전부 링크형이지만 전문형 렌더링도 함께
+  구현해둠). 두 섹션 제목("Essays", "Artistic Director's Letter")은
+  `t()`가 아니라 코드에 그냥 하드코딩된 영문 문자열 — About의 "The
+  Artist"/"Biography" 라벨과 동일한 기존 관행을 따름. 이 두 개를 위한
+  새 번역 키를 만들면 EN에는 있고 KO에는 없는 키가 되는데, 이 키는
+  `isEn` 게이트 없이 양쪽 로케일에서 무조건 호출되므로(섹션 제목이라
+  숨길 수 없음) About 인용구/Media 탭 라벨 때와 같은 버그가 남; 아예
+  번역 인프라를 안 타는 하드코딩으로 처음부터 피함.
+
+  기고문/음악감독노트 링크 자체(에세이 2건, PLZ 노트 2건)는 `isEn`으로
+  게이트하지 않고 양쪽 로케일에 동일하게 노출 — 원문이 애초에 한국어
+  기사·한국어 페스티벌 공지라서 "EN 콘텐츠 확정 전까지 KO에서 숨김"이라는
+  기존 게이트의 취지 자체가 적용 안 됨.
+
+  URL 4개 전부 curl로 직접 접속 확인(200 + 실제 페이지 제목 일치):
+  국민일보 기사 2건, plzfe.com 2020/2021 노트 2건. `plzfe.com`은 UA
+  없이도 정상 응답이라 별도 브라우저 UA 재시도 불필요했음.
+
+- Projects 페이지 — 홈페이지 링크 3건 (2026-07-29): PLZ/DMZ OPEN/Music
+  for One 섹션에 "Visit Website →" 링크 추가. **사용자 프롬프트는
+  "기존 `href="#"` placeholder를 교체"라고 했지만, 실제 코드에는 그런
+  placeholder가 전혀 없었음**(grep 확인 완료, 이 TODO.md에도 관련 항목
+  없었음) — 그래서 "교체"가 아니라 새로 추가함. 링크는 각 섹션의
+  `final`(=`isEn`) 조건에 함께 묶여 있어 KO에서는 (다른 콘텐츠가 아직
+  placeholder 상태인 것과 동일하게) 보이지 않음 — 의도적 설계.
+
+  URL 3개 전부 실접속 확인:
+  - `http://plzfe.com/` — 200, 실제 콘텐츠.
+  - `https://www.gg.go.kr/dmzopen/index.do` — 기본 curl(UA 없음)로는
+    "보안 정책에 의해 차단 되었습니다"(EUC-KR) 차단 페이지가 200으로
+    돌아옴 — 브라우저 User-Agent + Accept-Language 헤더를 추가하자
+    정상적인 실제 페이지(Vue 앱, 130KB)로 전환됨. 즉 이 도메인은 봇
+    차단이 실제로 존재했고, 브라우저처럼 보이는 요청에는 정상 응답함.
+  - `http://www.music4one.org/` — 사용자가 봇 차단 가능성을 특별히
+    언급했지만, 기본 curl로도 바로 200 + 정상 콘텐츠(title: "(사)
+    하나를위한음악재단") — 이 도메인은 차단 없음.
