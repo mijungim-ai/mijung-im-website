@@ -19,9 +19,20 @@ export default async function ProjectsPage() {
         ? t("plzImageCaption")
         : "Piano performance on the beach, PLZ Festival",
       imageCaption: isEn ? t("plzImageCaption") : undefined,
+      href: "http://plzfe.com/",
     },
-    { title: t("dmzTitle"), body: t("dmzBody"), final: isEn },
-    { title: t("foundationTitle"), body: t("foundationBody"), final: isEn },
+    {
+      title: t("dmzTitle"),
+      body: t("dmzBody"),
+      final: isEn,
+      href: "https://www.gg.go.kr/dmzopen/index.do",
+    },
+    {
+      title: t("foundationTitle"),
+      body: t("foundationBody"),
+      final: isEn,
+      href: "http://www.music4one.org/",
+    },
     { title: t("educationTitle"), body: t("educationBody"), final: false },
   ];
 
@@ -61,6 +72,16 @@ export default async function ProjectsPage() {
               <Placeholder label={tc("placeholderLabel")}>
                 <p className="text-body text-ivory/90">{project.body}</p>
               </Placeholder>
+            )}
+            {project.final && project.href && (
+              <a
+                href={project.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="label text-xs text-sage hover:text-ivory transition-colors mt-6 inline-block"
+              >
+                Visit Website →
+              </a>
             )}
           </section>
         ))}
