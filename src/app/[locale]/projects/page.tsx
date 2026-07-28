@@ -2,10 +2,12 @@ import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
 import { PageHeader } from "@/components/PageHeader";
 import { Placeholder } from "@/components/Placeholder";
+import { ProjectGallery } from "@/components/ProjectGallery";
 
 export default async function ProjectsPage() {
   const t = await getTranslations("projects");
   const tc = await getTranslations("common");
+  const tm = await getTranslations("media");
   const locale = await getLocale();
   const isEn = locale === "en";
 
@@ -33,7 +35,6 @@ export default async function ProjectsPage() {
       final: isEn,
       href: "http://www.music4one.org/",
     },
-    { title: t("educationTitle"), body: t("educationBody"), final: false },
   ];
 
   return (
@@ -85,6 +86,13 @@ export default async function ProjectsPage() {
             )}
           </section>
         ))}
+
+        <section>
+          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+            {tm("tabs.gallery")}
+          </h2>
+          <ProjectGallery />
+        </section>
       </div>
     </div>
   );

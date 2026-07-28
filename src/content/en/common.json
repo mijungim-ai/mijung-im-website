@@ -98,16 +98,14 @@
   },
   "projects": {
     "title": "Projects",
-    "subtitle": "Festivals, foundations, and educational initiatives",
+    "subtitle": "Festivals and foundations",
     "plzTitle": "PLZ Festival",
     "plzBody": "Founded in 2019 with the support of Gangwon Province, the PLZ Festival reimagines Korea's DMZ border region not only as a symbol of division, but as a Peace and Life Zone. Under Mijung IM's artistic direction, performances were created in railway stations, beaches, forests, churches, botanical gardens, and historic locations.",
     "plzImageCaption": "Mijung IM performing on the shore of Korea's East Sea",
     "dmzTitle": "DMZ OPEN International Music Festival",
     "dmzBody": "Appointed as General Director of Gyeonggi Province's DMZ OPEN Festival, Mijung IM curated and led its International Music Festival, bringing together distinguished soloists, major orchestras, and laureates of leading international competitions.",
     "foundationTitle": "Music for One Foundation",
-    "foundationBody": "Founded by Mijung IM in 2005, the Music for One Foundation develops artistic and educational programs that connect music with dignity, cultural dialogue, and human development. Its initiatives have included music education and international exchange projects in Cambodia, Myanmar, Tanzania, and India.",
-    "educationTitle": "Educational Initiatives",
-    "educationBody": "Details about educational and community initiatives will be presented here."
+    "foundationBody": "Founded by Mijung IM in 2005, the Music for One Foundation develops artistic and educational programs that connect music with dignity, cultural dialogue, and human development. Its initiatives have included music education and international exchange projects in Cambodia, Myanmar, Tanzania, and India."
   },
   "contact": {
     "title": "Contact",

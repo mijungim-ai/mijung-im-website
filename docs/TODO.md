@@ -189,3 +189,43 @@
   - `http://www.music4one.org/` — 사용자가 봇 차단 가능성을 특별히
     언급했지만, 기본 curl로도 바로 200 + 정상 콘텐츠(title: "(사)
     하나를위한음악재단") — 이 도메인은 차단 없음.
+
+- Projects 페이지 — Educational Initiatives 삭제 + 갤러리 6장 추가
+  (2026-07-29): `educationTitle`/`educationBody` 참조 코드(배열 항목)
+  삭제, `projects` 배열이 `.map()`으로 렌더링되고 각 섹션이
+  `space-y-20`으로만 간격을 두는 구조라(개별 섹션에 `py-*` 없음) 항목
+  하나를 지워도 앞뒤 간격이 자동으로 다른 섹션 쌍과 동일하게 유지됨 —
+  별도 스타일 조정 불필요. EN `common.json`에서 두 키 삭제; KO
+  `common.json`의 `projects.educationTitle`/`educationBody`는 (KO 파일
+  미수정 규칙에 따라) 그대로 남아있지만 이제 코드에서 전혀 참조 안 됨.
+
+  EN `projects.subtitle`도 함께 수정함("Festivals, foundations, and
+  educational initiatives" → "Festivals and foundations") — 이건 KO
+  폴백용이 아니라 `PageHeader`를 통해 EN 사용자에게도 그대로 노출되는
+  실제 텍스트라, Educational Initiatives를 지우면 EN 부제 자체가
+  당장 부정확해지는 문제라 다른 페이지의 "KO 폴백 문구가 나중에
+  부정확해짐" 케이스와는 다르게 즉시 고쳐야 했음. KO
+  `projects.subtitle`("페스티벌, 재단, 교육 프로그램")은 여전히 교육
+  프로그램을 언급 중 — KO는 안 건드리는 규칙이라 그대로 둠, KO 번역
+  작업 재개 시 같이 손볼 것.
+
+  갤러리 6장은 `src/data/projectGallery.ts`에 분리(다른 데이터 파일과
+  동일 패턴, `src/data/media.ts`의 `MediaImage` 타입 재사용), 렌더링은
+  `src/components/ProjectGallery.tsx`(신규 client 컴포넌트)가 담당 —
+  `MediaTabs.tsx`의 Gallery 탭과 동일하게 기존 `Lightbox` 컴포넌트를
+  그대로 재사용해 클릭 시 확대. "Gallery" 섹션 제목은 새 키를 만들지
+  않고 이미 양쪽 로케일에 있는 `media.tabs.gallery`를 재사용(페이지 간
+  네임스페이스 차용이지만, 새 미번역 키를 또 만드는 것보다 안전).
+  사진 자체는 (기고문 링크와 마찬가지로) `isEn` 게이트 없이 양쪽
+  로케일에 동일하게 노출.
+
+  이미지 처리 중 실수 발견 및 수정: 처음에 bash 배열+for 루프로 6개를
+  한 번에 리네이밍하려다가 출력 파일명과 실제 내용이 한 칸씩 밀리는
+  버그가 발생함(예: "coasta_rica_..." 파일에 UN 오케스트라 사진이
+  들어감) — 원인 특정 전에 즉시 전체 삭제 후 이미지 1장당 명령어 1개로
+  개별 재처리, 이름별로 실제 픽셀 치수를 다시 확인하고 대표 이미지
+  2장을 직접 눈으로 재확인한 뒤에야 커밋 진행. 6장 전부 4000px
+  강제 리사이즈 기준 미만이라 치수는 원본 그대로 두고 quality 85로만
+  재인코딩; 이 중 2장(경주 포럼 960×720, 박칼린 인터뷰 611×458)은 사이트
+  기준 1500px 미만이라 원본 자체가 저해상도임 — 리사이즈로 개선 불가,
+  그대로 사용.
