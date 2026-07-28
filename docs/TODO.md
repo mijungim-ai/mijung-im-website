@@ -229,3 +229,20 @@
   재인코딩; 이 중 2장(경주 포럼 960×720, 박칼린 인터뷰 611×458)은 사이트
   기준 1500px 미만이라 원본 자체가 저해상도임 — 리사이즈로 개선 불가,
   그대로 사용.
+
+- Contact 페이지 정리 (2026-07-29): 채널별로 분리했던 3개 컨택포인트
+  (콘서트/마스터클래스/미디어), 지금은 General과 동일 정보라 통합함.
+  채널별 구분이 필요해지면 참고. 레이아웃은 2×2 그리드에서 단일 블록으로
+  변경(`grid sm:grid-cols-2` 제거, General 블록에 `max-w-sm`만 적용해
+  전체 폭으로 늘어지지 않게 함). FOLLOW(SNS) 섹션은 Contact 페이지
+  렌더링에서만 제거 — `src/data/socials.ts`는 손대지 않음(Media 상단
+  도입부와 Footer가 계속 참조). 상단도입부(`contact.title`/`subtitle`)는
+  그대로 유지.
+
+  EN `common.json`에서 `contact.concertTitle`/`masterclassTitle`/
+  `mediaTitle`/`followTitle` 4개 키 삭제. KO `common.json`은 (미수정
+  규칙에 따라) 그대로 두었는데, KO는 애초에 `followTitle` 키 자체가
+  없었고(FOLLOW 섹션이 EN 전용으로만 `isEn` 게이트되어 있었기 때문),
+  `concertTitle`/`masterclassTitle`/`mediaTitle` 3개만 존재 — 이제 이
+  3개가 코드에서 전혀 참조되지 않는 미사용 키가 됨. KO 번역 작업 재개
+  시 함께 정리할 것.

@@ -110,15 +110,11 @@
   "contact": {
     "title": "Contact",
     "subtitle": "Booking, media, and general inquiries",
-    "concertTitle": "Concert & Residency",
-    "masterclassTitle": "Masterclass",
-    "mediaTitle": "Media",
     "generalTitle": "General",
     "emailPlaceholder": "Email address to be added",
     "email": "pianist629@gmail.com",
     "contactPerson": "Jinyoung Lee (Artist Relations)",
-    "phone": "+1 630-518-1399",
-    "followTitle": "Follow"
+    "phone": "+1 630-518-1399"
   },
   "home": {
     "heroTitle": "Pianist of Peace & Nature",
