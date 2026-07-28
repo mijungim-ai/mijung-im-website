@@ -71,7 +71,7 @@ export default async function Home() {
         )}
       </section>
 
-      <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[420px] flex items-center">
+      <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[420px] flex items-start">
         <Image
           src="/images/home/plz_goseong_hwajinpo_beach_2020.jpg"
           alt={
@@ -83,16 +83,14 @@ export default async function Home() {
           sizes="100vw"
           className="object-cover object-bottom"
         />
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/55 to-transparent"
-          aria-hidden
-        />
-        <div className="relative z-10 mx-auto max-w-3xl w-full px-6 py-20">
-          <h2 className="text-h2 font-display-bold! font-bold not-italic text-on-photo mb-3">
+        <div className="relative z-10 mx-auto max-w-3xl w-full px-6 pt-12 pb-10">
+          <h2 className="text-h2 font-display-bold! font-bold not-italic text-on-photo mb-3 [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_2px_10px_rgba(0,0,0,0.85)]">
             {t("projectTitle")}
           </h2>
           {isEn ? (
-            <p className="text-body text-on-photo/90">{t("projectSubtitle")}</p>
+            <p className="text-body text-on-photo/90 [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_2px_10px_rgba(0,0,0,0.85)]">
+              {t("projectSubtitle")}
+            </p>
           ) : (
             <Placeholder label={tc("placeholderLabel")} surfaceClassName="bg-ink-deep">
               <p className="text-body text-on-photo/90">{t("projectSubtitle")}</p>
@@ -100,7 +98,7 @@ export default async function Home() {
           )}
           <Link
             href="/projects"
-            className="label text-xs text-on-photo hover:text-sage transition-colors mt-6 inline-block"
+            className="label text-xs text-on-photo hover:text-sage transition-colors mt-6 inline-block [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_2px_10px_rgba(0,0,0,0.85)]"
           >
             {t("projectLink")} →
           </Link>
