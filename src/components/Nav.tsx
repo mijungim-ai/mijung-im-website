@@ -37,6 +37,8 @@ export function Nav() {
   const isActive = (href: (typeof ITEMS)[number]["href"]) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  const targetLocale = LOCALES.find((l) => l.code !== locale)!;
+
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-ink border-b border-hairline">
       <nav className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
@@ -47,46 +49,56 @@ export function Nav() {
           Mijung IM
         </Link>
 
-        <ul className="hidden md:flex items-center gap-7">
-          {ITEMS.map((item) => (
-            <li key={item.key}>
-              <Link
-                href={item.href}
-                className={`label text-xs transition-colors ${
-                  isActive(item.href)
-                    ? "text-sage"
-                    : "text-grey-muted hover:text-ivory"
-                }`}
-              >
-                {t(item.key)}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="flex items-center gap-4 md:gap-5">
+          <ul className="hidden md:flex items-center gap-5">
+            {ITEMS.map((item) => (
+              <li key={item.key}>
+                <Link
+                  href={item.href}
+                  className={`nav-label text-xs transition-colors ${
+                    isActive(item.href)
+                      ? "text-sage"
+                      : "text-grey-muted hover:text-ivory"
+                  }`}
+                >
+                  {t(item.key)}
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-        <button
-          type="button"
-          onClick={() => setIsOpen((v) => !v)}
-          aria-expanded={isOpen}
-          aria-label={isOpen ? t("closeMenu") : t("openMenu")}
-          className="md:hidden relative w-8 h-8 flex items-center justify-center shrink-0"
-        >
-          <span
-            className={`absolute h-px w-5 bg-ivory transition-transform duration-200 ${
-              isOpen ? "rotate-45" : "-translate-y-1.5"
-            }`}
-          />
-          <span
-            className={`absolute h-px w-5 bg-ivory transition-opacity duration-200 ${
-              isOpen ? "opacity-0" : "opacity-100"
-            }`}
-          />
-          <span
-            className={`absolute h-px w-5 bg-ivory transition-transform duration-200 ${
-              isOpen ? "-rotate-45" : "translate-y-1.5"
-            }`}
-          />
-        </button>
+          <Link
+            href={pathname}
+            locale={targetLocale.code}
+            className="label text-xs border border-hairline px-2.5 py-1 text-grey-muted hover:text-ivory hover:border-ivory transition-colors shrink-0"
+          >
+            {targetLocale.label}
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => setIsOpen((v) => !v)}
+            aria-expanded={isOpen}
+            aria-label={isOpen ? t("closeMenu") : t("openMenu")}
+            className="md:hidden relative w-8 h-8 flex items-center justify-center shrink-0"
+          >
+            <span
+              className={`absolute h-px w-5 bg-ivory transition-transform duration-200 ${
+                isOpen ? "rotate-45" : "-translate-y-1.5"
+              }`}
+            />
+            <span
+              className={`absolute h-px w-5 bg-ivory transition-opacity duration-200 ${
+                isOpen ? "opacity-0" : "opacity-100"
+              }`}
+            />
+            <span
+              className={`absolute h-px w-5 bg-ivory transition-transform duration-200 ${
+                isOpen ? "-rotate-45" : "translate-y-1.5"
+              }`}
+            />
+          </button>
+        </div>
       </nav>
 
       <div
@@ -103,7 +115,7 @@ export function Nav() {
             <li key={item.key} className="border-b border-hairline">
               <Link
                 href={item.href}
-                className={`label text-sm py-5 block transition-colors ${
+                className={`nav-label text-sm py-5 block transition-colors ${
                   isActive(item.href)
                     ? "text-sage"
                     : "text-ivory hover:text-sage"
