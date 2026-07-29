@@ -394,3 +394,32 @@
   거의 일치): Sage 4.756:1(추정 4.76:1), Brass 4.812:1(추정 4.81:1) —
   둘 다 AA 통과, 사용자가 지정한 "4.5 미만이면 먼저 보고" 조건에
   해당하지 않아 값 조정 없이 그대로 반영.
+
+- 로고 — Nav "MIJUNG IM" → "IM" 모노그램 + 파비콘 (2026-07-29): Home
+  히어로의 "Mijung IM" 타이틀 실제 computed style을 확인해 재사용(새
+  폰트 로드 없음) — `font-family: Merriweather`(레이아웃의
+  `--font-bodoni` 변수, 프로젝트 초기에 "Bodoni Moda"였다가 나중에
+  Merriweather로 교체된 이력이 있어 변수명과 실제 폰트가 다름),
+  `font-weight: 700`, `font-style: italic`, `letter-spacing: normal`
+  — 기존 globals.css의 `.display-serif` 클래스가 정확히 이 조합이라
+  Nav.tsx에서 `logotype` 대신 `display-serif`로 교체. 텍스트는
+  `t()` 없이 `IM` 하드코딩, `aria-label="Mijung IM"` 추가. Footer의
+  "Mijung IM" 워드마크는 이번 지시 범위 밖이라 손대지 않음(로고
+  일관성 관점에서 나중에 재검토 여지 있음).
+
+  파비콘: 기존 `src/app/favicon.ico`는 `create-next-app` 기본값(커스텀
+  안 된 상태)이었음 — 새 아이콘 도입에 맞춰 삭제하고 Next.js 파일
+  컨벤션대로 `src/app/icon.png`(32×32, 배지형 A안: ink 배경 둥근
+  사각형 + 반전색 IM)와 `src/app/apple-icon.png`(180×180, 풀블리드
+  불투명 정사각형 — iOS가 자체적으로 모서리를 마스킹하므로 투명/둥근
+  모서리를 넣지 않음, Apple 권장사항)로 교체. 두 파일 다 히어로와
+  동일한 Merriweather Bold Italic 폰트로 PIL 직접 래스터화(브라우저
+  캔버스가 아니라 실제 폰트 파일을 8배 슈퍼샘플링 후 LANCZOS
+  다운스케일 — 파비콘은 최종적으로 정적 비트맵으로 표시되므로 이
+  방식이 실제 결과물과 가장 가까움).
+
+  16px 검증 결과 실제 문제 발견해 사용자에게 보고 후 진행: 투명
+  배경(B안, 세리프 획이 16px에서 소실)과 배지형(A안)의 16px도
+  경계선상이었으나, 32px에서는 A안이 확실히 우수 — 사용자가 A안을
+  그대로 채택하기로 결정. 16px 열화는 알려진 트레이드오프로 남겨둠;
+  나중에 16px 전용 단순화 마크가 필요해지면 이 항목 참고.
