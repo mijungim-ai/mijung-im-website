@@ -72,6 +72,16 @@ body {
   font-family: var(--font-sans);
 }
 
+/*
+ * Tailwind's Preflight leaves <button> at the browser's native default
+ * cursor instead of pointer (a deliberate change since Tailwind v3).
+ * Centralize the fix here rather than scattering cursor-pointer across
+ * every button usage, same principle as the color/spacing tokens.
+ */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
 .label {
   font-family: var(--font-manrope), sans-serif;
   text-transform: uppercase;

@@ -154,7 +154,7 @@ export function Lightbox({
       tabIndex={-1}
       onClick={onClose}
       onKeyDown={handleKeyDown}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/90 outline-none transition-opacity duration-200 motion-reduce:transition-none ${
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/90 outline-none cursor-pointer transition-opacity duration-200 motion-reduce:transition-none ${
         visible ? "opacity-100" : "opacity-0"
       }`}
     >
@@ -199,7 +199,7 @@ export function Lightbox({
       )}
 
       <div
-        className="flex flex-col items-center"
+        className="flex flex-col items-center cursor-default"
         onClick={(e) => {
           e.stopPropagation();
           // Clicking non-focusable content (image, caption) would
