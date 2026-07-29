@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 // Standard page-header wrapper — the pt-16 (nav clearance) + bordered
 // intro block duplicated near-identically across About/Performances/
 // Media/Dialogue/Projects/Contact, now centralized. The inner py-14
-// md:py-28 pairs with Section's own top padding so the header-to-body
-// gap (A) matches the section-to-section gap (B): ~224px on desktop,
-// ~112px on mobile.
+// md:py-28 is the SOLE contributor to the header-to-body gap (A) —
+// <Section> has no padding of its own, so this single 112px (56px
+// mobile) is never doubled.
 export function PageHeaderSection({
   children,
   className = "",

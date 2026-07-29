@@ -50,25 +50,27 @@ export default async function PerformancesPage() {
         )}
       </PageHeaderSection>
 
-      <Section>
-        <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-          {t("engagementsTitle")}
-        </h2>
-        {isEn ? (
-          <EngagementsList />
-        ) : (
-          <Placeholder label={tc("placeholderLabel")}>
+      <div className="space-y-14 md:space-y-28">
+        <Section>
+          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+            {t("engagementsTitle")}
+          </h2>
+          {isEn ? (
             <EngagementsList />
-          </Placeholder>
-        )}
-      </Section>
+          ) : (
+            <Placeholder label={tc("placeholderLabel")}>
+              <EngagementsList />
+            </Placeholder>
+          )}
+        </Section>
 
-      <Section>
-        <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-          {t("archiveTitle")}
-        </h2>
-        <ConcertArchiveGrid />
-      </Section>
+        <Section>
+          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+            {t("archiveTitle")}
+          </h2>
+          <ConcertArchiveGrid />
+        </Section>
+      </div>
     </div>
   );
 }

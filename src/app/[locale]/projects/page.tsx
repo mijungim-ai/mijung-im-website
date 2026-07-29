@@ -50,7 +50,7 @@ export default async function ProjectsPage() {
         </PageHeaderStatement>
       </PageHeaderSection>
 
-      <>
+      <div className="space-y-14 md:space-y-28">
         {projects.map((project) => (
           <Section key={project.title}>
             {project.image && (
@@ -102,7 +102,7 @@ export default async function ProjectsPage() {
           </h2>
           <ProjectGallery />
         </Section>
-      </>
+      </div>
     </div>
   );
 }

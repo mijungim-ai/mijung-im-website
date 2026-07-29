@@ -51,27 +51,29 @@ export default async function DialoguePage() {
         )}
       </PageHeaderSection>
 
-      <Section>
-        <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-          Essays
-        </h2>
-        <div>
-          {essays.map((essay) => (
-            <LinkEntry key={essay.href} title={essay.title} href={essay.href} />
-          ))}
-        </div>
-      </Section>
+      <div className="space-y-14 md:space-y-28">
+        <Section>
+          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+            Essays
+          </h2>
+          <div>
+            {essays.map((essay) => (
+              <LinkEntry key={essay.href} title={essay.title} href={essay.href} />
+            ))}
+          </div>
+        </Section>
 
-      <Section>
-        <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-          Artistic Director&rsquo;s Letter
-        </h2>
-        <div className="space-y-6">
-          {directorLetters.map((entry) => (
-            <DirectorLetterEntryRow key={entry.title} entry={entry} />
-          ))}
-        </div>
-      </Section>
+        <Section>
+          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+            Artistic Director&rsquo;s Letter
+          </h2>
+          <div className="space-y-6">
+            {directorLetters.map((entry) => (
+              <DirectorLetterEntryRow key={entry.title} entry={entry} />
+            ))}
+          </div>
+        </Section>
+      </div>
     </div>
   );
 }

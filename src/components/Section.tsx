@@ -1,11 +1,9 @@
 import type { ReactNode } from "react";
 
-// Standard body-section wrapper — centralizes the site's vertical
-// rhythm. Two adjacent <Section>s combine to ~224px on desktop
-// (112px padding each), the value validated on About's photo
-// grid/Bio/EPK sequence, now applied everywhere. py-14 on mobile
-// halves that, matching the existing pt-10 md:pt-16 precedent on the
-// Home hero title.
+// Standard body-section wrapper — horizontal centering only. Vertical
+// rhythm is NOT this component's job: siblings get their single
+// 112px (56px mobile) gap from the parent's space-y-14 md:space-y-28
+// wrapper, so two adjacent <Section>s never double-pad into 224px.
 export function Section({
   children,
   className = "",
@@ -14,7 +12,7 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section className={`mx-auto max-w-3xl px-6 py-14 md:py-28 ${className}`}>
+    <section className={`mx-auto max-w-3xl px-6 ${className}`}>
       {children}
     </section>
   );
