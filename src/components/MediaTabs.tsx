@@ -50,7 +50,7 @@ export function MediaTabs() {
     <div>
       <div
         role="tablist"
-        aria-label="Media category"
+        aria-label={t("categoryLabel")}
         className="flex gap-6 border-b border-hairline mb-8 flex-wrap"
       >
         {TABS.map((tab) => (

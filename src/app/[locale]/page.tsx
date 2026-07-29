@@ -76,11 +76,7 @@ export default async function Home() {
         <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[420px] flex items-start">
           <Image
             src="/images/home/plz_goseong_hwajinpo_beach_2020.jpg"
-            alt={
-              isEn
-                ? t("projectImageCaption")
-                : "Piano performance inside a transparent dome on the beach at Hwajinpo, Goseong"
-            }
+            alt={t("projectImageCaption")}
             fill
             sizes="100vw"
             className="object-cover object-bottom"

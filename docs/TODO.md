@@ -948,3 +948,74 @@ true일 때만 렌더링되는 기존 구조라 KO 화면에는 애초에 노출
 `projects.visitWebsiteLabel`) 값만 교체하면 됨. `media.videoGroups.*`
 두 키는 코드 구조상 "Performances"/"Talks & Interviews"가 사실상
 게시판형 섹션의 감싸는 UI 라벨이라 번역 여부는 추후 판단 필요.
+
+### `docs/translation-ko-final-v2.md` 확정 번역 1차 반영 (2026-07-29)
+
+**8번째 하드코딩 항목 추가 전환**: 지난 라운드에서 "7건"에 포함하지
+않고 의도적으로 남겨뒀던 `MediaTabs.tsx:53`의 탭 목록 접근성 라벨
+(`aria-label="Media category"`)을 이번 요청에서 명시적으로 포함시켜
+`media.categoryLabel` 키로 전환. EN `common.json`에 신규 추가(`"Media
+category"`), KO에는 확정 번역("미디어 카테고리")을 바로 채워 넣음(이번
+항목은 임시 EN 자리표시자 단계 없이 곧장 최종 번역으로 추가).
+
+**KO 번역 반영**: `translation-ko-final-v2.md`에 정리된 확정 번역을
+`content/ko/common.json`에 채워 넣음 — `footer.rights`, `home.
+statementHeadline`/`statementTagline`/`projectImageCaption`(3개 다
+KO에 없던 신규 키), `about.quoteText`/`quoteAttribution`(신규 키)
+및 `theArtistLabel`/`biographyLabel`(지난 라운드의 EN 임시값을 실제
+번역으로 교체), `about.bioMedium`(전체 교체, 기존 자리표시자 문단
+삭제), `performances.headerStatement`(신규), `media.headerTitle`/
+`headerStatement`(신규) 및 `videoGroups.performancesTitle`/
+`talksTitle`(임시값 → 실제 번역), `dialogue.headerStatement`(신규)
+및 `essaysTitle`/`directorLetterTitle`(임시값 → 실제 번역),
+`projects.plzBody`/`dmzBody`/`foundationBody`(전체 교체) 및
+`plzImageCaption`(신규), `projects.visitWebsiteLabel`(임시값 → 실제
+번역).
+
+**코드 변경은 명시적으로 요청된 2건으로만 한정**:
+1. `MediaTabs.tsx` 탭 목록 `aria-label`을 `{t("categoryLabel")}`로 전환.
+2. `page.tsx`(Home) PLZ 배너 이미지 alt — 기존 `isEn ? t("projectImageCaption")
+   : "Piano performance inside a transparent dome..."`(KO 분기 영문
+   하드코딩 fallback)을 `{t("projectImageCaption")}` 단일 호출로 교체.
+   EN/KO 둘 다 이제 같은 키를 통해 각자의 언어로 alt 텍스트를 받음
+   (EN 값은 기존과 동일해 시각적 변화 없음, KO는 새 번역 alt로 교체).
+
+**의도적으로 건드리지 않은 부분(판단 보류, 사용자 확인 필요)**: 사용자
+요청 항목 2는 "JSON 값을 채워달라"는 요청이었고, 항목 1·3에서만
+명시적으로 코드 변경을 요청함. 그래서 아래 기존 `isEn`/`Placeholder`
+게이트는 이번에 건드리지 않음 — 즉 방금 채운 번역 중 일부는 코드에
+아직 연결되지 않아 KO 화면에 보이지 않음:
+- About 상단 인용구(`quoteText`/`quoteAttribution`) — `about/page.tsx`의
+  `{isEn && (...)}` 블록이 그대로라 KO에서는 여전히 렌더링 안 됨.
+- Performances/Media/Dialogue 상단본문(`headerStatement`, Media는
+  `headerTitle`도) — 각 페이지의 `isEn ? headerStatement 문단 : 짧은
+  subtitle` 삼항연산자가 그대로라 KO는 여전히 기존 subtitle만 노출.
+- Home `statementHeadline`/`statementTagline` — `{isEn && (...)}` 블록
+  그대로라 KO에서는 여전히 안 보임.
+- About bioMedium / Projects 3개 카드 본문(`plzBody`/`dmzBody`/
+  `foundationBody`) — 이 두 곳은 완전히 숨겨진 게 아니라 `Placeholder`
+  컴포넌트로 감싸져 있어(점선 박스 + "콘텐츠 준비 중" 라벨), 새 번역
+  텍스트 자체는 KO 화면에 그대로 노출됨 — 다만 이미 완성된 최종
+  번역 위에 "준비 중" 라벨이 함께 뜨는 상태로 남아 있음.
+- Projects "홈페이지 방문" 버튼 — `project.final`(=`isEn`) 조건에
+  묶여 있어 KO에서는 버튼 자체가 렌더링되지 않음(지난 라운드부터
+  동일, 이번에도 변경 없음).
+
+이 게이트들을 해제할지는 사용자에게 별도 확인 필요 — TODO.md 44행의
+로드맵 메모("3단계 한글 1차 번역 투입 시 isEn 게이트 일괄 해제 예정")
+상으로는 이번이 그 3단계에 해당하지만, 이번 요청은 정확히 JSON 값
+채우기와 지정된 2건의 코드 변경으로만 범위를 한정했기 때문에 게이트
+해제는 임의로 진행하지 않음.
+
+**검증**: `tsc --noEmit`/`eslint`(수정 파일 전체)/`next build` 모두
+통과. EN 7개 페이지를 `get_page_text`/DOM(`img[alt]`, tablist
+`aria-label`)로 실측 — 이번 변경으로 전혀 달라지지 않았음을 확인.
+KO 7개 페이지(Home/About/Performances/Media/Dialogue/Projects/
+Contact) 전부 `get_page_text`로 실측, About·Media·Projects는 데스크톱
+(About) 및 375px 모바일(About/Projects/Media) 스크린샷으로도 확인.
+About 바이오 전체 4문단, Projects 카드 3개 설명, Dialogue 두 섹션
+제목, Media 그룹 라벨 2건 및 탭 접근성 라벨, Footer 저작권 문구가
+모두 새 번역대로 정확히 노출되고 missing-key 에러(원문 키 이름이
+그대로 문자열로 출력되는 현상)가 전혀 없음을 확인. Home PLZ 배너
+alt가 EN에서는 기존과 동일한 영문 그대로, KO에서는 새 한국어 번역으로
+바뀐 것을 `img[alt]` DOM 조회로 확인.
