@@ -44,9 +44,10 @@ export function Nav() {
       <nav className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
         <Link
           href="/"
-          className="logotype text-sm uppercase text-ivory tracking-wide shrink-0"
+          aria-label="Mijung IM"
+          className="display-serif text-3xl text-ivory shrink-0"
         >
-          Mijung IM
+          IM
         </Link>
 
         <div className="flex items-center gap-4 md:gap-5">
