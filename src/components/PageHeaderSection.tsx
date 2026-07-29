@@ -2,10 +2,12 @@ import type { ReactNode } from "react";
 
 // Standard page-header wrapper — the pt-16 (nav clearance) + bordered
 // intro block duplicated near-identically across About/Performances/
-// Media/Dialogue/Projects/Contact, now centralized. The inner py-14
-// md:py-28 is the SOLE contributor to the header-to-body gap (A) —
-// <Section> has no padding of its own, so this single 112px (56px
-// mobile) is never doubled.
+// Media/Dialogue/Projects/Contact, now centralized. The border-b sits
+// at this div's bottom edge, so pb-7 md:pb-14 only carries HALF of
+// the header-to-body gap (A) — the other half (pt-7 md:pt-14) belongs
+// on the page's first <Section> only, never on Section itself or the
+// whole space-y wrapper, so the line ends up with even space above
+// and below it instead of being glued to the next heading.
 export function PageHeaderSection({
   children,
   className = "",
@@ -16,7 +18,7 @@ export function PageHeaderSection({
   return (
     <section className="pt-16">
       <div
-        className={`mx-auto max-w-6xl px-6 py-14 md:py-28 border-b border-hairline ${className}`}
+        className={`mx-auto max-w-6xl px-6 pt-14 md:pt-28 pb-7 md:pb-14 border-b border-hairline ${className}`}
       >
         {children}
       </div>

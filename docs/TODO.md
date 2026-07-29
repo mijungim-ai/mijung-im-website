@@ -616,3 +616,42 @@
     없음을 확인 — 전부 56/112px 근처로 수렴(Placeholder 박스 패딩,
     `border-b pb-6`, 이탤릭 인용구 line-height 등 실제 콘텐츠로 인한
     자연스러운 소폭 초과만 있고 이중 합산 흔적은 없음).
+
+- 상단도입부↔본문 경계 — 구분선 위치 재분배 (2026-07-29): 사용자가
+  Performances에서 이탤릭 진술문 다음 가로 구분선(`border-b`)이 여백
+  끝자락에 붙어있어서, 구분선 아래("Selected Engagements" 제목까지)가
+  거의 0px로 보인다고 제보. 실측으로 확인: `PageHeaderSection`의
+  `border-b`는 헤더 안쪽 div 자체의 아래쪽 테두리라서, div의
+  `padding-bottom`(당시 `pb-14 md:pb-28`, 56/112px)이 전부 "구분선
+  위" 쪽에만 쓰이고, `<Section>`은 이제 자기 padding이 없으므로
+  "구분선 아래" 쪽은 0px였음(Performances 실측: 위 113px / 아래 0px).
+  수정:
+  - `PageHeaderSection`의 안쪽 div `padding-bottom`을 절반으로 줄임
+    (`pb-14 md:pb-28` → `pb-7 md:pb-14`, 56/112px → 28/56px).
+    `padding-top`(pt-14 md:pt-28, nav 여백 다음 제목까지 간격)은
+    이 문제와 무관해서 그대로 둠.
+  - 나머지 절반을 각 페이지의 **첫 번째** `<Section>`에만
+    `pt-7 md:pt-14`(28/56px)로 개별 추가 — `<Section>` 컴포넌트 자체나
+    `space-y-14 md:space-y-28` 래퍼는 건드리지 않아서, 지난번 "모든
+    Section에 padding을 주면 이중합산" 문제가 재발하지 않음. 대상:
+    About(사진 그리드 Section), Performances(Engagements Section),
+    Media(유일한 Section), Dialogue(Essays Section), Projects(3개
+    프로젝트 카드 중 `i === 0`인 첫 번째만, `.map`에 index 추가),
+    Contact(유일한 Section). Home은 이 헤더 구조 자체를 안 써서
+    (히어로 구조) 해당 없음, 그대로 둠.
+  - 검증(구분선 위/아래 개별 측정): Performances 57/56(데스크톱)
+    29/28(모바일), Media 59/56 · 31/28, Dialogue 57/56 · 29/28,
+    Projects 57/56 · 29/28, Contact 57/56 · 29/28 — 전부 거의 정확히
+    균등 분배(목표 56/56, 28/28). About만 예외: 94/56(데스크톱)
+    84/28(모바일)로 "구분선 위" 쪽이 더 큼 — 이건 이 수정과 무관하게
+    이전부터 있던 이탤릭 인용구의 line-height 초과분(문단 텍스트의
+    실제 렌더링 하단 경계가 CSS 라인하이트보다 아래로 벌어지는 폰트
+    렌더링 특성)이 "구분선 위" 쪽 padding에 얹혀서 생기는 현상이고,
+    총합(150 데스크톱/112 모바일)은 이번 수정 전후로 동일 — 새로
+    생긴 문제가 아니라 기존에 알려진 현상이 이번에 어느 쪽에
+    귀속되는지가 바뀐 것뿐. B(섹션 간) 간격은 전부 재측정해서 이번
+    수정으로 영향받지 않았음을 확인(예: About 112/112,
+    Dialogue 129, Projects 58×3 등 직전 커밋과 동일).
+  - `tsc`/`eslint`/`next build` 통과. 데스크톱(1280px)·모바일(375px)
+    양쪽에서 구분선 주변 스크린샷으로 위/아래 여백이 시각적으로도
+    균등해 보이는지 확인(About 제외, 이유 상술), EN/KO 확인.

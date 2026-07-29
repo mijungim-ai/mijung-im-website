@@ -27,7 +27,7 @@ export default async function AboutPage() {
       </PageHeaderSection>
 
       <div className="space-y-14 md:space-y-28">
-        <Section>
+        <Section className="pt-7 md:pt-14">
           <p className="label text-xs text-sage mb-6">The Artist</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
             <div className="photo-frame relative aspect-[3/4] overflow-hidden">

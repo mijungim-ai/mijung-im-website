@@ -34,7 +34,7 @@ export default async function MediaPage() {
         <SocialIconRow className="mt-8" />
       </PageHeaderSection>
 
-      <Section>
+      <Section className="pt-7 md:pt-14">
         <MediaTabs />
       </Section>
     </div>

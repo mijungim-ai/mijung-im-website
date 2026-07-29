@@ -51,8 +51,11 @@ export default async function ProjectsPage() {
       </PageHeaderSection>
 
       <div className="space-y-14 md:space-y-28">
-        {projects.map((project) => (
-          <Section key={project.title}>
+        {projects.map((project, i) => (
+          <Section
+            key={project.title}
+            className={i === 0 ? "pt-7 md:pt-14" : undefined}
+          >
             {project.image && (
               <div
                 className={`photo-frame relative aspect-video overflow-hidden ${

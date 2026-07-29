@@ -21,7 +21,7 @@ export default async function ContactPage() {
         </PageHeaderStatement>
       </PageHeaderSection>
 
-      <Section>
+      <Section className="pt-7 md:pt-14">
         <h2 className="label text-xs text-grey-muted mb-4">
           {t("generalTitle")}
         </h2>

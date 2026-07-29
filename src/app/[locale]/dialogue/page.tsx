@@ -52,7 +52,7 @@ export default async function DialoguePage() {
       </PageHeaderSection>
 
       <div className="space-y-14 md:space-y-28">
-        <Section>
+        <Section className="pt-7 md:pt-14">
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
             Essays
           </h2>
