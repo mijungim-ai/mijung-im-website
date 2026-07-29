@@ -41,8 +41,8 @@
 
   --font-sans: var(--font-manrope), var(--font-pretendard), sans-serif;
   --font-heading: var(--font-bricolage), var(--font-manrope), sans-serif;
-  --font-display: var(--font-bodoni), "Merriweather", serif;
-  --font-display-bold: var(--font-bodoni-bold), "Merriweather", serif;
+  --font-display: var(--font-display-serif), "Merriweather", serif;
+  --font-display-bold: var(--font-display-serif-bold), "Merriweather", serif;
 
   /*
    * Editorial type scale. The Home hero's H1/subtitle use a fluid

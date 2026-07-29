@@ -21,14 +21,14 @@ const bricolage = Bricolage_Grotesque({
 });
 
 const merriweatherItalic = Merriweather({
-  variable: "--font-bodoni",
+  variable: "--font-display-serif",
   subsets: ["latin"],
   weight: ["700"],
   style: ["italic"],
 });
 
 const merriweatherBold = Merriweather({
-  variable: "--font-bodoni-bold",
+  variable: "--font-display-serif-bold",
   subsets: ["latin"],
   weight: ["700"],
   style: ["normal"],
