@@ -1174,3 +1174,32 @@ EN 원문 전달(번역 요청 후속 처리 대기):
 됨 — `page.tsx`의 `isEn ? 그냥 렌더 : <Placeholder>로 감싸서 렌더`
 구조(About bioMedium/Projects 카드 본문과 동일한 패턴)도 그때 함께
 걷어낼 필요 있음(이번엔 미실행).
+
+### `home.introBody` 번역 반영 + 게이트 해제 (2026-07-29)
+
+바로 위 항목에서 전달했던 EN 원문에 대해 사용자가 번역을 보내와 반영.
+`content/ko/common.json`의 `home.introBody`를 기존 짧은 자리표시자
+문장에서 5문장 전체 번역으로 교체(About bioMedium/Projects 카드
+본문 전체 교체 때와 동일한 패턴). `page.tsx`에서 이 값을 감싸고 있던
+`isEn ? 그냥 렌더 : <Placeholder>로 감싸서 렌더` 삼항연산자를 제거하고
+무조건 렌더링하도록 변경.
+
+이 게이트 제거로 `isEn`이 `page.tsx`에서 완전히 안 쓰이게 되어(지난
+두 라운드에서 이미 video/projectSubtitle 게이트를 걷어내면서 이
+introBody 게이트가 마지막 사용처였음) `locale`/`getLocale`/`isEn`
+선언과 `getLocale` import를 제거. `Placeholder`/`tc`는 newsTitle
+섹션(게이트 없이 항상 Placeholder로 렌더링되는 기존 구조, 이번
+요청 범위 밖)에서 계속 쓰이므로 그대로 둠 — 결과적으로 `page.tsx`
+에는 이제 로케일 분기 코드가 전혀 남아있지 않음(Home 페이지의 남은
+모든 텍스트가 EN/KO 양쪽에 실제 콘텐츠를 갖췄다는 뜻; `newsBody`만
+여전히 실제 콘텐츠가 없어 Placeholder 유지).
+
+**검증**: `tsc --noEmit`/`eslint`/`next build` 모두 통과. EN Home을
+`get_page_text`로 재확인 — 텍스트 100% 동일. KO Home을 `get_page_text`
+로 확인 — 새 5문장 번역이 "콘텐츠 준비 중" 라벨 없이 statementTagline
+바로 아래에 노출됨을 확인. 375px 모바일에서 `scrollIntoView`로 문단
+위/아래 두 장 스크린샷 확인 — 점선 placeholder 박스 없이 일반 본문
+텍스트로 자연스럽게 흐르며 바로 아래 "대표 연주 영상" 섹션으로
+이어짐을 시각 확인. 데스크톱은 이번에도 스크롤 직후 스크린샷이
+빈 화면으로 나오는 기존에 확인된 브라우저 툴 아티팩트가 재현되어
+모바일 스크린샷과 `get_page_text`로 대체 확인.

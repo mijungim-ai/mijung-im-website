@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getTranslations, getLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Placeholder } from "@/components/Placeholder";
 import { HeroRotator } from "@/components/HeroRotator";
@@ -8,8 +8,6 @@ import { Section } from "@/components/Section";
 export default async function Home() {
   const t = await getTranslations("home");
   const tc = await getTranslations("common");
-  const locale = await getLocale();
-  const isEn = locale === "en";
 
   return (
     <div>
@@ -39,13 +37,7 @@ export default async function Home() {
               {t("statementTagline")}
             </p>
           </div>
-          {isEn ? (
-            <p className="text-body text-ivory/90">{t("introBody")}</p>
-          ) : (
-            <Placeholder label={tc("placeholderLabel")}>
-              <p className="text-body text-ivory/90">{t("introBody")}</p>
-            </Placeholder>
-          )}
+          <p className="text-body text-ivory/90">{t("introBody")}</p>
         </Section>
 
         <Section>
