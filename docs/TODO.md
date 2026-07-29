@@ -1019,3 +1019,70 @@ About 바이오 전체 4문단, Projects 카드 3개 설명, Dialogue 두 섹션
 그대로 문자열로 출력되는 현상)가 전혀 없음을 확인. Home PLZ 배너
 alt가 EN에서는 기존과 동일한 영문 그대로, KO에서는 새 한국어 번역으로
 바뀐 것을 `img[alt]` DOM 조회로 확인.
+
+### KO 게이트 5건 해제 — 이번에 번역한 항목들 (2026-07-29)
+
+바로 위 라운드에서 "일부러 안 건드림"으로 명시했던 5개 게이트를 이번
+요청에서 전부 해제. 해제 전, 각 게이트가 번역 유무 판단 외 다른 용도
+(레이아웃 대응, 다른 조건부 로직)로도 쓰이는지 먼저 확인 — `PageSubtitle`/
+`PageHeaderStatement`/`PageHeaderSection` 컴포넌트 코드를 읽어 순수
+타이포그래피 스타일링 컴포넌트일 뿐 로케일이나 다른 조건 분기 로직이
+전혀 없음을 확인한 뒤 진행(사용자가 직접 요청한 확인 절차).
+
+1. **About 인용구** (`about/page.tsx`) — `{isEn && (...)}` 래퍼 제거,
+   `quoteText`/`quoteAttribution` 블록을 무조건 렌더링. `isEn`이 이
+   파일에서 더 이상 쓰이지 않게 되어 `locale`/`getLocale`/`isEn`
+   선언 전체와 `getLocale` import 제거.
+2. **Performances/Media/Dialogue 상단본문** — 각 페이지의
+   `isEn ? headerStatement(문단) : PageSubtitle(subtitle)` 삼항연산자를
+   제거하고 `headerStatement`(Media는 `headerTitle`도) 쪽만 무조건
+   렌더링. Performances·Dialogue는 `isEn`이 이제 안 쓰여 `locale`/
+   `getLocale`/`isEn` 선언과 `getLocale`/`PageSubtitle` import까지
+   제거(두 파일 다 `PageSubtitle`은 subtitle 분기에서만 쓰였음). Media는
+   `PageSubtitle`이 남은 분기(`headerTitle`)에서도 쓰여 import 유지,
+   `isEn`/`locale`/`getLocale`만 제거.
+3. **Home 스테이트먼트 헤드라인/태그라인** (`page.tsx`) — `{isEn && (...)}`
+   래퍼만 제거, 안의 `<div>`는 무조건 렌더링. `isEn`은 이 파일의 다른
+   게이트(introBody/videoBody/projectSubtitle Placeholder 분기 — 이번
+   요청 범위 밖, 그대로 유지)에서 계속 쓰이므로 `isEn`/`locale`/
+   `getLocale`/`Placeholder`/`tc` 전부 그대로 둠.
+4. **About 바이오 / Projects 카드 3개 본문** — About은 `isEn ? 그냥 렌더 :
+   <Placeholder>로 감싸서 렌더` 삼항연산자를 제거하고 무조건 렌더링
+   (양쪽 분기 내용이 완전히 동일했으므로 단순 삭제). `tc`/`Placeholder`
+   import 및 `tc` 변수 제거(이 파일에서 더 이상 안 쓰임). Projects는
+   각 프로젝트 객체의 `final: isEn` 필드 자체를 제거(3개 항목 모두
+   상시 true가 되어 필드가 무의미해졌으므로 필드 자체를 삭제하는 쪽을
+   택함 — `final: true`로 남겨두는 것보다 죽은 분기를 안 남기는 게
+   깔끔) — body를 감싸던 `project.final ? ... : <Placeholder>...`
+   삼항연산자도 단순 `<p>` 렌더링으로 교체, `Placeholder`/`tc` import·
+   변수 제거. `imageAlt`/`imageCaption`의 `isEn ? plzImageCaption :
+   영문 하드코딩/undefined` 삼항연산자는 이번 5건에 포함되지 않아
+   그대로 둠(아래 "남은 루즈엔드" 참고) — 그래서 `isEn`/`locale`/
+   `getLocale`은 이 파일에 계속 필요.
+5. **Projects "홈페이지 방문" 버튼** — `project.final &&`를 없애면서
+   자연히 함께 해제됨(4번과 동일한 필드였음). `project.href &&`만
+   남겨 버튼 표시 여부를 판단.
+
+**남은 루즈엔드(이번에도 건드리지 않음, 필요시 별도 요청)**: Projects
+PLZ 카드 자체의 `imageAlt`/`imageCaption`은 여전히 `isEn` 삼항연산자로
+갈려 있어, KO에서는 alt가 여전히 영문 하드코딩 fallback("Piano
+performance on the beach, PLZ Festival")이고 caption 자체가 아예 안
+뜸 — `projects.plzImageCaption`의 KO 번역("대한민국 동해 해안에서
+연주하는 임미정")은 이미 채워져 있는데 아직 연결 안 됨. Home 배너의
+동일 계열 이슈는 지난지난 라운드에 이미 고쳤지만(별도 이미지, `home.
+projectImageCaption` 키), 이 Projects 카드 쪽은 이번 요청 5건에
+포함되지 않아 그대로 둠.
+
+**검증**: `tsc --noEmit`/`eslint`(수정 파일 6개: about/performances/
+media/dialogue/projects/home `page.tsx`)/`next build` 모두 통과.
+EN 7개 페이지를 `get_page_text`로 전수 재확인 — 전부 이번 변경 이전과
+100% 동일한 텍스트임을 확인(0건 변경). KO 7개 페이지 확인 — About(데스크톱+
+375px, 인용구와 "콘텐츠 준비 중" 없는 바이오 확인)/Performances(375px,
+headerStatement 3문단 노출)/Media(375px, headerTitle+headerStatement
+2문단 노출)/Dialogue(375px, headerStatement 4문단 노출)/Home(375px,
+statementHeadline/Tagline 노출, 바로 아래 introBody는 기존처럼
+"콘텐츠 준비 중" 유지된 것도 확인 — 이번 요청 범위 밖이라 의도대로
+안 건드림)/Projects(데스크톱+375px, "콘텐츠 준비 중" 박스 사라지고
+카드 3개 본문이 일반 텍스트로, "홈페이지 방문 →" 버튼 3개 모두 노출
++ href를 DOM에서 직접 조회해 각각 plzfe.com/gg.go.kr/music4one.org로
+정확히 연결됨을 확인)/Contact(변경 없음 재확인). missing-key 에러 없음.

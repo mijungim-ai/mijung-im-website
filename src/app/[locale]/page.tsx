@@ -31,16 +31,14 @@ export default async function Home() {
 
       <div className="pt-14 md:pt-28 space-y-14 md:space-y-28">
         <Section>
-          {isEn && (
-            <div className="mb-8">
-              <p className="font-display-bold font-bold not-italic text-[clamp(32px,4vw,40px)] leading-tight text-ivory">
-                {t("statementHeadline")}
-              </p>
-              <p className="display-serif text-[clamp(18px,2vw,20px)] text-sage mt-3">
-                {t("statementTagline")}
-              </p>
-            </div>
-          )}
+          <div className="mb-8">
+            <p className="font-display-bold font-bold not-italic text-[clamp(32px,4vw,40px)] leading-tight text-ivory">
+              {t("statementHeadline")}
+            </p>
+            <p className="display-serif text-[clamp(18px,2vw,20px)] text-sage mt-3">
+              {t("statementTagline")}
+            </p>
+          </div>
           {isEn ? (
             <p className="text-body text-ivory/90">{t("introBody")}</p>
           ) : (

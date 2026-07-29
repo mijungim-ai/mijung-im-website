@@ -4,12 +4,10 @@ import { PageSubtitle } from "@/components/PageSubtitle";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
 import { Section } from "@/components/Section";
-import { Placeholder } from "@/components/Placeholder";
 import { ProjectGallery } from "@/components/ProjectGallery";
 
 export default async function ProjectsPage() {
   const t = await getTranslations("projects");
-  const tc = await getTranslations("common");
   const tm = await getTranslations("media");
   const locale = await getLocale();
   const isEn = locale === "en";
@@ -18,7 +16,6 @@ export default async function ProjectsPage() {
     {
       title: t("plzTitle"),
       body: t("plzBody"),
-      final: isEn,
       image: "/images/east_sea_plz_festival.jpg",
       imageAlt: isEn
         ? t("plzImageCaption")
@@ -29,13 +26,11 @@ export default async function ProjectsPage() {
     {
       title: t("dmzTitle"),
       body: t("dmzBody"),
-      final: isEn,
       href: "https://www.gg.go.kr/dmzopen/index.do",
     },
     {
       title: t("foundationTitle"),
       body: t("foundationBody"),
-      final: isEn,
       href: "http://www.music4one.org/",
     },
   ];
@@ -79,14 +74,8 @@ export default async function ProjectsPage() {
             <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
               {project.title}
             </h2>
-            {project.final ? (
-              <p className="text-body text-ivory/90">{project.body}</p>
-            ) : (
-              <Placeholder label={tc("placeholderLabel")}>
-                <p className="text-body text-ivory/90">{project.body}</p>
-              </Placeholder>
-            )}
-            {project.final && project.href && (
+            <p className="text-body text-ivory/90">{project.body}</p>
+            {project.href && (
               <a
                 href={project.href}
                 target="_blank"
