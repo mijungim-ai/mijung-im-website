@@ -2,12 +2,12 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { useLocale, useTranslations } from "next-intl";
-import { Placeholder } from "@/components/Placeholder";
+import { useTranslations } from "next-intl";
 import { Lightbox } from "@/components/Lightbox";
 import { LinkEntry } from "@/components/LinkEntry";
 import { galleryImages, pressImages, type MediaImage } from "@/data/media";
 import { pressArticles } from "@/data/pressArticles";
+import { videoItems, talkItems } from "@/data/videos";
 
 // Internal key stays "video" even though its label is now "YouTube" —
 // KO common.json already has a translated tabs.video entry, and
@@ -16,15 +16,9 @@ import { pressArticles } from "@/data/pressArticles";
 const TABS = ["video", "press", "gallery"] as const;
 type Tab = (typeof TABS)[number];
 
-type VideoItem = { title: string; body: string; embedUrl: string };
-type TalkItem = { title: string; embedUrl: string };
-
 export function MediaTabs() {
   const t = useTranslations("media");
-  const tc = useTranslations("common");
-  const locale = useLocale();
   const [active, setActive] = useState<Tab>("video");
-  const isEn = locale === "en";
 
   const [lightbox, setLightbox] = useState<{
     images: MediaImage[];
@@ -50,16 +44,6 @@ export function MediaTabs() {
     setLightbox((prev) => (prev ? { ...prev, index } : prev));
   }
 
-  const bodyKey = {
-    gallery: "galleryBody",
-    video: "videoBody",
-    press: "pressBody",
-  }[active] as "galleryBody" | "videoBody" | "pressBody";
-
-  const videoItems: VideoItem[] | null =
-    isEn && active === "video" ? (t.raw("videoItems") as VideoItem[]) : null;
-  const talkItems: TalkItem[] | null =
-    isEn && active === "video" ? (t.raw("talkItems") as TalkItem[]) : null;
   const nytPhoto = pressImages[0];
 
   return (
@@ -86,11 +70,11 @@ export function MediaTabs() {
         ))}
       </div>
 
-      {videoItems && talkItems ? (
+      {active === "video" ? (
         <div className="space-y-20">
           <div>
             <h3 className="label text-xs text-grey-muted mb-8">
-              {t("videoGroups.performancesTitle")}
+              Performances
             </h3>
             <div className="space-y-12">
               {videoItems.map((item) => (
@@ -115,7 +99,7 @@ export function MediaTabs() {
 
           <div>
             <h3 className="label text-xs text-grey-muted mb-8">
-              {t("videoGroups.talksTitle")}
+              Talks &amp; Interviews
             </h3>
             <div className="grid gap-10 sm:grid-cols-2">
               {talkItems.map((item, i) => (
@@ -137,7 +121,7 @@ export function MediaTabs() {
             </div>
           </div>
         </div>
-      ) : isEn && active === "gallery" ? (
+      ) : active === "gallery" ? (
         <div className="grid gap-8 grid-cols-2 sm:grid-cols-4">
           {galleryImages.map((img, i) => (
             <div key={img.src}>
@@ -165,7 +149,7 @@ export function MediaTabs() {
             </div>
           ))}
         </div>
-      ) : isEn && active === "press" ? (
+      ) : (
         <div>
           <div className="photo-frame border border-hairline overflow-hidden mb-16">
             <button
@@ -197,10 +181,6 @@ export function MediaTabs() {
             ))}
           </div>
         </div>
-      ) : (
-        <Placeholder label={tc("placeholderLabel")}>
-          <p className="text-body text-ivory/90">{t(bodyKey)}</p>
-        </Placeholder>
       )}
 
       <Lightbox

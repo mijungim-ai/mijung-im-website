@@ -24,11 +24,20 @@
 8. **도메인 연결 = 공개 런칭**
    (미검수 한글 번역본이 검색엔진에 노출되지 않도록 최종 수정 이후로 미룸)
 
-### CMS 구축 전 결정 필요 3건
+### CMS 구축 전 결정 필요 2건
 
-- 이중언어 정책 — EN만 / 폴백 / 언어별 독립
 - 인증 방식 — Netlify Identity 폐기로 대안 필요 (DecapBridge, Auth0, GitHub OAuth 중)
 - 배포 빈도 정책 — Decap Editorial Workflow로 발행 시 1회만 배포되게 할지
+
+### 이중언어 정책 — 확정 (2026-07-29)
+
+게시판형 5개 섹션(Home Latest News, Performances Selected Engagements/
+Concert Archive, Media YouTube/Press/Gallery, Dialogue Essays/Director's
+Letter, Projects Gallery)은 **콘텐츠 EN/KO 공용, 감싸는 UI 텍스트만
+언어별 분리**. 작성 언어는 항목마다 다를 수 있음(전부 한국어, 전부
+영어, 혼용 전부 허용) — 예: Dialogue 기사 제목은 한국어(국민일보 등
+실제 한국 언론), Media 비디오 제목("Mozart"/"Chopin")과 Performances
+공연 정보는 영어, 전부 그대로 유지.
 
 ### KO 사이트 방향 미결
 
@@ -833,3 +842,67 @@
   유지·computed `font-weight: 900`·`font-size: 24.3px` 확인. 파비콘
   (`icon.png`/`apple-icon.png`)은 지시대로 전혀 건드리지 않음(git
   status로 미변경 확인).
+
+- 게시판형 5개 섹션 언어 게이팅 감사 및 통일 (2026-07-29): 콘텐츠는
+  EN/KO 공용, 감싸는 UI만 언어별 분리라는 정책 기준으로 5개 섹션
+  전수 감사.
+
+  | 섹션 | 콘텐츠 소스 | 게이트 상태(감사 전) | 조치 |
+  |---|---|---|---|
+  | Home Latest News | `t("newsBody")` | 게이트 없음 — EN/KO 둘 다 "곧 게시 예정" 문구뿐(실제 뉴스 콘텐츠 자체가 아직 없음) | 조치 없음(정책 위반 아님, 콘텐츠 미작성 상태) |
+  | Performances Selected Engagements | `data/engagements.ts`(plain) | 약한 게이트 — KO에서 동일 데이터를 Placeholder(점선 박스+"콘텐츠 준비 중")로 감쌈 | **수정**: isEn/Placeholder 제거, 무조건 렌더링 |
+  | Performances Concert Archive | `data/concertArchive.ts`(plain) | 게이트 없음(이전 라운드 확인) | 재확인만, 변경 없음 |
+  | Media YouTube | `t.raw("videoItems"/"talkItems")` | 강한 게이트(`isEn &&`) — **KO 번역 파일에 해당 키 자체가 없어서, 단순히 게이트만 지우면 즉시 런타임 에러**로 확인 | **수정**: 콘텐츠를 `src/data/videos.ts`(plain)로 이전 후 게이트 제거 |
+  | Media Press | `data/pressArticles.ts` + `data/media.ts`(plain) | 강한 게이트(`isEn &&`) | **수정**: 게이트 제거 |
+  | Media Gallery | `data/media.ts`(plain) | 강한 게이트(`isEn &&`, 지난 라운드부터 확인된 사항) | **수정**: 게이트 제거 |
+  | Dialogue Essays | `data/dialogue.ts`(plain) | 게이트 없음(이전 라운드 확인) | 재확인만, 변경 없음 |
+  | Dialogue Director's Letter | `data/dialogue.ts`(plain) | 게이트 없음(이전 라운드 확인) | 재확인만, 변경 없음 |
+  | Projects Gallery(하단, 6장) | `data/projectGallery.ts`(plain), `ProjectGallery.tsx` | 게이트 없음 — 이미 정책 준수 | 조치 없음 |
+
+  **Media YouTube 탭이 가장 까다로웠던 이유**: `videoItems`/
+  `talkItems`(영상 제목·설명·embed URL)와 상위 그룹 라벨
+  `videoGroups.performancesTitle`/`talksTitle`("Performances"/
+  "Talks & Interviews")가 next-intl 번역 시스템(`content/en/
+  common.json`) 안에만 있었고, `content/ko/common.json`의 `media`
+  네임스페이스에는 `videoItems`/`talkItems`/`videoGroups`/
+  `headerTitle`/`headerStatement` 키 자체가 통째로 없었음(실측
+  확인). 이 상태에서 `isEn &&`만 지우면 KO에서 `t.raw("videoItems")`
+  가 없는 키를 찾다가 즉시 에러가 남 — 이전 라운드에 실제로
+  `t("projectSubtitle")` 같은 EN 전용 키를 KO에서 잘못 호출해 런타임
+  에러가 났던 것과 같은 패턴. 표준 진행 규칙("ko/common.json은 명시적
+  지시 없이 수정 금지, 고아 키는 TODO.md에 기록")을 지키면서 이 문제를
+  풀기 위해, `videoItems`/`talkItems`를 갤러리·프레스·대화·공연
+  데이터와 동일한 패턴(plain TS 데이터 파일, `src/data/videos.ts`
+  신규 생성)으로 옮겨서 언어 무관 콘텐츠로 전환 — ko/common.json은
+  전혀 건드리지 않음.
+
+  `videoGroups.performancesTitle`/`talksTitle` 두 그룹 라벨은
+  콘텐츠라기보다 "Essays"/"Artistic Director's Letter"처럼 섹션을
+  나누는 라벨에 가까워서, 이미 이 코드베이스에 있는 선례(Dialogue의
+  두 섹션 제목이 애초에 `t()`가 아니라 하드코딩된 영어 문자열임)를
+  그대로 따라 "Performances"/"Talks & Interviews"를 하드코딩 —
+  ko/common.json에 새 번역 키를 추가하지 않고도 안전하게 양쪽 언어에
+  노출시킴.
+
+  **오펀 처리(삭제 아님, 기록만)**: `MediaTabs.tsx`에서 최종 폴백
+  분기(`isEn`이 전부 false일 때만 도달하던 `<Placeholder>{t(bodyKey)}
+  </Placeholder>`)를 제거하면서, `media.videoBody`/`galleryBody`/
+  `pressBody`/`videoGroups`/`videoItems`/`talkItems` 번역 키가
+  코드에서 더 이상 참조되지 않게 됨(en/ko 둘 다 해당). JSON에서
+  삭제하지는 않고 여기에 고아 상태만 기록. (참고: `home.videoBody`는
+  Media 탭과 이름만 같을 뿐 별개의 Home "Featured Video" 섹션 키라
+  계속 사용 중 — 혼동 주의.)
+
+  **검증**: `tsc`/`eslint`/`next build` 통과. KO 페이지에서 실측 —
+  Media 탭 전환 시 YouTube(Mozart/Chopin/DMZ 공연 + Talk/Interview
+  4개), Press(NYT 사진 + 실제 언론 기사 5개, 전부 한국어 원문 제목),
+  Gallery(20장 전부, 캡션 포함)가 Placeholder 없이 그대로 노출됨을
+  `get_page_text`/DOM 카운트로 확인. Gallery 라이트박스는 데스크톱·
+  375px 모바일 둘 다 KO 라벨("닫기"/"다음 이미지"/"1 / 20")로 정상
+  동작, 첫 장은 이전 버튼 없음, 임의 중간 장(3/20)에서 이전·다음
+  버튼 둘 다 있음을 확인. Performances Selected Engagements도 KO에서
+  더 이상 점선 Placeholder 박스 없이 Concert Archive와 동일한 방식
+  으로 노출됨을 확인. Dialogue(Essays·Letter)·Projects Gallery(6장)는
+  기존처럼 KO에서 정상 노출 유지 재확인. Home Latest News는 EN/KO
+  둘 다 여전히 "콘텐츠 준비 중" 상태 그대로(실제 콘텐츠가 없어
+  변경하지 않음).

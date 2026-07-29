@@ -1,5 +1,4 @@
 import { getTranslations, getLocale } from "next-intl/server";
-import { Placeholder } from "@/components/Placeholder";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageSubtitle } from "@/components/PageSubtitle";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
@@ -27,7 +26,6 @@ function EngagementsList() {
 
 export default async function PerformancesPage() {
   const t = await getTranslations("performances");
-  const tc = await getTranslations("common");
   const locale = await getLocale();
   const isEn = locale === "en";
 
@@ -55,13 +53,7 @@ export default async function PerformancesPage() {
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
             {t("engagementsTitle")}
           </h2>
-          {isEn ? (
-            <EngagementsList />
-          ) : (
-            <Placeholder label={tc("placeholderLabel")}>
-              <EngagementsList />
-            </Placeholder>
-          )}
+          <EngagementsList />
         </Section>
 
         <Section>
