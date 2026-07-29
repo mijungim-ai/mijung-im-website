@@ -16,8 +16,8 @@
   --text-primary: #1a1a1a; /* dark theme was: #f5f1e8 */
   --text-secondary: #6e6b62; /* dark theme was: #b5b3ac */
   --border: #e4e2da; /* dark theme was: #3a3a38 */
-  --accent-sage: #5a6650; /* dark theme was: #6e7a5e */
-  --accent-brass: #8a6b3a; /* dark theme was: #b08d57 */
+  --accent-sage: #5b7a3e; /* was: #5a6650; dark theme was: #6e7a5e */
+  --accent-brass: #8f6a1e; /* was: #8a6b3a; dark theme was: #b08d57 */
 
   /*
    * Fixed tokens — NOT part of the theme-switching set above.
