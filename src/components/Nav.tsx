@@ -47,7 +47,10 @@ export function Nav() {
           aria-label="Mijung IM"
           className="shrink-0 flex items-center justify-center w-11 h-11 rounded-full bg-sage"
         >
-          <span className="display-serif text-lg text-white leading-none">
+          <span
+            className="display-serif text-[24.3px] text-white leading-none"
+            style={{ fontWeight: 900 }}
+          >
             IM
           </span>
         </Link>

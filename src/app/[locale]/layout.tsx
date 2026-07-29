@@ -23,7 +23,7 @@ const bricolage = Bricolage_Grotesque({
 const merriweatherItalic = Merriweather({
   variable: "--font-display-serif",
   subsets: ["latin"],
-  weight: ["700"],
+  weight: ["700", "900"],
   style: ["italic"],
 });
 
