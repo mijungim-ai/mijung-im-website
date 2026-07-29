@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getTranslations, getLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { PageSubtitle } from "@/components/PageSubtitle";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
@@ -9,18 +9,14 @@ import { ProjectGallery } from "@/components/ProjectGallery";
 export default async function ProjectsPage() {
   const t = await getTranslations("projects");
   const tm = await getTranslations("media");
-  const locale = await getLocale();
-  const isEn = locale === "en";
 
   const projects = [
     {
       title: t("plzTitle"),
       body: t("plzBody"),
       image: "/images/east_sea_plz_festival.jpg",
-      imageAlt: isEn
-        ? t("plzImageCaption")
-        : "Piano performance on the beach, PLZ Festival",
-      imageCaption: isEn ? t("plzImageCaption") : undefined,
+      imageAlt: t("plzImageCaption"),
+      imageCaption: t("plzImageCaption"),
       href: "http://plzfe.com/",
     },
     {

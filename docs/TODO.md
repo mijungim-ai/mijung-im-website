@@ -1086,3 +1086,21 @@ statementHeadline/Tagline 노출, 바로 아래 introBody는 기존처럼
 카드 3개 본문이 일반 텍스트로, "홈페이지 방문 →" 버튼 3개 모두 노출
 + href를 DOM에서 직접 조회해 각각 plzfe.com/gg.go.kr/music4one.org로
 정확히 연결됨을 확인)/Contact(변경 없음 재확인). missing-key 에러 없음.
+
+### Projects PLZ 카드 이미지 alt/caption 연결 (2026-07-29)
+
+지난 라운드 "남은 루즈엔드"로 남겨뒀던 항목 해결. `projects/page.tsx`의
+PLZ 카드 `imageAlt`/`imageCaption`이 여전히 `isEn ? t("plzImageCaption")
+: 영문 하드코딩/undefined` 삼항연산자였던 것을, Home PLZ 배너 alt를
+고쳤을 때와 동일한 방식으로 `t("plzImageCaption")` 단일 호출로 교체 —
+EN/KO 둘 다 이제 같은 키로 각자 언어의 alt·caption을 받음. `isEn`이
+이 파일에서 더 이상 쓰이지 않게 되어 `locale`/`getLocale`/`isEn`
+선언과 `getLocale` import 제거.
+
+**검증**: `tsc --noEmit`/`eslint`/`next build` 모두 통과. EN
+Projects 페이지를 `get_page_text` + `img[alt]` DOM 조회로 재확인 —
+텍스트·alt 둘 다 변경 전과 100% 동일("Mijung IM performing on the
+shore of Korea's East Sea"). KO Projects 페이지에서 `img[alt]` DOM
+조회로 alt가 "대한민국 동해 해안에서 연주하는 임미정"으로 바뀐 것을
+확인, 화면에 보이는 캡션 텍스트도 `get_page_text`로 동일하게 노출됨을
+재확인.
