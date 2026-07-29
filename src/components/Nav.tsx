@@ -55,7 +55,7 @@ export function Nav() {
               <li key={item.key}>
                 <Link
                   href={item.href}
-                  className={`nav-label text-xs pb-1 border-b transition-colors ${
+                  className={`nav-label text-xs pb-1 border-b-2 transition-colors ${
                     isActive(item.href)
                       ? "text-sage border-sage"
                       : "text-grey-muted border-transparent hover:text-ivory"
