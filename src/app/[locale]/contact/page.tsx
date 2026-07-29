@@ -1,6 +1,8 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { PageSubtitle } from "@/components/PageSubtitle";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
+import { PageHeaderSection } from "@/components/PageHeaderSection";
+import { Section } from "@/components/Section";
 import { Placeholder } from "@/components/Placeholder";
 
 export default async function ContactPage() {
@@ -11,17 +13,15 @@ export default async function ContactPage() {
 
   return (
     <div>
-      <section className="pt-16">
-        <div className="mx-auto max-w-6xl px-6 py-28 border-b border-hairline">
-          <h1 className="sr-only">{t("title")}</h1>
-          <PageSubtitle>{t("title")}</PageSubtitle>
-          <PageHeaderStatement className="text-sage mt-3">
-            {t("subtitle")}
-          </PageHeaderStatement>
-        </div>
-      </section>
+      <PageHeaderSection>
+        <h1 className="sr-only">{t("title")}</h1>
+        <PageSubtitle>{t("title")}</PageSubtitle>
+        <PageHeaderStatement className="text-sage mt-3">
+          {t("subtitle")}
+        </PageHeaderStatement>
+      </PageHeaderSection>
 
-      <div className="mx-auto max-w-3xl px-6 py-28">
+      <Section>
         <h2 className="label text-xs text-grey-muted mb-4">
           {t("generalTitle")}
         </h2>
@@ -45,7 +45,7 @@ export default async function ContactPage() {
             </p>
           </Placeholder>
         )}
-      </div>
+      </Section>
     </div>
   );
 }

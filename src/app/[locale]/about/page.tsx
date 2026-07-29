@@ -3,6 +3,8 @@ import { getTranslations, getLocale } from "next-intl/server";
 import { Placeholder } from "@/components/Placeholder";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageSubtitle } from "@/components/PageSubtitle";
+import { PageHeaderSection } from "@/components/PageHeaderSection";
+import { Section } from "@/components/Section";
 
 export default async function AboutPage() {
   const t = await getTranslations("about");
@@ -12,21 +14,19 @@ export default async function AboutPage() {
 
   return (
     <div>
-      <section className="pt-16">
-        <div className="mx-auto max-w-6xl px-6 py-28 border-b border-hairline">
-          <h1 className="display-serif text-h1 text-ivory">{t("title")}</h1>
-          <PageSubtitle className="mt-3">{t("subtitle")}</PageSubtitle>
-          {isEn && (
-            <PageHeaderStatement className="text-sage mt-6 max-w-xl">
-              &ldquo;{t("quoteText")}&rdquo;
-              <br />
-              &mdash; {t("quoteAttribution")}
-            </PageHeaderStatement>
-          )}
-        </div>
-      </section>
+      <PageHeaderSection>
+        <h1 className="display-serif text-h1 text-ivory">{t("title")}</h1>
+        <PageSubtitle className="mt-3">{t("subtitle")}</PageSubtitle>
+        {isEn && (
+          <PageHeaderStatement className="text-sage mt-6 max-w-xl">
+            &ldquo;{t("quoteText")}&rdquo;
+            <br />
+            &mdash; {t("quoteAttribution")}
+          </PageHeaderStatement>
+        )}
+      </PageHeaderSection>
 
-      <section className="mx-auto max-w-3xl px-6 py-28">
+      <Section>
         <p className="label text-xs text-sage mb-6">The Artist</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
           <div className="photo-frame relative aspect-[3/4] overflow-hidden">
@@ -48,9 +48,9 @@ export default async function AboutPage() {
             />
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section className="mx-auto max-w-3xl px-6 py-28">
+      <Section>
         <h2 className="label text-xs text-grey-muted mb-6">Biography</h2>
         {isEn ? (
           <div className="space-y-4">
@@ -75,9 +75,9 @@ export default async function AboutPage() {
             </div>
           </Placeholder>
         )}
-      </section>
+      </Section>
 
-      <section className="mx-auto max-w-3xl px-6 py-28 text-center">
+      <Section className="text-center">
         <a
           href="/epk/mijung-im-epk.pdf"
           className="label text-xs inline-flex items-center border border-sage text-sage px-[28px] py-[12px] hover:bg-sage hover:text-ink transition-colors"
@@ -85,7 +85,7 @@ export default async function AboutPage() {
           {t("epkLabel")}
         </a>
         <p className="text-caption text-grey-muted mt-4">{t("epkNote")}</p>
-      </section>
+      </Section>
     </div>
   );
 }

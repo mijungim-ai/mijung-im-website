@@ -2,6 +2,8 @@ import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
 import { PageSubtitle } from "@/components/PageSubtitle";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
+import { PageHeaderSection } from "@/components/PageHeaderSection";
+import { Section } from "@/components/Section";
 import { Placeholder } from "@/components/Placeholder";
 import { ProjectGallery } from "@/components/ProjectGallery";
 
@@ -40,19 +42,17 @@ export default async function ProjectsPage() {
 
   return (
     <div>
-      <section className="pt-16">
-        <div className="mx-auto max-w-6xl px-6 py-28 border-b border-hairline">
-          <h1 className="sr-only">{t("title")}</h1>
-          <PageSubtitle>{t("title")}</PageSubtitle>
-          <PageHeaderStatement className="text-sage mt-3">
-            {t("subtitle")}
-          </PageHeaderStatement>
-        </div>
-      </section>
+      <PageHeaderSection>
+        <h1 className="sr-only">{t("title")}</h1>
+        <PageSubtitle>{t("title")}</PageSubtitle>
+        <PageHeaderStatement className="text-sage mt-3">
+          {t("subtitle")}
+        </PageHeaderStatement>
+      </PageHeaderSection>
 
-      <div className="mx-auto max-w-3xl px-6 py-28 space-y-20">
+      <>
         {projects.map((project) => (
-          <section key={project.title}>
+          <Section key={project.title}>
             {project.image && (
               <div
                 className={`photo-frame relative aspect-video overflow-hidden ${
@@ -93,16 +93,16 @@ export default async function ProjectsPage() {
                 Visit Website →
               </a>
             )}
-          </section>
+          </Section>
         ))}
 
-        <section>
+        <Section>
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
             {tm("tabs.gallery")}
           </h2>
           <ProjectGallery />
-        </section>
-      </div>
+        </Section>
+      </>
     </div>
   );
 }

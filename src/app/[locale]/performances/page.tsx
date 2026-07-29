@@ -2,6 +2,8 @@ import { getTranslations, getLocale } from "next-intl/server";
 import { Placeholder } from "@/components/Placeholder";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageSubtitle } from "@/components/PageSubtitle";
+import { PageHeaderSection } from "@/components/PageHeaderSection";
+import { Section } from "@/components/Section";
 import { ConcertArchiveGrid } from "@/components/ConcertArchiveGrid";
 import { engagements } from "@/data/engagements";
 
@@ -31,46 +33,42 @@ export default async function PerformancesPage() {
 
   return (
     <div>
-      <section className="pt-16">
-        <div className="mx-auto max-w-6xl px-6 py-28 border-b border-hairline">
-          <h1 className="sr-only">{t("title")}</h1>
-          {isEn ? (
-            <div className="space-y-4 max-w-2xl">
-              {t("headerStatement")
-                .split("\n\n")
-                .map((sentence, i) => (
-                  <PageHeaderStatement key={i} className="text-sage">
-                    {sentence}
-                  </PageHeaderStatement>
-                ))}
-            </div>
-          ) : (
-            <PageSubtitle>{t("subtitle")}</PageSubtitle>
-          )}
-        </div>
-      </section>
+      <PageHeaderSection>
+        <h1 className="sr-only">{t("title")}</h1>
+        {isEn ? (
+          <div className="space-y-4 max-w-2xl">
+            {t("headerStatement")
+              .split("\n\n")
+              .map((sentence, i) => (
+                <PageHeaderStatement key={i} className="text-sage">
+                  {sentence}
+                </PageHeaderStatement>
+              ))}
+          </div>
+        ) : (
+          <PageSubtitle>{t("subtitle")}</PageSubtitle>
+        )}
+      </PageHeaderSection>
 
-      <div className="mx-auto max-w-3xl px-6 py-28 space-y-20">
-        <section>
-          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-            {t("engagementsTitle")}
-          </h2>
-          {isEn ? (
+      <Section>
+        <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+          {t("engagementsTitle")}
+        </h2>
+        {isEn ? (
+          <EngagementsList />
+        ) : (
+          <Placeholder label={tc("placeholderLabel")}>
             <EngagementsList />
-          ) : (
-            <Placeholder label={tc("placeholderLabel")}>
-              <EngagementsList />
-            </Placeholder>
-          )}
-        </section>
+          </Placeholder>
+        )}
+      </Section>
 
-        <section>
-          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-            {t("archiveTitle")}
-          </h2>
-          <ConcertArchiveGrid />
-        </section>
-      </div>
+      <Section>
+        <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+          {t("archiveTitle")}
+        </h2>
+        <ConcertArchiveGrid />
+      </Section>
     </div>
   );
 }

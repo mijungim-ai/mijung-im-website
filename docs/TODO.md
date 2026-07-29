@@ -539,3 +539,44 @@
   보내서 생긴 착각으로 보임). 다른 페이지(About/Performances/Media)는
   전부 헤더 교체가 요청된 라운드에 실제로 반영됐음 — 이런 종류의 누락은
   Projects/Contact(둘 다 이번에 처리)를 제외하면 더 없는 것으로 확인.
+
+- 사이트 전역 섹션 간격 통일 (2026-07-29): 7개 페이지의 상단도입부↔
+  본문(A), 섹션↔섹션(B) 간격이 페이지마다 제각각이었음(About/Home류
+  "이중 패딩 인접 섹션" 패턴은 ~224px, Performances/Dialogue/Projects류
+  "space-y-20 래퍼" 패턴은 ~80-105px). 실측(leaf 요소 기준 DOM 측정,
+  단순 padding 값이 아니라 실제 렌더링된 텍스트 경계 기준) 후 제안값을
+  먼저 보여주고 승인받은 뒤 적용:
+  - B = 224px(`py-28`, 즉 한쪽 112px) — About의 기존 값을 전역 기준으로
+    채택. A = B와 동일(224px).
+  - 모바일 `py-14 md:py-28`(56px→112px) — 기존 Home 히어로 타이틀의
+    `pt-10 md:pt-16` 반응형 축소 관행과 일치.
+  - 중앙화: `src/components/Section.tsx`(본문 섹션 래퍼),
+    `src/components/PageHeaderSection.tsx`(상단도입부 래퍼, `pt-16` +
+    `border-b` 포함) 신설. 6개 페이지에 중복돼 있던 헤더 래퍼 코드를
+    `PageHeaderSection`으로, 모든 본문 섹션을 `Section`으로 교체.
+  - Performances/Dialogue/Projects: `space-y-20` 래퍼를 걷어내고 각
+    섹션을 `<Section>`으로 개별 감싸 224px가 자연스럽게 나오게 함.
+  - About/Home: 이미 224px 근처였으므로 `<Section>`으로 갈아끼우되
+    시각적 변화 최소화. Home 히어로→인트로는 사진 자체가 이미 강한
+    시각적 구분선이라는 판단하에 단일 `py-28`만 유지(두 배로 안 늘림,
+    사용자 승인). Home의 PLZ 전면 사진 섹션(`bg-ink-deep` 풀블리드,
+    `Image fill`)은 구조가 완전히 다른 커스텀 섹션이라 판단, `Section`
+    으로 바꾸지 않고 그대로 둠 — 이건 내 판단이고 명시적으로 논의된
+    바는 아님. Home CTA 섹션은 원래 `py-32`(다른 곳들의 `py-28`과
+    다른 outlier)였는데, "전역 통일"이라는 목표에 예외를 두지 않고
+    `<Section>`(=`py-28`)으로 통일함 — 이것도 명시적으로 논의되지
+    않은 내 판단.
+  - Media/Contact: 섹션이 하나뿐이라 B 해당 없음, A만 224px로 맞춤.
+  - 검증: `tsc`/`eslint`/`next build` 통과. 7개 페이지 전부 데스크톱
+    (1280px)·모바일(375px) 폭에서 leaf 기준 DOM 측정 + 스크린샷으로
+    확인. 데스크톱 스크린샷 도구가 스크롤 후 캡처 시 간헐적으로
+    빈 화면을 반환하는 문제가 있어(이전에도 발견된 known issue) 대부분
+    스크롤 위치는 DOM 측정으로, 시각 확인은 모바일 스크린샷 위주로
+    진행. 실측 결과 전 페이지 데스크톱 A/B 값이 224-226px 범위로
+    수렴(Home 249px, Performances 249px, Dialogue 241px 등 일부는
+    Placeholder 박스 패딩이나 `border-b pb-6` 같은 실제 콘텐츠 때문에
+    조금 더 큼 — 버그 아님). About 상단도입부(262px)는 이탤릭 인용구의
+    line-height 때문에 이전부터 있던 초과분으로, 이번 리팩터로 새로
+    생긴 게 아님. Performances/Dialogue/Projects는 간격이 3배 가까이
+    늘었지만 실제로 스크린샷 확인 결과 허전하거나 헐거워 보이지
+    않았음 — 오히려 여유 있고 자연스러운 느낌.

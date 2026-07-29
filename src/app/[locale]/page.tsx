@@ -3,6 +3,7 @@ import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Placeholder } from "@/components/Placeholder";
 import { HeroRotator } from "@/components/HeroRotator";
+import { Section } from "@/components/Section";
 
 export default async function Home() {
   const t = await getTranslations("home");
@@ -28,7 +29,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-3xl px-6 py-28">
+      <Section>
         {isEn && (
           <div className="mb-8">
             <p className="font-display-bold font-bold not-italic text-[clamp(32px,4vw,40px)] leading-tight text-ivory">
@@ -46,9 +47,9 @@ export default async function Home() {
             <p className="text-body text-ivory/90">{t("introBody")}</p>
           </Placeholder>
         )}
-      </section>
+      </Section>
 
-      <section className="mx-auto max-w-3xl px-6 py-28">
+      <Section>
         <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
           {t("videoTitle")}
         </h2>
@@ -69,7 +70,7 @@ export default async function Home() {
             </div>
           </Placeholder>
         )}
-      </section>
+      </Section>
 
       <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[420px] flex items-start">
         <Image
@@ -105,16 +106,16 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-3xl px-6 py-28">
+      <Section>
         <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
           {t("newsTitle")}
         </h2>
         <Placeholder label={tc("placeholderLabel")}>
           <p className="text-body text-ivory/90">{t("newsBody")}</p>
         </Placeholder>
-      </section>
+      </Section>
 
-      <section className="mx-auto max-w-3xl px-6 py-32 text-center">
+      <Section className="text-center">
         <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-4">
           {t("ctaTitle")}
         </h2>
@@ -133,7 +134,7 @@ export default async function Home() {
             {t("ctaEpk")}
           </a>
         </div>
-      </section>
+      </Section>
     </div>
   );
 }

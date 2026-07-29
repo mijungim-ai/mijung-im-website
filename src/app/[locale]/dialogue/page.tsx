@@ -1,6 +1,8 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageSubtitle } from "@/components/PageSubtitle";
+import { PageHeaderSection } from "@/components/PageHeaderSection";
+import { Section } from "@/components/Section";
 import { LinkEntry } from "@/components/LinkEntry";
 import {
   essays,
@@ -32,48 +34,44 @@ export default async function DialoguePage() {
 
   return (
     <div>
-      <section className="pt-16">
-        <div className="mx-auto max-w-6xl px-6 py-28 border-b border-hairline">
-          <h1 className="sr-only">{t("title")}</h1>
-          {isEn ? (
-            <div className="space-y-4 max-w-2xl">
-              {t("headerStatement")
-                .split("\n\n")
-                .map((sentence, i) => (
-                  <PageHeaderStatement key={i} className="text-sage">
-                    {sentence}
-                  </PageHeaderStatement>
-                ))}
-            </div>
-          ) : (
-            <PageSubtitle>{t("subtitle")}</PageSubtitle>
-          )}
+      <PageHeaderSection>
+        <h1 className="sr-only">{t("title")}</h1>
+        {isEn ? (
+          <div className="space-y-4 max-w-2xl">
+            {t("headerStatement")
+              .split("\n\n")
+              .map((sentence, i) => (
+                <PageHeaderStatement key={i} className="text-sage">
+                  {sentence}
+                </PageHeaderStatement>
+              ))}
+          </div>
+        ) : (
+          <PageSubtitle>{t("subtitle")}</PageSubtitle>
+        )}
+      </PageHeaderSection>
+
+      <Section>
+        <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+          Essays
+        </h2>
+        <div>
+          {essays.map((essay) => (
+            <LinkEntry key={essay.href} title={essay.title} href={essay.href} />
+          ))}
         </div>
-      </section>
+      </Section>
 
-      <div className="mx-auto max-w-3xl px-6 py-28 space-y-20">
-        <section>
-          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-            Essays
-          </h2>
-          <div>
-            {essays.map((essay) => (
-              <LinkEntry key={essay.href} title={essay.title} href={essay.href} />
-            ))}
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-            Artistic Director&rsquo;s Letter
-          </h2>
-          <div className="space-y-6">
-            {directorLetters.map((entry) => (
-              <DirectorLetterEntryRow key={entry.title} entry={entry} />
-            ))}
-          </div>
-        </section>
-      </div>
+      <Section>
+        <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+          Artistic Director&rsquo;s Letter
+        </h2>
+        <div className="space-y-6">
+          {directorLetters.map((entry) => (
+            <DirectorLetterEntryRow key={entry.title} entry={entry} />
+          ))}
+        </div>
+      </Section>
     </div>
   );
 }
