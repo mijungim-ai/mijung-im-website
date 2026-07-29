@@ -54,8 +54,8 @@ export function ConcertArchiveGrid() {
                 />
               </div>
             </button>
-            <p className="text-caption text-grey-muted mt-2.5">{entry.year}</p>
-            <p className="text-body text-ivory">{entry.title}</p>
+            <p className="text-body text-sage mt-2.5">{entry.year}</p>
+            <p className="text-caption text-grey-muted">{entry.title}</p>
           </div>
         ))}
       </div>
