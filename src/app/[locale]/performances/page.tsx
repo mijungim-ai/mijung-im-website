@@ -1,9 +1,8 @@
-import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
 import { Placeholder } from "@/components/Placeholder";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
+import { ConcertArchiveGrid } from "@/components/ConcertArchiveGrid";
 import { engagements } from "@/data/engagements";
-import { concertArchive } from "@/data/concertArchive";
 
 function EngagementsList() {
   return (
@@ -70,38 +69,7 @@ export default async function PerformancesPage() {
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
             {t("archiveTitle")}
           </h2>
-          {concertArchive.length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-              {concertArchive.map((entry) => (
-                <div
-                  key={`${entry.year}-${entry.title}`}
-                  className="photo-frame relative aspect-[3/4] overflow-hidden"
-                >
-                  <Image
-                    src={entry.image}
-                    alt={entry.title}
-                    fill
-                    sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 bg-black/60 px-3 py-2">
-                    <p className="text-caption text-on-photo">
-                      {entry.year}
-                    </p>
-                    <p className="text-body text-on-photo">{entry.title}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : isEn ? (
-            <p className="text-body text-grey-muted italic text-center py-16 border border-dashed border-grey-muted/50">
-              {t("archiveBody")}
-            </p>
-          ) : (
-            <Placeholder label={tc("placeholderLabel")}>
-              <p className="text-body text-ivory/90">{t("archiveBody")}</p>
-            </Placeholder>
-          )}
+          <ConcertArchiveGrid />
         </section>
       </div>
     </div>
