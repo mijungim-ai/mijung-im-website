@@ -28,7 +28,7 @@ export default async function AboutPage() {
 
       <div className="space-y-14 md:space-y-28">
         <Section className="pt-7 md:pt-14">
-          <p className="label text-xs text-sage mb-6">The Artist</p>
+          <p className="label text-xs text-sage mb-6">{t("theArtistLabel")}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
             <div className="photo-frame relative aspect-[3/4] overflow-hidden">
               <Image
@@ -52,7 +52,7 @@ export default async function AboutPage() {
         </Section>
 
         <Section>
-          <h2 className="label text-xs text-grey-muted mb-6">Biography</h2>
+          <h2 className="label text-xs text-grey-muted mb-6">{t("biographyLabel")}</h2>
           {isEn ? (
             <div className="space-y-4">
               {t("bioMedium")

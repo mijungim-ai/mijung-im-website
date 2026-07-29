@@ -54,7 +54,7 @@ export default async function DialoguePage() {
       <div className="space-y-14 md:space-y-28">
         <Section className="pt-7 md:pt-14">
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-            Essays
+            {t("essaysTitle")}
           </h2>
           <div>
             {essays.map((essay) => (
@@ -65,7 +65,7 @@ export default async function DialoguePage() {
 
         <Section>
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-            Artistic Director&rsquo;s Letter
+            {t("directorLetterTitle")}
           </h2>
           <div className="space-y-6">
             {directorLetters.map((entry) => (

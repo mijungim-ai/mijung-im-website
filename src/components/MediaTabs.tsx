@@ -74,7 +74,7 @@ export function MediaTabs() {
         <div className="space-y-20">
           <div>
             <h3 className="label text-xs text-grey-muted mb-8">
-              Performances
+              {t("videoGroups.performancesTitle")}
             </h3>
             <div className="space-y-12">
               {videoItems.map((item) => (
@@ -99,7 +99,7 @@ export function MediaTabs() {
 
           <div>
             <h3 className="label text-xs text-grey-muted mb-8">
-              Talks &amp; Interviews
+              {t("videoGroups.talksTitle")}
             </h3>
             <div className="grid gap-10 sm:grid-cols-2">
               {talkItems.map((item, i) => (

@@ -23,6 +23,8 @@
     "subtitle": "Pianist of Peace & Nature",
     "quoteText": "One of the most important pianists of our time.",
     "quoteAttribution": "Maurice Hinson, American pianist, pedagogue, and critic",
+    "theArtistLabel": "The Artist",
+    "biographyLabel": "Biography",
     "bioMedium": "Mijung IM is an internationally acclaimed concert pianist known as the Pianist of Peace & Nature. Her performances are distinguished by clarity of tone, contemplative depth, and spiritual artistry. Through her artistry, she explores music as a meeting place of sound, silence, and human presence, inviting listeners into a deeper awareness of our shared humanity.\n\nShe serves as Professor of Music at Hansei University in Korea. A graduate of Seoul National University, she earned her Master's degree from The Juilliard School, her Doctor of Musical Arts degree from Stony Brook University, and later a Master's degree in Life Culture Studies from The Catholic University of Korea. She won First Prize at the Dong-A Music Competition (1984) and the San Antonio International Piano Competition (1997, now The Gurwitz International Piano Competition), launching an international performing career.\n\nIm has appeared as soloist and recitalist throughout the United States, Europe, and Asia, including appearances at David Geffen Hall at Lincoln Center and other major venues across New York, Chicago, Washington, D.C., Austria, Hungary, Bulgaria, Switzerland, and numerous cities throughout China. The late American pianist, pedagogue, and critic Maurice Hinson described her as \"one of the most important pianists of our time.\"\n\nBeyond the concert stage, Im has expanded the artistic role of classical music through education, cultural exchange, and projects that foster peace. In 2005, she founded Music for One, a nonprofit organization through which she began developing initiatives that connect music with education, cultural dialogue, and peace. That same year, she presented One Nation: From Jeju to Pyongyang, a recital project symbolically connecting the southernmost and northernmost regions of the Korean Peninsula through music. Her educational initiatives have since extended to Cambodia, Myanmar, Tanzania, and India through music education, online learning, and youth music programs. From 2019, she served as Artistic Director of the PLZ (Peace & Life Zone) Festival in Korea's DMZ border region and later as General Director of the DMZ OPEN International Music Festival (2023–2024). In July 2023, a photograph of her performance at the PLZ Festival was featured on the cover of The New York Times. Through her performances, teaching, and artistic leadership, she continues to explore music as a living art that unites technical excellence with spiritual depth, inviting audiences into a deeper awareness of our shared humanity.",
     "epkLabel": "Download EPK",
     "epkNote": "PDF, Electronic Press Kit"
@@ -86,6 +88,8 @@
   "dialogue": {
     "title": "Dialogue",
     "subtitle": "Essays and interviews",
+    "essaysTitle": "Essays",
+    "directorLetterTitle": "Artistic Director’s Letter",
     "headerStatement": "Music gives shape to what words cannot fully hold.\n\nYet words, too, have their own quiet music.\n\nThey carry the rhythm of listening, the echoes of everyday life, and the quiet questions that linger after the final note.\n\nWords are simply another way for music to continue."
   },
   "projects": {
@@ -97,7 +101,8 @@
     "dmzTitle": "DMZ OPEN International Music Festival",
     "dmzBody": "Appointed as General Director of Gyeonggi Province's DMZ OPEN Festival, Mijung IM curated and led its International Music Festival, bringing together distinguished soloists, major orchestras, and laureates of leading international competitions.",
     "foundationTitle": "Music for One Foundation",
-    "foundationBody": "Founded by Mijung IM in 2005, the Music for One Foundation develops artistic and educational programs that connect music with dignity, cultural dialogue, and human development. Its initiatives have included music education and international exchange projects in Cambodia, Myanmar, Tanzania, and India."
+    "foundationBody": "Founded by Mijung IM in 2005, the Music for One Foundation develops artistic and educational programs that connect music with dignity, cultural dialogue, and human development. Its initiatives have included music education and international exchange projects in Cambodia, Myanmar, Tanzania, and India.",
+    "visitWebsiteLabel": "Visit Website"
   },
   "contact": {
     "title": "Contact",

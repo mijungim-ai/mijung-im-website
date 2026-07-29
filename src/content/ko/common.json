@@ -29,6 +29,8 @@
     },
     "bioShort": "임미정은 콘서트홀을 넘어 DMZ를 비롯한 자연 현장에서 연주하는 것으로 알려진 국제 콘서트 피아니스트입니다.",
     "bioMedium": "임미정은 전통적인 공연장과 숲, 접경지대 등 갈등의 흔적이 남은 장소를 오가며 활동하는 국제 콘서트 피아니스트입니다. 그의 리사이틀은 홀의 음향만큼이나 풍경의 고요함에 의해 형성되며, 장소에 응답하여 쓰인 신작과 정통 레퍼토리를 함께 선보이는 프로그램으로 알려져 있습니다. 북미, 유럽, 아시아 전역의 오케스트라 및 독주 무대에 섰습니다.",
+    "theArtistLabel": "The Artist",
+    "biographyLabel": "Biography",
     "bioFull": "임미정은 전통적인 공연장과 숲, 접경지대 등 갈등의 흔적이 남은 장소를 오가며 활동하는 국제 콘서트 피아니스트입니다. 그의 리사이틀은 홀의 음향만큼이나 풍경의 고요함에 의해 형성되며, 장소에 응답하여 쓰인 신작과 정통 레퍼토리를 함께 선보이는 프로그램으로 알려져 있습니다.\n\nDMZ 및 다른 자연 현장에서의 연주는 그의 예술적 정체성을 상징하는 활동이 되었으며, 피아노 리사이틀을 사람과 역사, 땅 사이의 화해 행위로 재구성합니다. 북미, 유럽, 아시아 전역의 오케스트라 및 독주 무대에 섰으며, 음악과 평화 구축, 환경 인식이 교차하는 지점에 관심을 가진 기획자와 언론의 주목을 받아왔습니다.\n\n무대 밖에서는 교육 및 커뮤니티 활동에도 참여하여 청년 음악가 및 시민단체와 함께 작업하며 예술적 비전의 지평을 넓히고 있습니다. 이 섹션은 최종 승인된 소개글로 교체될 예정입니다.",
     "visionTitle": "예술적 비전",
     "visionBody": "임미정에게 음악은 좀처럼 귀 기울여지지 않는 장소 — 접경지대, 숲, 침묵 — 를 듣는 방식입니다. 그의 프로그램은 피아노 리사이틀이 아름다움만큼이나 평화를 위한 자리를 마련할 수 있다는 생각을 바탕으로 구성됩니다.",
@@ -66,6 +68,10 @@
       "counter": "{current} / {total}"
     },
     "videoBody": "대표 연주 영상이 이곳에 삽입될 예정입니다.",
+    "videoGroups": {
+      "performancesTitle": "Performances",
+      "talksTitle": "Talks & Interviews"
+    },
     "audioBody": "선정 오디오 녹음이 이곳에 제공될 예정입니다.",
     "pressBody": "언론 보도 및 리뷰 발췌가 이곳에 정리될 예정입니다."
   },
@@ -73,6 +79,8 @@
     "eyebrow": "다이얼로그",
     "title": "다이얼로그",
     "subtitle": "에세이 및 인터뷰",
+    "essaysTitle": "Essays",
+    "directorLetterTitle": "Artistic Director’s Letter",
     "entriesBody": "에세이와 인터뷰 콘텐츠가 발행되는 대로 이곳에 게시될 예정입니다."
   },
   "projects": {
@@ -86,7 +94,8 @@
     "foundationTitle": "Music for One Foundation",
     "foundationBody": "Music for One Foundation 및 관련 프로그램에 대한 정보가 이곳에 제공될 예정입니다.",
     "educationTitle": "교육 프로그램",
-    "educationBody": "교육 및 커뮤니티 프로그램에 대한 상세 내용이 이곳에 제공될 예정입니다."
+    "educationBody": "교육 및 커뮤니티 프로그램에 대한 상세 내용이 이곳에 제공될 예정입니다.",
+    "visitWebsiteLabel": "Visit Website"
   },
   "contact": {
     "eyebrow": "연락처",

@@ -93,7 +93,7 @@ export default async function ProjectsPage() {
                 rel="noopener noreferrer"
                 className="label text-xs text-sage hover:text-ivory transition-colors mt-6 inline-block"
               >
-                Visit Website →
+                {t("visitWebsiteLabel")} →
               </a>
             )}
           </Section>

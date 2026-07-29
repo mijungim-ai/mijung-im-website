@@ -906,3 +906,45 @@ Letter, Projects Gallery)은 **콘텐츠 EN/KO 공용, 감싸는 UI 텍스트만
   기존처럼 KO에서 정상 노출 유지 재확인. Home Latest News는 EN/KO
   둘 다 여전히 "콘텐츠 준비 중" 상태 그대로(실제 콘텐츠가 없어
   변경하지 않음).
+
+### 하드코딩 문자열 7건 → t() 키 전환, KO는 EN 임시값 (2026-07-29)
+
+`docs/translation-source-en.md` 감사에서 발견한 하드코딩 7건을 모두
+`t()` 호출로 전환하고 EN/KO `common.json` 양쪽에 정식 키를 추가함.
+KO 값은 아직 번역이 없어 EN과 동일한 값을 임시로 넣음(자리만 잡아둠,
+의미 변화 없음) — 사용자가 명시적으로 이번 건에 한해 KO
+`common.json` 수정을 허용함(평소엔 명시 지시 없이 건드리지 않는 규칙).
+
+전환 목록:
+- About "The Artist" → `about.theArtistLabel` (about/page.tsx)
+- About "Biography" → `about.biographyLabel` (about/page.tsx)
+- Dialogue "Essays" → `dialogue.essaysTitle` (dialogue/page.tsx)
+- Dialogue "Artistic Director's Letter" → `dialogue.directorLetterTitle`
+  (dialogue/page.tsx) — `&rsquo;`는 JSON에 실제 어퍼스트로피(’)로 저장
+- Projects "Visit Website" → `projects.visitWebsiteLabel`
+  (projects/page.tsx) — 화살표 "→"는 기존 `home.projectLink` 선례처럼
+  키 밖에 그대로 둠(`{t("visitWebsiteLabel")} →`)
+- Media "Performances" 그룹 라벨 → `media.videoGroups.performancesTitle`
+  (MediaTabs.tsx) — 위 항목(2026-07-29 이전 라운드)에서 하드코딩으로
+  남겨뒀던 것을 이번에 다시 `t()`로 연결. EN 키는 이미 존재했음
+  (당시엔 고아 키), 이번에 KO 쪽에 `media.videoGroups` 객체 자체가
+  없던 것을 새로 추가
+- Media "Talks & Interviews" 그룹 라벨 → `media.videoGroups.talksTitle`
+  (MediaTabs.tsx) — 위와 동일한 방식
+
+`media.videoGroups.*`를 제외한 나머지 5개 키는 EN/KO 둘 다 이번에
+신규 추가. Projects "Visit Website"는 `project.final`(=`isEn`)이
+true일 때만 렌더링되는 기존 구조라 KO 화면에는 애초에 노출되지
+않음(변경 없음, 기존 동작 그대로) — 실측으로 확인.
+
+**검증**: `tsc --noEmit`/`eslint`(수정 파일 4개)/`next build` 모두
+통과. EN·KO 양쪽에서 About/Dialogue/Projects/Media 4개 페이지를
+`get_page_text`로 실측 — 7곳 전부 변경 전과 동일하게 영문 그대로
+노출됨을 확인(KO 값이 EN과 같으므로 시각적 변화 없음).
+
+**남은 일**: 실제 한글 번역이 오면 `content/ko/common.json`의 해당
+5개 신규 키(`about.theArtistLabel`/`biographyLabel`,
+`dialogue.essaysTitle`/`directorLetterTitle`,
+`projects.visitWebsiteLabel`) 값만 교체하면 됨. `media.videoGroups.*`
+두 키는 코드 구조상 "Performances"/"Talks & Interviews"가 사실상
+게시판형 섹션의 감싸는 UI 라벨이라 번역 여부는 추후 판단 필요.
