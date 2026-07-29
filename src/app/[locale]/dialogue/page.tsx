@@ -1,5 +1,6 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
+import { PageSubtitle } from "@/components/PageSubtitle";
 import { LinkEntry } from "@/components/LinkEntry";
 import {
   essays,
@@ -39,15 +40,13 @@ export default async function DialoguePage() {
               {t("headerStatement")
                 .split("\n\n")
                 .map((sentence, i) => (
-                  <PageHeaderStatement key={i} className="text-grey-muted">
+                  <PageHeaderStatement key={i} className="text-sage">
                     {sentence}
                   </PageHeaderStatement>
                 ))}
             </div>
           ) : (
-            <p className="display-serif text-h2 text-grey-muted">
-              {t("subtitle")}
-            </p>
+            <PageSubtitle>{t("subtitle")}</PageSubtitle>
           )}
         </div>
       </section>

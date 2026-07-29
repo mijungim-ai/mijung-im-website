@@ -1,6 +1,7 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { MediaTabs } from "@/components/MediaTabs";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
+import { PageSubtitle } from "@/components/PageSubtitle";
 import { SocialIconRow } from "@/components/SocialIconRow";
 
 export default async function MediaPage() {
@@ -15,23 +16,19 @@ export default async function MediaPage() {
           <h1 className="sr-only">{t("title")}</h1>
           {isEn ? (
             <>
-              <p className="display-serif text-h1 text-ivory">
-                {t("headerTitle")}
-              </p>
+              <PageSubtitle>{t("headerTitle")}</PageSubtitle>
               <div className="space-y-4 mt-6 max-w-2xl">
                 {t("headerStatement")
                   .split("\n\n")
                   .map((sentence, i) => (
-                    <PageHeaderStatement key={i} className="text-grey-muted">
+                    <PageHeaderStatement key={i} className="text-sage">
                       {sentence}
                     </PageHeaderStatement>
                   ))}
               </div>
             </>
           ) : (
-            <p className="display-serif text-h2 text-grey-muted">
-              {t("subtitle")}
-            </p>
+            <PageSubtitle>{t("subtitle")}</PageSubtitle>
           )}
           <SocialIconRow className="mt-8" />
         </div>

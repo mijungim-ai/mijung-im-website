@@ -1,6 +1,7 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { Placeholder } from "@/components/Placeholder";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
+import { PageSubtitle } from "@/components/PageSubtitle";
 import { ConcertArchiveGrid } from "@/components/ConcertArchiveGrid";
 import { engagements } from "@/data/engagements";
 
@@ -38,15 +39,13 @@ export default async function PerformancesPage() {
               {t("headerStatement")
                 .split("\n\n")
                 .map((sentence, i) => (
-                  <PageHeaderStatement key={i} className="text-ivory">
+                  <PageHeaderStatement key={i} className="text-sage">
                     {sentence}
                   </PageHeaderStatement>
                 ))}
             </div>
           ) : (
-            <p className="display-serif text-h2 text-grey-muted">
-              {t("subtitle")}
-            </p>
+            <PageSubtitle>{t("subtitle")}</PageSubtitle>
           )}
         </div>
       </section>
