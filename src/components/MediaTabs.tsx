@@ -138,7 +138,7 @@ export function MediaTabs() {
           </div>
         </div>
       ) : isEn && active === "gallery" ? (
-        <div className="grid gap-8 sm:grid-cols-2">
+        <div className="grid gap-8 grid-cols-2 sm:grid-cols-4">
           {galleryImages.map((img, i) => (
             <div key={img.src}>
               <button

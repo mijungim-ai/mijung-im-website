@@ -10,16 +10,6 @@ export type MediaImage = {
 // reorder photos, move entries within this array, never rename files.
 export const galleryImages: MediaImage[] = [
   {
-    src: "/images/gallery/dmz_dome_beach.jpg",
-    alt: "Performance inside a dome on the DMZ coastline",
-  },
-  {
-    src: "/images/gallery/jeil_church_cheorwon.jpg",
-    alt: "Mijung IM performing at the historic war-damaged Jeil Church in Cheorwon, near the Korean DMZ",
-    caption:
-      "Mijung IM performing at the historic war-damaged Jeil Church in Cheorwon, near the Korean DMZ",
-  },
-  {
     src: "/images/gallery/goseong_hwajinpo_beach_2020.jpg",
     alt: "Piano performance inside a transparent dome on Hwajinpo Beach, Goseong, 2020",
     caption: "Goseong, Hwajinpo Beach, 2020",
