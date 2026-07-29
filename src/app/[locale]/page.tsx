@@ -52,23 +52,15 @@ export default async function Home() {
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
             {t("videoTitle")}
           </h2>
-          {isEn ? (
-            <div className="aspect-video">
-              <iframe
-                className="w-full h-full"
-                src={t("videoEmbedUrl")}
-                title={t("videoTitle")}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
-            </div>
-          ) : (
-            <Placeholder label={tc("placeholderLabel")}>
-              <div className="aspect-video flex items-center justify-center text-grey-muted text-caption">
-                {t("videoBody")}
-              </div>
-            </Placeholder>
-          )}
+          <div className="aspect-video">
+            <iframe
+              className="w-full h-full"
+              src={t("videoEmbedUrl")}
+              title={t("videoTitle")}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </div>
         </Section>
 
         <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[420px] flex items-start">
@@ -83,15 +75,9 @@ export default async function Home() {
             <h2 className="text-h2 font-display-bold! font-bold not-italic text-on-photo mb-3 [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_2px_10px_rgba(0,0,0,0.85)]">
               {t("projectTitle")}
             </h2>
-            {isEn ? (
-              <p className="text-body text-on-photo/90 [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_2px_10px_rgba(0,0,0,0.85)]">
-                {t("projectSubtitle")}
-              </p>
-            ) : (
-              <Placeholder label={tc("placeholderLabel")} surfaceClassName="bg-ink-deep">
-                <p className="text-body text-on-photo/90">{t("projectBody")}</p>
-              </Placeholder>
-            )}
+            <p className="text-body text-on-photo/90 [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_2px_10px_rgba(0,0,0,0.85)]">
+              {t("projectSubtitle")}
+            </p>
             <Link
               href="/projects"
               className="label text-xs text-on-photo hover:text-sage transition-colors mt-6 inline-block [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_2px_10px_rgba(0,0,0,0.85)]"

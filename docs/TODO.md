@@ -31,13 +31,15 @@
 
 ### 이중언어 정책 — 확정 (2026-07-29)
 
-게시판형 5개 섹션(Home Latest News, Performances Selected Engagements/
-Concert Archive, Media YouTube/Press/Gallery, Dialogue Essays/Director's
-Letter, Projects Gallery)은 **콘텐츠 EN/KO 공용, 감싸는 UI 텍스트만
-언어별 분리**. 작성 언어는 항목마다 다를 수 있음(전부 한국어, 전부
-영어, 혼용 전부 허용) — 예: Dialogue 기사 제목은 한국어(국민일보 등
+게시판형 6개 섹션(Home Latest News, Home Featured Performance, Performances
+Selected Engagements/Concert Archive, Media YouTube/Press/Gallery, Dialogue
+Essays/Director's Letter, Projects Gallery)은 **콘텐츠 EN/KO 공용, 감싸는
+UI 텍스트만 언어별 분리**. 작성 언어는 항목마다 다를 수 있음(전부 한국어,
+전부 영어, 혼용 전부 허용) — 예: Dialogue 기사 제목은 한국어(국민일보 등
 실제 한국 언론), Media 비디오 제목("Mozart"/"Chopin")과 Performances
-공연 정보는 영어, 전부 그대로 유지.
+공연 정보는 영어, 전부 그대로 유지. Home Featured Performance는 2026-07-29
+추가 라운드에서 뒤늦게 이 정책에 편입됨 — 처음 정책을 확정할 때 누락됐던
+항목(아래 신규 dated 항목 참고).
 
 ### KO 사이트 방향 미결
 
@@ -1104,3 +1106,71 @@ shore of Korea's East Sea"). KO Projects 페이지에서 `img[alt]` DOM
 조회로 alt가 "대한민국 동해 해안에서 연주하는 임미정"으로 바뀐 것을
 확인, 화면에 보이는 캡션 텍스트도 `get_page_text`로 동일하게 노출됨을
 재확인.
+
+### home.projectSubtitle 번역 채움 + Home Featured Performance 게시판 정책 편입 (2026-07-29)
+
+**1) `home.projectSubtitle` 번역 채움**: EN "Pianist of Peace and Nature"에
+대응하는 KO 값이 아예 없어서(신규 키), 사이트에서 이미 쓰이던 표준 번역
+"평화와 자연의 피아니스트"(about.subtitle/footer.tagline/home.heroTitle과
+동일 문구)를 그대로 `content/ko/common.json`의 `home.projectSubtitle`에
+추가. `page.tsx`의 PLZ 배너 섹션에서 `isEn ? projectSubtitle : <Placeholder>
+projectBody</Placeholder>` 삼항연산자를 제거하고 `projectSubtitle`만
+무조건 렌더링 — `home.projectBody`(옛 자리표시자 키)는 이제 코드에서
+참조되지 않는 고아 키가 됨(삭제하지 않고 여기 기록만).
+
+**2) Home "Featured Performance" 영상 — 게시판 정책 편입**: 지난번
+"게시판형 5개 섹션" 정책 확정 때 이 섹션이 목록에서 빠져 있었음(감사
+당시 실수로 누락). 실제로는 EN에 이미 실제 영상(`home.videoEmbedUrl` =
+DMZ 공연 embed URL)이 있는 콘텐츠 섹션이라, Media YouTube 등 다른
+게시판들과 동일한 정책(콘텐츠 EN/KO 공용, 섹션 제목만 언어별 분리 —
+`videoTitle`은 원래도 게이트 없이 무조건 렌더링되고 있었음)을 적용하는
+게 맞음. `content/ko/common.json`에 `home.videoEmbedUrl`을 EN과 동일한
+값으로 추가(URL 자체는 언어 종속적이지 않은 콘텐츠이므로 번역이 아니라
+그대로 복사)하고, `page.tsx`에서 `isEn ? <iframe> : <Placeholder>
+videoBody</Placeholder>` 삼항연산자를 제거해 iframe을 무조건 렌더링.
+`home.videoBody`(옛 자리표시자 키)는 고아 키가 됨(기록만).
+`docs/TODO.md` 32행의 게시판 정책 목록도 "게시판형 5개 섹션" →
+"게시판형 6개 섹션"으로 갱신하고 Home Featured Performance를 추가.
+
+이 두 삼항연산자를 걷어낸 뒤에도 `isEn`/`locale`/`getLocale`/
+`Placeholder`/`tc`는 `page.tsx`의 다른 곳(introBody Placeholder 게이트,
+newsTitle 무조건 Placeholder)에서 계속 쓰이므로 전부 그대로 둠.
+
+**검증**: `tsc --noEmit`/`eslint`/`next build` 모두 통과. EN Home을
+`get_page_text` + `iframe.src` DOM 조회로 재확인 — 텍스트·영상 URL
+둘 다 변경 전과 100% 동일. KO Home을 `get_page_text` + `iframe.src`
+DOM 조회로 확인 — projectSubtitle이 "평화와 자연의 피아니스트"로,
+iframe.src가 EN과 동일한 URL로 정상 노출됨을 확인. 데스크톱(헤더
+영역, 스크롤 안정성 이슈로 상단만)·375px 모바일(`scrollIntoView`로
+영상 섹션까지 스크롤 후 스크린샷, statementTagline 아래 introBody는
+여전히 "콘텐츠 준비 중" placeholder로 남아있는 것도 함께 확인 — 이번
+요청 범위 밖) 스크린샷으로 실측 확인.
+
+**3) `home.introBody` 조사만(코드 미변경)**: 사용자 요청에 따라 코드는
+건드리지 않고 조사만 진행. EN `home.introBody`에는 실제 최종 원고가
+이미 들어있음(이전 세션에서 "Home intro paragraph를 full version으로
+교체" 작업 때 확정된 5문장 단락) — 고아 필드 아님, 정상적으로 Home
+페이지 statementTagline 바로 아래 Section에서 렌더링되고 있음.
+문제는 KO `home.introBody`에도 값 자체는 있지만(존재하는 키), 그
+내용이 EN 원문의 번역이 아니라 훨씬 짧은 자리표시자 스타일 문장
+("콘서트홀과 자연 및 비전통적 공연 현장을 오가며, 음악을 자연과 기억,
+장소와의 대화로 확장하는 국제 콘서트 피아니스트입니다.")이라는 것.
+EN 원문 전달(번역 요청 후속 처리 대기):
+
+> "Some performances are remembered for their virtuosity. Others
+> remain with us because of the place they create within the
+> listener. Pianist Mijung IM brings these two dimensions together.
+> Her playing combines clarity of tone, technical command,
+> contemplative depth, and a deeply personal sense of musical
+> presence. Whether performing in an established concert hall or in
+> a landscape shaped by history, she approaches music as a living
+> encounter—between sound and silence, memory and hope, the
+> individual and the wider human experience. Through a career
+> spanning the United States, Europe, and Asia, she has developed an
+> artistic identity that is both classically grounded and
+> unmistakably her own."
+
+번역 도착 시 `content/ko/common.json`의 `home.introBody` 값만 교체하면
+됨 — `page.tsx`의 `isEn ? 그냥 렌더 : <Placeholder>로 감싸서 렌더`
+구조(About bioMedium/Projects 카드 본문과 동일한 패턴)도 그때 함께
+걷어낼 필요 있음(이번엔 미실행).
