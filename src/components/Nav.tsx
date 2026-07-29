@@ -45,9 +45,11 @@ export function Nav() {
         <Link
           href="/"
           aria-label="Mijung IM"
-          className="display-serif text-3xl text-ivory shrink-0"
+          className="shrink-0 flex items-center justify-center w-11 h-11 rounded-full bg-sage"
         >
-          IM
+          <span className="display-serif text-lg text-white leading-none">
+            IM
+          </span>
         </Link>
 
         <div className="flex items-center gap-4 md:gap-5">
