@@ -37,27 +37,26 @@ export function ConcertArchiveGrid() {
     <div>
       <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
         {concertArchive.map((entry, i) => (
-          <button
-            key={entry.image}
-            type="button"
-            onClick={(e) => openLightbox(i, e.currentTarget)}
-            aria-label={buildCaption(entry)}
-            className="block w-full text-left group"
-          >
-            <div className="photo-frame relative aspect-[3/4] overflow-hidden">
-              <Image
-                src={entry.image}
-                alt={entry.title}
-                fill
-                sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
-                className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-              />
-              <div className="absolute inset-x-0 bottom-0 bg-black/60 px-3 py-2">
-                <p className="text-caption text-on-photo">{entry.year}</p>
-                <p className="text-body text-on-photo">{entry.title}</p>
+          <div key={entry.image}>
+            <button
+              type="button"
+              onClick={(e) => openLightbox(i, e.currentTarget)}
+              aria-label={buildCaption(entry)}
+              className="block w-full group"
+            >
+              <div className="photo-frame relative aspect-[3/4] overflow-hidden">
+                <Image
+                  src={entry.image}
+                  alt={entry.title}
+                  fill
+                  sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                />
               </div>
-            </div>
-          </button>
+            </button>
+            <p className="text-caption text-grey-muted mt-2.5">{entry.year}</p>
+            <p className="text-body text-ivory">{entry.title}</p>
+          </div>
         ))}
       </div>
 
