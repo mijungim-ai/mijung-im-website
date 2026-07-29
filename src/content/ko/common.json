@@ -113,7 +113,10 @@
     "masterclassTitle": "마스터클래스",
     "mediaTitle": "미디어",
     "generalTitle": "일반 문의",
-    "emailPlaceholder": "이메일 주소 추가 예정"
+    "emailPlaceholder": "이메일 주소 추가 예정",
+    "email": "pianist629@gmail.com",
+    "contactPerson": "Jinyoung Lee (Artist Relations)",
+    "phone": "+1 630-518-1399"
   },
   "home": {
     "kicker": "임미정",

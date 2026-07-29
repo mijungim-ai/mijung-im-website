@@ -1203,3 +1203,31 @@ introBody 게이트가 마지막 사용처였음) `locale`/`getLocale`/`isEn`
 이어짐을 시각 확인. 데스크톱은 이번에도 스크롤 직후 스크린샷이
 빈 화면으로 나오는 기존에 확인된 브라우저 툴 아티팩트가 재현되어
 모바일 스크린샷과 `get_page_text`로 대체 확인.
+
+### Contact 실제 연락처 정보 — KO 게이트 제거 (2026-07-29)
+
+`content/ko/common.json`의 `contact.email`/`contactPerson`/`phone`이
+아예 존재하지 않아, KO Contact 페이지에서는 `contact/page.tsx`의
+`isEn ? 실제 정보 : <Placeholder>{emailPlaceholder}</Placeholder>`
+삼항연산자에 의해 항상 emailPlaceholder("이메일 주소 추가 예정")만
+노출되던 상태. 이메일·담당자명·전화번호는 번역 대상이 아니라 언어
+무관 데이터이므로, EN과 동일한 실제 값(`pianist629@gmail.com`,
+`Jinyoung Lee (Artist Relations)`, `+1 630-518-1399`)을 KO
+`common.json`에 그대로 복사해 추가하고, `page.tsx`의 삼항연산자를
+제거해 정보 블록을 무조건 렌더링하도록 변경.
+
+이 파일에서 `isEn`/`Placeholder`가 이 한 곳에서만 쓰이고 있었어서,
+게이트 제거로 `locale`/`getLocale`/`isEn` 선언과 `getLocale` import,
+`Placeholder` import 및 `tc`(`getTranslations("common")`) 변수까지
+전부 제거 — `page.tsx`에 로케일 분기 코드가 하나도 남지 않음.
+`contact.emailPlaceholder` 키는 이제 EN/KO 둘 다 코드에서 참조되지
+않는 고아 키가 됨(삭제하지 않고 기록만).
+
+**검증**: `tsc --noEmit`/`eslint`/`next build` 모두 통과. EN Contact를
+`get_page_text`로 재확인 — 텍스트 100% 동일. KO Contact를
+`get_page_text`로 확인 — "이메일 주소 추가 예정" 대신 실제 이메일·
+담당자명·전화번호가 노출됨을 확인, `a[href^="mailto:"]` DOM 조회로
+mailto 링크도 `mailto:pianist629@gmail.com`으로 정확히 연결됨을 확인.
+데스크톱(스크롤 없이 폴드 위에서 바로 보이는 섹션이라 스크린샷 안정적)
++ 375px 모바일 스크린샷 둘 다로 실제 정보가 점선 placeholder 박스
+없이 일반 카드 형태로 노출됨을 시각 확인.
