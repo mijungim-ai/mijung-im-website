@@ -166,7 +166,7 @@ export function Lightbox({
           onClose();
         }}
         aria-label={t("lightbox.close")}
-        className="absolute top-4 right-4 sm:top-6 sm:right-6 text-on-photo text-3xl leading-none hover:text-sage transition-colors"
+        className="absolute z-10 top-4 right-4 sm:top-6 sm:right-6 text-on-photo text-3xl leading-none hover:text-sage transition-colors"
       >
         ×
       </button>
@@ -179,7 +179,7 @@ export function Lightbox({
             goPrev();
           }}
           aria-label={t("lightbox.previous")}
-          className="absolute left-2 sm:left-6 text-on-photo text-4xl leading-none hover:text-sage transition-colors px-2"
+          className="absolute z-10 left-2 sm:left-6 text-on-photo text-4xl leading-none hover:text-sage transition-colors px-2"
         >
           ‹
         </button>
@@ -192,7 +192,7 @@ export function Lightbox({
             goNext();
           }}
           aria-label={t("lightbox.next")}
-          className="absolute right-2 sm:right-6 text-on-photo text-4xl leading-none hover:text-sage transition-colors px-2"
+          className="absolute z-10 right-2 sm:right-6 text-on-photo text-4xl leading-none hover:text-sage transition-colors px-2"
         >
           ›
         </button>
