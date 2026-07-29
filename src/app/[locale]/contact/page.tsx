@@ -1,4 +1,5 @@
 import { getTranslations, getLocale } from "next-intl/server";
+import { PageSubtitle } from "@/components/PageSubtitle";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { Placeholder } from "@/components/Placeholder";
 
@@ -12,7 +13,8 @@ export default async function ContactPage() {
     <div>
       <section className="pt-16">
         <div className="mx-auto max-w-6xl px-6 py-28 border-b border-hairline">
-          <h1 className="display-serif text-h1 text-ivory">{t("title")}</h1>
+          <h1 className="sr-only">{t("title")}</h1>
+          <PageSubtitle>{t("title")}</PageSubtitle>
           <PageHeaderStatement className="text-sage mt-3">
             {t("subtitle")}
           </PageHeaderStatement>

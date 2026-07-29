@@ -510,3 +510,32 @@
     display`/`--font-display-bold`는 이번 세션 초반에 이미
     `--font-bodoni`(-bold)에서 `--font-display-serif`(-bold)로
     리네임 완료.
+
+- Projects·Contact 상단도입부 — sr-only h1 + 서브타이틀 + 상단본문 패턴
+  편입 (2026-07-29): 지금까지 두 페이지만 `PageHeader`(항상 보이는
+  큰 `text-h1` 제목 + 회색 서브타이틀 2단 구성)를 쓰고 있었음 —
+  About/Performances/Media/Dialogue와 다른 별도 패턴. 이번에 통일: 두
+  페이지 다 `sr-only <h1>{title}</h1>` + 보이는 `PageSubtitle`(제목
+  단어 자체, 회색 36px) + `PageHeaderStatement`(부제 문구, sage
+  이탤릭)로 교체. `PageHeader` 컴포넌트는 이 두 곳이 유일한 사용처였고
+  둘 다 마이그레이션되면서 완전히 미사용이 돼 `src/components/
+  PageHeader.tsx` 자체를 삭제함(grep으로 다른 참조 없음 확인).
+
+  **git log 조사 — Projects가 예전에 Dialogue와 함께 상단도입부 교체
+  요청을 받았는데 왜 반영이 안 됐는지**: 커밋 `7c738c3`(Dialogue 헤더
+  교체 — sr-only h1 + headerStatement)의 커밋 메시지와 diff를 확인한
+  결과 Dialogue 페이지 파일만 수정했고 Projects는 전혀 건드리지
+  않았음. `src/app/[locale]/projects/page.tsx`의 전체 커밋 이력
+  (`git log --oneline -- .../projects/page.tsx`)에도 헤더/상단도입부
+  교체 커밋이 단 한 번도 없었음 — 갤러리 추가, 링크 추가, 이미지 간격
+  조정, PageHeader eyebrow 제거, 타이포 통일 커밋뿐. 그 라운드에서
+  Dialogue와 같은 메시지에 같이 왔던 "Projects" 프롬프트는 실제로는
+  헤더 교체가 아니라 **완전히 다른 내용**(PLZ/DMZ OPEN/Music for One
+  "Visit Website" 링크 추가)이었음 — `docs/TODO.md`의 "Projects 페이지
+  — 홈페이지 링크 3건" 항목(이 파일 174번째 줄 부근)이 바로 그 커밋의
+  기록. 즉 "반영했다가 나중에 되돌아간" 게 아니라, 애초에 그 라운드의
+  Projects 프롬프트 자체가 헤더 교체를 요청한 적이 없었음(사용자가
+  같은 메시지에 두 개의 다른 페이지에 대한 다른 종류의 작업을 함께
+  보내서 생긴 착각으로 보임). 다른 페이지(About/Performances/Media)는
+  전부 헤더 교체가 요청된 라운드에 실제로 반영됐음 — 이런 종류의 누락은
+  Projects/Contact(둘 다 이번에 처리)를 제외하면 더 없는 것으로 확인.

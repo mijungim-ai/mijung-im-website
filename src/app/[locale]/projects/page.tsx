@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
-import { PageHeader } from "@/components/PageHeader";
+import { PageSubtitle } from "@/components/PageSubtitle";
+import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { Placeholder } from "@/components/Placeholder";
 import { ProjectGallery } from "@/components/ProjectGallery";
 
@@ -39,7 +40,15 @@ export default async function ProjectsPage() {
 
   return (
     <div>
-      <PageHeader title={t("title")} subtitle={t("subtitle")} />
+      <section className="pt-16">
+        <div className="mx-auto max-w-6xl px-6 py-28 border-b border-hairline">
+          <h1 className="sr-only">{t("title")}</h1>
+          <PageSubtitle>{t("title")}</PageSubtitle>
+          <PageHeaderStatement className="text-sage mt-3">
+            {t("subtitle")}
+          </PageHeaderStatement>
+        </div>
+      </section>
 
       <div className="mx-auto max-w-3xl px-6 py-28 space-y-20">
         {projects.map((project) => (
