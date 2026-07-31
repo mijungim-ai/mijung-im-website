@@ -68,6 +68,16 @@ export default async function LocaleLayout({
       lang={locale}
       className={`${manrope.variable} ${pretendard.variable} ${bricolage.variable} ${merriweatherItalic.variable} ${merriweatherBold.variable} h-full antialiased`}
     >
+      <head>
+        {/*
+         * Doesn't fix IE/Trident's lack of @layer, color-mix(), or
+         * @property support (see docs/TODO.md browser-compat investigation)
+         * — Trident has none of these regardless of document mode. This
+         * only stops group-policy-forced IE mode from downgrading further
+         * into an even older quirks/document mode on top of that gap.
+         */}
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+      </head>
       <body className="min-h-full flex flex-col bg-ink text-ivory">
         <NextIntlClientProvider>
           <Nav />
