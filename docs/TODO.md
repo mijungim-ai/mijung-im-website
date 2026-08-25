@@ -1352,3 +1352,40 @@ Media는 Press 탭이 빠져 YouTube/Gallery 2개만 남음 — 콘텐츠 볼륨
 드로어)·About 인용구·라벨 등 여러 지점에서 스크린샷 및
 `getComputedStyle` 양쪽으로 확인. 커밋만 진행, push는 보류(사용자
 지시).
+
+### Projects PLZ Festival 카드 이미지 삭제 (2026-07-30)
+
+`projects.plzImageCaption`("Mijung IM performing on the shore of
+Korea's East Sea")으로 캡션된 `/images/east_sea_plz_festival.jpg`를
+PLZ Festival 카드에서 제거 — 같은 페이지 최상단의 NYT 지면 사진
+(`NytPressPhoto.tsx`, 별개 컴포넌트·별개 데이터)과는 캡션 텍스트로
+명확히 구분해 확인 후 진행, NYT 쪽은 전혀 손대지 않음.
+
+`grep`으로 `east_sea_plz_festival.jpg` 전체 검색 — `projects/page.tsx`
+한 곳에서만 참조되고 있었음(Home 히어로 로테이션·Home PLZ 배너·
+Gallery 전부 다른 파일 사용, 재사용 없음). 참조 제거 후
+`public/images/east_sea_plz_festival.jpg` 파일 자체도 삭제.
+
+`projects/page.tsx`에서 PLZ 프로젝트 객체의 `image`/`imageAlt`/
+`imageCaption` 필드와, 이를 렌더링하던 `{project.image && (...)}`/
+`{project.imageCaption && (...)}` 조건부 블록을 제거. 이미지 제거로
+3개 프로젝트(PLZ/DMZ OPEN/Music for One) 전부 이미지 없는 동일
+구조(제목→본문→버튼)가 되어 이 조건부 렌더링 블록이 항상 거짓이
+되는 죽은 코드가 되므로, 필드를 남겨두는 대신 완전히 제거하는 쪽을
+택함 — 남은 유일한 참조자였던 `next/image`의 `Image` import도 함께
+제거. 결과적으로 PLZ 카드가 DMZ OPEN/Music for One 카드와 구조적
+으로 동일해져 여백도 자동으로 통일됨(별도 여백 조정 불필요).
+`projects.plzImageCaption` 키는 EN/KO 둘 다 이제 코드에서 참조되지
+않는 고아 키(삭제하지 않고 기록만).
+
+**검증**: `tsc --noEmit`/`eslint`/`next build`(클린) 모두 통과.
+검증 중 `next start`용으로 쓰던 `rm -rf .next`가 별도로 떠 있던
+`next dev` 서버의 캐시를 지워 500 에러가 발생 — 서버 재시작으로
+해결(코드 문제 아님, 툴링 순서 이슈였다는 것만 기록). EN·KO
+`get_page_text`+콘솔 에러 체크로 재확인 — PLZ 카드 캡션 문구
+완전히 사라짐, DMZ/foundation 카드와 동일한 구조로 노출, NYT 사진
+캡션은 그대로 유지됨을 확인. 375px 모바일 스크린샷으로 PLZ→DMZ OPEN
+카드 사이 여백이 자연스럽고 일관됨을 시각 확인. 데스크톱은 NYT
+사진(폴드 안, 스크롤 불필요)은 스크린샷 확인, PLZ 카드는 이 세션
+내내 반복된 "스크롤 직후 스크린샷 빈 화면" 브라우저 툴 아티팩트가
+재현되어 모바일 스크린샷+양쪽 로케일 텍스트 확인으로 대체.

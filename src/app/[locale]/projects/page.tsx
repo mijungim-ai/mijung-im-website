@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { PageSubtitle } from "@/components/PageSubtitle";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
@@ -15,9 +14,6 @@ export default async function ProjectsPage() {
     {
       title: t("plzTitle"),
       body: t("plzBody"),
-      image: "/images/east_sea_plz_festival.jpg",
-      imageAlt: t("plzImageCaption"),
-      imageCaption: t("plzImageCaption"),
       href: "http://plzfe.com/",
     },
     {
@@ -49,26 +45,6 @@ export default async function ProjectsPage() {
 
         {projects.map((project) => (
           <Section key={project.title}>
-            {project.image && (
-              <div
-                className={`photo-frame relative aspect-video overflow-hidden ${
-                  project.imageCaption ? "mb-2.5" : "mb-8"
-                }`}
-              >
-                <Image
-                  src={project.image}
-                  alt={project.imageAlt ?? ""}
-                  fill
-                  sizes="(min-width: 768px) 48rem, 100vw"
-                  className="object-cover"
-                />
-              </div>
-            )}
-            {project.imageCaption && (
-              <p className="text-caption text-grey-muted mb-6">
-                {project.imageCaption}
-              </p>
-            )}
             <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
               {project.title}
             </h2>
