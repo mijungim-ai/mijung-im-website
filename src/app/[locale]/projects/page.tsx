@@ -5,6 +5,7 @@ import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
 import { Section } from "@/components/Section";
 import { ProjectGallery } from "@/components/ProjectGallery";
+import { NytPressPhoto } from "@/components/NytPressPhoto";
 
 export default async function ProjectsPage() {
   const t = await getTranslations("projects");
@@ -42,11 +43,12 @@ export default async function ProjectsPage() {
       </PageHeaderSection>
 
       <div className="space-y-14 md:space-y-28">
-        {projects.map((project, i) => (
-          <Section
-            key={project.title}
-            className={i === 0 ? "pt-7 md:pt-14" : undefined}
-          >
+        <Section className="pt-7 md:pt-14">
+          <NytPressPhoto />
+        </Section>
+
+        {projects.map((project) => (
+          <Section key={project.title}>
             {project.image && (
               <div
                 className={`photo-frame relative aspect-video overflow-hidden ${

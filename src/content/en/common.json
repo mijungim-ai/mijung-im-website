@@ -34,7 +34,13 @@
     "subtitle": "Selected engagements, concert archive, and repertoire",
     "headerStatement": "Every performance is an invitation to enter the music's own sense of time.\n\nListening becomes an act of presence, where sound, silence, and resonance unfold with quiet clarity.\n\nWithin that shared moment, music reveals its inner life—awakening a deeper awareness of ourselves, one another, and the mystery that quietly connects us.",
     "engagementsTitle": "Selected Engagements",
-    "archiveTitle": "Concert Archive"
+    "archiveTitle": "Concert Archive",
+    "archiveModal": {
+      "dialogLabel": "Concert details",
+      "close": "Close",
+      "previous": "Previous concert",
+      "next": "Next concert"
+    }
   },
   "media": {
     "title": "Media",
@@ -91,6 +97,7 @@
     "subtitle": "Essays and interviews",
     "essaysTitle": "Essays",
     "directorLetterTitle": "Artistic Director’s Letter",
+    "pressTitle": "Press",
     "headerStatement": "Music gives shape to what words cannot fully hold.\n\nYet words, too, have their own quiet music.\n\nThey carry the rhythm of listening, the echoes of everyday life, and the quiet questions that linger after the final note.\n\nWords are simply another way for music to continue."
   },
   "projects": {
@@ -110,7 +117,7 @@
     "subtitle": "Booking, media, and general inquiries",
     "generalTitle": "General",
     "emailPlaceholder": "Email address to be added",
-    "email": "pianist629@gmail.com",
+    "email": "mijungim.com@gmail.com",
     "contactPerson": "Jinyoung Lee (Artist Relations)",
     "phone": "+1 630-518-1399"
   },
@@ -121,7 +128,7 @@
     "introBody": "Some performances are remembered for their virtuosity. Others remain with us because of the place they create within the listener. Pianist Mijung IM brings these two dimensions together. Her playing combines clarity of tone, technical command, contemplative depth, and a deeply personal sense of musical presence. Whether performing in an established concert hall or in a landscape shaped by history, she approaches music as a living encounter—between sound and silence, memory and hope, the individual and the wider human experience. Through a career spanning the United States, Europe, and Asia, she has developed an artistic identity that is both classically grounded and unmistakably her own.",
     "videoTitle": "Featured Performance",
     "videoBody": "A featured performance video will be embedded here.",
-    "videoEmbedUrl": "https://www.youtube.com/embed/QLA9hIY6gv4",
+    "videoEmbedUrl": "https://www.youtube.com/embed/ebOXZHd7XB0",
     "projectTitle": "PLZ Festival",
     "projectSubtitle": "Pianist of Peace and Nature",
     "projectImageCaption": "Mijung IM performing inside a transparent dome on the beach at Hwajinpo, Goseong, 2020.",

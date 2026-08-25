@@ -8,8 +8,9 @@ import {
   directorLetters,
   type DirectorLetterEntry,
 } from "@/data/dialogue";
+import { pressArticles } from "@/data/pressArticles";
 
-function DirectorLetterEntryRow({ entry }: { entry: DirectorLetterEntry }) {
+function WritingEntryRow({ entry }: { entry: DirectorLetterEntry }) {
   if (entry.type === "link") {
     return <LinkEntry title={entry.title} href={entry.href} />;
   }
@@ -28,6 +29,20 @@ function DirectorLetterEntryRow({ entry }: { entry: DirectorLetterEntry }) {
 
 export default async function DialoguePage() {
   const t = await getTranslations("dialogue");
+
+  // Essays and Artistic Director's Letters merged into one section per
+  // artist feedback. Essays (undated magazine op-eds) come first, then
+  // director's letters (dated festival notes) — each group keeps its
+  // original internal order, since the essays have no known publish
+  // date to interleave chronologically against the letters' years.
+  const writings: DirectorLetterEntry[] = [
+    ...essays.map((essay) => ({
+      type: "link" as const,
+      title: essay.title,
+      href: essay.href,
+    })),
+    ...directorLetters,
+  ];
 
   return (
     <div>
@@ -50,19 +65,19 @@ export default async function DialoguePage() {
             {t("essaysTitle")}
           </h2>
           <div>
-            {essays.map((essay) => (
-              <LinkEntry key={essay.href} title={essay.title} href={essay.href} />
+            {writings.map((entry) => (
+              <WritingEntryRow key={entry.title} entry={entry} />
             ))}
           </div>
         </Section>
 
         <Section>
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-            {t("directorLetterTitle")}
+            {t("pressTitle")}
           </h2>
-          <div className="space-y-6">
-            {directorLetters.map((entry) => (
-              <DirectorLetterEntryRow key={entry.title} entry={entry} />
+          <div>
+            {pressArticles.map((article) => (
+              <LinkEntry key={article.url} title={article.title} href={article.url} />
             ))}
           </div>
         </Section>

@@ -1231,3 +1231,124 @@ mailto 링크도 `mailto:pianist629@gmail.com`으로 정확히 연결됨을 확�
 데스크톱(스크롤 없이 폴드 위에서 바로 보이는 섹션이라 스크린샷 안정적)
 + 375px 모바일 스크린샷 둘 다로 실제 정보가 점선 placeholder 박스
 없이 일반 카드 형태로 노출됨을 시각 확인.
+
+### 아티스트 피드백 8건 일괄 반영 (2026-07-30)
+
+**1) Home Featured Performance 영상 교체** — `home.videoEmbedUrl`을
+`https://www.youtube.com/embed/ebOXZHd7XB0`로 교체(EN/KO 공통, URL
+자체는 번역 대상 아님). 적용 전 실제 브라우저에서 확인 — `/embed/...`
+URL에 직접 최상위 네비게이션하면 "오류 153"(임베드 재생 불가)이
+뜨는데, 이는 실제 사이트가 쓰는 방식(다른 페이지 안에 `<iframe>`으로
+삽입)과 다른 접근이라 발생하는 알려진 false positive임을 확인 —
+로컬 HTTP 서버로 실제 `<iframe src="...">` 안에 띄워보니 정상
+재생(썸네일 정확히 로드, 재생 버튼 클릭 시 실제로 진행됨, 0:02/4:53
+등 재생 진행 확인). 문제 없어 그대로 적용.
+
+**2) Home "Get in Touch" CTA 섹션 삭제** — `page.tsx`에서 CTA
+`<Section>` 블록(ctaTitle/ctaBody/ctaContact/ctaEpk) 전체 삭제.
+`ctaTitle`/`ctaBody`/`ctaContact`/`ctaEpk` 키는 grep 확인 결과 이
+한 곳에서만 쓰이고 있었어서 이제 EN/KO 둘 다 고아 키가 됨(기록만,
+삭제 안 함).
+
+**3) 히어로 부제 삭제(Home 한정)** — Home 히어로의
+`<p>{t("heroTitle")}</p>`(부제 "Pianist of Peace & Nature") 삭제,
+`<h1>Mijung IM</h1>`만 남김. `home.heroTitle`은 이 한 곳에서만
+쓰이던 키라 고아 키가 됨(기록만). About subtitle/Footer tagline 등
+다른 곳의 동일 문구는 별개 키라 손대지 않음. 히어로 사진 로테이션
+순서(`data/hero.ts`)는 변경 없음. hover 시 정지 기능은 기존 그대로
+유지 — 화살표 수동 네비게이션은 이번 요청에 없어 추가하지 않음.
+
+**4) sage → violet 색상 토큰 전체 교체** — `globals.css`의
+`--accent-sage`를 `#5b7a3e` → `#4a2e6d`로 교체(brass는 무변경).
+적용 전 `grep -rn "sage"` 전수 확인 — 하드코딩된 hex 값은 전혀 없고
+(주석에 남은 과거 값 문자열 제외), 전부 `text-sage`/`bg-sage`/
+`border-sage` Tailwind 유틸리티(15개 파일, ~28곳)를 통해 이 토큰
+하나로만 렌더링됨을 확인 — 즉 단일 지점 교체로 안전하게 전체 반영됨.
+교체 후 Python으로 WCAG 대비 실측: violet vs bg-ink(#fcfcfa) =
+10.74:1(사용자 계산과 정확히 일치, AAA 여유), vs bg-ink-deep = 9.76:1,
+vs text-on-photo = 9.79:1 — 전부 AAA 통과. grey-muted와의 구분도
+명도(luminance) 0.045 vs 0.147로 뚜렷이 구분됨을 확인. 실제 렌더링
+스크린샷으로 로고 배지·내비 활성 표시(데스크톱+모바일 드로어)·About
+인용구·About "The Artist" 라벨(getComputedStyle로 `rgb(74, 46, 109)`
+직접 확인 — 스크린샷상 작은 라벨 텍스트는 눈으로 보면 회색처럼
+보일 수 있어 DOM 조회로 재확인함) 등 다수 지점에서 violet이 정확히
+적용됨을 확인.
+
+**5) Concert Archive — 게시판(제목 목록 + 클릭 확장) 전환** —
+기존 `ConcertArchiveGrid.tsx`(포스터 썸네일 그리드) 삭제, 대신
+`ConcertArchiveList.tsx`(제목+연도 목록, 썸네일 없음, Selected
+Engagements와 동일한 `border-b` 행 스타일)와 `ConcertArchiveModal.tsx`
+(클릭 시 포스터+제목+연도+장소+프로그램을 모달로 표시) 신설.
+모달은 사용자가 추천한 대로 `Lightbox.tsx`의 접근성 패턴(포커스
+트랩, ESC 닫기, 열릴 때 닫기 버튼 포커스, 닫을 때 트리거로 포커스
+복귀, iOS 세이프 스크롤 락, 트랩된 Tab 순환)을 그대로 재사용 —
+다만 표시 내용이 사진 캡션이 아니라 제목/연도/장소/프로그램
+텍스트라 Lightbox 자체를 재사용하지 않고 같은 패턴으로 새로
+작성. `performances.archiveModal.{dialogLabel,close,previous,next}`
+신규 키 추가(EN/KO 둘 다 실제 번역값으로, 임시값 없이 바로).
+`ConcertArchiveEntry`(`venue`/`program` 필드)는 변경 없이 그대로
+재사용. Selected Engagements는 요청대로 구조 변경 안 함(현재
+3건은 추가 콘텐츠가 없어 클릭-확장의 실익이 없음) — 동일 패턴
+확장 여지는 `ConcertArchiveModal`이 이미 `entries: ConcertArchiveEntry[]`
+제네릭한 배열을 받는 구조라 향후 필요시 큰 변경 없이 재사용 가능.
+클릭 열기/×·ESC 닫기(포커스 복귀 확인)/‹›로 이전·다음 항목 탐색
+(첫 항목은 ‹ 없음, 마지막 항목은 › 없음 정상 확인)/포스터 이미지·
+연도(violet)·제목·장소·프로그램 노출을 EN·KO·데스크톱·375px
+모바일 전부에서 직접 클릭해 실측 확인.
+
+**6) Media Press 탭 → Dialogue로 이동, Essays/Director's Letter
+병합** — `pressArticles.ts`(5건 그대로, 데이터 변경 없음)의
+렌더링을 `MediaTabs.tsx`에서 `dialogue/page.tsx`로 이전.
+`dialogue/page.tsx`에서 기존 "Essays"/"Artistic Director's Letter"
+두 섹션을 하나로 병합 — 병합된 배열은 essays(2건, 국민일보 에세이,
+날짜 미상) + directorLetters(2건, PLZ 예술감독노트 2020/2021,
+연도 있음) 순서로, 각 그룹의 기존 내부 순서를 그대로 유지한 채
+essays를 먼저 배치. 에세이 2건은 정확한 발행일을 모르는 상태라
+연도가 있는 director's letter와 진짜 시간순으로 인터리빙하는 건
+근거 없이 추측하는 셈이라 하지 않음 — 그룹 단위로만 병합.
+병합 섹션 제목은 기존 `essaysTitle`("Essays"/"기고문") 재사용(더
+포괄적인 용어라 새 섹션에도 자연스러움), `directorLetterTitle`은
+이제 코드에서 안 쓰여 고아 키(기록만). 새 `dialogue.pressTitle`
+("Press"/"프레스") 키 추가. 렌더링 함수는 기존
+`DirectorLetterEntryRow`를 범용화해 `WritingEntryRow`로 이름 변경
+(essays도 `{type:"link", title, href}`로 정규화해 같은 유니온
+타입으로 통과시킴 — `type: "text"` 전문형 렌더링 능력은 그대로 보존).
+섹션 순서는 Essays(병합) → Press로 배치(작성한 글 먼저, 언론 보도
+다음이 자연스러운 흐름이라 판단) — 페이지 순서 결정은 사용자가
+위임한 부분이라 이렇게 정하고 기록.
+
+Media는 Press 탭이 빠져 YouTube/Gallery 2개만 남음 — 콘텐츠 볼륨이
+커서(YouTube 탭 안에 연주 영상 3개 + 토크/인터뷰 4개, Gallery에
+20장) 탭 형태를 유지하는 쪽으로 판단(전부 한 페이지에 나열하면
+스크롤이 지나치게 길어짐). `TABS` 배열에서 `"press"`만 제거,
+3-tab 삼항연산자를 2-tab 삼항연산자로 단순화. `media.tabs.press`
+키는 고아가 됨(기록만).
+
+**7) 뉴욕타임즈 사진 → Projects 페이지 상단** — Media Press 탭에
+있던 NYT 사진(`data/media.ts`의 `pressImages`, 라이트박스+촬영자
+크레딧 포함)을 `MediaTabs.tsx`에서 완전히 제거하고, 신규
+`NytPressPhoto.tsx` 클라이언트 컴포넌트로 이전. Projects 페이지는
+서버 컴포넌트라 Lightbox의 `useState` 상호작용을 직접 넣을 수
+없어 `ProjectGallery.tsx`와 동일한 패턴(자체 상태를 가진 독립
+클라이언트 컴포넌트)으로 분리. `projects/page.tsx`에서 상단도입부
+바로 아래·첫 프로젝트 카드 위, `pt-7 md:pt-14`(원래 첫 카드가
+갖던 헤더 직후 여백)를 이 새 섹션으로 옮기고 프로젝트 카드
+쪽의 `i === 0` 분기는 제거. 스타일(큰 사진+캡션+라이트박스)은
+`MediaTabs.tsx`에서 쓰던 것 그대로 재사용.
+
+**8) Contact — mailto 링크** — 기존 코드가 이미
+`<a href={`mailto:${t("email")}`}>{t("email")}</a>` 구조라 구조
+자체는 손댈 필요 없었음(이미 단순 mailto 링크, 제출 폼 아님). 실제
+바뀐 건 `contact.email` 값을 `pianist629@gmail.com` →
+`mijungim.com@gmail.com`으로 교체한 것뿐(EN/KO 공통).
+
+**공통 검증**: `tsc --noEmit`/`eslint .`(전체)/`next build`(클린
+`rm -rf .next` 후) 전부 통과. EN 7페이지 + KO 7페이지를
+`get_page_text`+콘솔 에러 체크로 전수 스윕(missing-key 에러 없음,
+14개 조합 전부 정상). 데스크톱+375px 모바일 스크린샷으로 8개 항목
+전부 시각 확인 — 특히 Concert Archive 클릭→모달 열림/포커스
+이동/‹›탐색/ESC 닫힘+포커스 복귀를 EN·KO 양쪽에서 직접 클릭해
+검증했고, violet 색상은 로고 배지·내비 활성 표시(데스크톱+모바일
+드로어)·About 인용구·라벨 등 여러 지점에서 스크린샷 및
+`getComputedStyle` 양쪽으로 확인. 커밋만 진행, push는 보류(사용자
+지시).

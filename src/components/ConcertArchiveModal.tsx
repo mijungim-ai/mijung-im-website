@@ -1,0 +1,197 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import type { ConcertArchiveEntry } from "@/data/concertArchive";
+
+const SIZES = "(max-width: 768px) 100vw, 60vw";
+
+export function ConcertArchiveModal({
+  entries,
+  index,
+  onClose,
+  onNavigate,
+}: {
+  entries: ConcertArchiveEntry[];
+  index: number | null;
+  onClose: () => void;
+  onNavigate: (index: number) => void;
+}) {
+  const t = useTranslations("performances");
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const wasOpenRef = useRef(false);
+  const scrollYRef = useRef(0);
+  const [visible, setVisible] = useState(false);
+
+  const isOpen = index !== null;
+  const entry = index !== null ? entries[index] : null;
+  const canPrev = index !== null && index > 0;
+  const canNext = index !== null && index < entries.length - 1;
+
+  // Same fade-in-on-open pattern as Lightbox.
+  useEffect(() => {
+    if (!isOpen) return;
+    const id = requestAnimationFrame(() => setVisible(true));
+    return () => {
+      cancelAnimationFrame(id);
+      setVisible(false);
+    };
+  }, [isOpen]);
+
+  // Focus the close button only on the closed -> open transition.
+  useEffect(() => {
+    if (isOpen && !wasOpenRef.current) {
+      closeButtonRef.current?.focus();
+    }
+    wasOpenRef.current = isOpen;
+  }, [isOpen]);
+
+  // Same iOS-safe scroll lock as Lightbox.
+  useEffect(() => {
+    if (!isOpen) return;
+    const scrollY = window.scrollY;
+    scrollYRef.current = scrollY;
+    const body = document.body;
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    return () => {
+      body.style.position = "";
+      body.style.top = "";
+      body.style.left = "";
+      body.style.right = "";
+      window.scrollTo(0, scrollYRef.current);
+    };
+  }, [isOpen]);
+
+  if (!isOpen || !entry || index === null) {
+    return null;
+  }
+
+  const goPrev = () => {
+    if (canPrev) onNavigate(index - 1);
+  };
+  const goNext = () => {
+    if (canNext) onNavigate(index + 1);
+  };
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (e.key === "Escape") {
+      onClose();
+      return;
+    }
+    if (e.key === "ArrowLeft") {
+      goPrev();
+      return;
+    }
+    if (e.key === "ArrowRight") {
+      goNext();
+      return;
+    }
+    if (e.key === "Tab") {
+      const focusables = dialogRef.current?.querySelectorAll<HTMLElement>(
+        "button:not([disabled]), a[href]",
+      );
+      if (!focusables || focusables.length === 0) return;
+      const list = Array.from(focusables);
+      const first = list[0];
+      const last = list[list.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
+  return (
+    <div
+      ref={dialogRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={t("archiveModal.dialogLabel")}
+      tabIndex={-1}
+      onClick={onClose}
+      onKeyDown={handleKeyDown}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/90 outline-none cursor-pointer transition-opacity duration-200 motion-reduce:transition-none overflow-y-auto py-8 ${
+        visible ? "opacity-100" : "opacity-0"
+      }`}
+    >
+      <button
+        ref={closeButtonRef}
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+        aria-label={t("archiveModal.close")}
+        className="fixed z-10 top-4 right-4 sm:top-6 sm:right-6 text-on-photo text-3xl leading-none hover:text-sage transition-colors"
+      >
+        ×
+      </button>
+
+      {canPrev && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            goPrev();
+          }}
+          aria-label={t("archiveModal.previous")}
+          className="fixed z-10 left-2 sm:left-6 top-1/2 -translate-y-1/2 text-on-photo text-4xl leading-none hover:text-sage transition-colors px-2"
+        >
+          ‹
+        </button>
+      )}
+      {canNext && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            goNext();
+          }}
+          aria-label={t("archiveModal.next")}
+          className="fixed z-10 right-2 sm:right-6 top-1/2 -translate-y-1/2 text-on-photo text-4xl leading-none hover:text-sage transition-colors px-2"
+        >
+          ›
+        </button>
+      )}
+
+      <div
+        className="photo-frame bg-ink w-[90vw] max-w-2xl cursor-default overflow-hidden"
+        onClick={(e) => {
+          e.stopPropagation();
+          dialogRef.current?.focus();
+        }}
+      >
+        <div className="relative w-full aspect-[3/4] sm:aspect-video bg-ink-deep">
+          <Image
+            src={entry.image}
+            alt={entry.title}
+            fill
+            sizes={SIZES}
+            quality={85}
+            className="object-contain"
+          />
+        </div>
+        <div className="p-6 sm:p-8">
+          <p className="label text-xs text-sage mb-2">{entry.year}</p>
+          <h3 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-4">
+            {entry.title}
+          </h3>
+          {entry.venue && (
+            <p className="text-body text-ivory/90">{entry.venue}</p>
+          )}
+          {entry.program && (
+            <p className="text-body text-ivory/70 mt-1">{entry.program}</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

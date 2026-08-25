@@ -4,16 +4,14 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Lightbox } from "@/components/Lightbox";
-import { LinkEntry } from "@/components/LinkEntry";
-import { galleryImages, pressImages, type MediaImage } from "@/data/media";
-import { pressArticles } from "@/data/pressArticles";
+import { galleryImages, type MediaImage } from "@/data/media";
 import { videoItems, talkItems } from "@/data/videos";
 
 // Internal key stays "video" even though its label is now "YouTube" —
 // KO common.json already has a translated tabs.video entry, and
 // renaming the key would need a new KO key this codebase can't add
 // without an explicit translation pass (see docs/TODO.md).
-const TABS = ["video", "press", "gallery"] as const;
+const TABS = ["video", "gallery"] as const;
 type Tab = (typeof TABS)[number];
 
 export function MediaTabs() {
@@ -43,8 +41,6 @@ export function MediaTabs() {
   function navigateLightbox(index: number) {
     setLightbox((prev) => (prev ? { ...prev, index } : prev));
   }
-
-  const nytPhoto = pressImages[0];
 
   return (
     <div>
@@ -121,7 +117,7 @@ export function MediaTabs() {
             </div>
           </div>
         </div>
-      ) : active === "gallery" ? (
+      ) : (
         <div className="grid gap-8 grid-cols-2 sm:grid-cols-4">
           {galleryImages.map((img, i) => (
             <div key={img.src}>
@@ -148,38 +144,6 @@ export function MediaTabs() {
               )}
             </div>
           ))}
-        </div>
-      ) : (
-        <div>
-          <div className="photo-frame border border-hairline overflow-hidden mb-16">
-            <button
-              type="button"
-              onClick={(e) => openLightbox(pressImages, 0, e.currentTarget)}
-              aria-label={t("enlargeLabel", { alt: nytPhoto.alt })}
-              className="block w-full group"
-            >
-              <div className="relative aspect-[3/2]">
-                <Image
-                  src={nytPhoto.src}
-                  alt={nytPhoto.alt}
-                  fill
-                  sizes="(min-width: 768px) 48rem, 100vw"
-                  className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-                />
-              </div>
-            </button>
-            {nytPhoto.caption && (
-              <p className="text-caption text-grey-muted px-5 py-4">
-                {nytPhoto.caption}
-              </p>
-            )}
-          </div>
-
-          <div>
-            {pressArticles.map((article) => (
-              <LinkEntry key={article.url} title={article.title} href={article.url} />
-            ))}
-          </div>
         </div>
       )}
 

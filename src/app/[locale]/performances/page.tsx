@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
 import { Section } from "@/components/Section";
-import { ConcertArchiveGrid } from "@/components/ConcertArchiveGrid";
+import { ConcertArchiveList } from "@/components/ConcertArchiveList";
 import { engagements } from "@/data/engagements";
 
 function EngagementsList() {
@@ -53,7 +53,7 @@ export default async function PerformancesPage() {
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
             {t("archiveTitle")}
           </h2>
-          <ConcertArchiveGrid />
+          <ConcertArchiveList />
         </Section>
       </div>
     </div>

@@ -21,9 +21,6 @@ export default async function Home() {
           <h1 className="display-serif text-on-photo text-[clamp(40px,7.5vw,88px)] leading-[1.05] [text-shadow:0_2px_12px_rgba(0,0,0,0.6)]">
             Mijung IM
           </h1>
-          <p className="display-serif text-on-photo/80 text-[clamp(16px,2.4vw,26px)] mt-3 [text-shadow:0_1px_8px_rgba(0,0,0,0.6)]">
-            {t("heroTitle")}
-          </p>
         </div>
       </section>
 
@@ -86,27 +83,6 @@ export default async function Home() {
           <Placeholder label={tc("placeholderLabel")}>
             <p className="text-body text-ivory/90">{t("newsBody")}</p>
           </Placeholder>
-        </Section>
-
-        <Section className="text-center">
-          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-4">
-            {t("ctaTitle")}
-          </h2>
-          <p className="text-body text-ivory/90 mb-10">{t("ctaBody")}</p>
-          <div className="flex flex-wrap items-center justify-center gap-6">
-            <Link
-              href="/contact"
-              className="label text-xs inline-flex items-center border border-sage text-sage px-[28px] py-[12px] hover:bg-sage hover:text-ink transition-colors"
-            >
-              {t("ctaContact")}
-            </Link>
-            <a
-              href="/epk/mijung-im-epk.pdf"
-              className="label text-xs inline-flex items-center border border-sage text-sage px-[28px] py-[12px] hover:bg-sage hover:text-ink transition-colors"
-            >
-              {t("ctaEpk")}
-            </a>
-          </div>
         </Section>
       </div>
     </div>
