@@ -63,7 +63,7 @@ export default async function Home() {
 
         <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[420px] flex items-start">
           <Image
-            src="/images/home/plz_goseong_hwajinpo_beach_2020.jpg"
+            src="/images/home/east_sea_plz_beach.jpg"
             alt={t("projectImageCaption")}
             fill
             sizes="100vw"

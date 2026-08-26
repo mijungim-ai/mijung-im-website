@@ -1560,3 +1560,49 @@ EN/KO 둘 다: 버튼 클릭 → 필드 채움 → 허니팟 필드 존재+시�
 숨김 확인(`getComputedStyle`) → `form-name` 값 확인 → 실제 제출 →
 성공 상태("Thank you"/"감사합니다") 전환을 데스크톱+375px 모바일
 둘 다에서 확인. 네트워크 탭에서 실제 POST 요청 발생 확인.
+
+### Home PLZ 배너 이미지 교체 완료 (2026-07-30)
+
+지난 라운드에서 보류됐던 이미지 교체 — 사용자가 `public/images/home/
+east_sea_plz_beach.jpg`를 직접 저장해줌(파일 확인: 4306×1362px,
+실측 비율 3.16:1 — 사용자가 언급한 "2048×1365, 2.65:1"과는 실제
+수치가 다르지만, 사용자가 "이미 목표 비율로 크롭 완료, 추가 조정
+불필요"라고 명시했으므로 그대로 신뢰하고 진행 — 파일 내용 자체는
+채팅에서 보여준 PLZ 비치 피아노 사진과 픽셀 단위로 일치함을
+`Read`로 직접 열어 확인). `page.tsx`의 `<Image src>`만
+`plz_goseong_hwajinpo_beach_2020.jpg` → `east_sea_plz_beach.jpg`로
+교체, `object-cover object-bottom` 등 기존 스타일/포지셔닝은
+지시대로 손대지 않음.
+
+기존 파일 재사용 여부 grep 확인 — `plz_goseong_hwajinpo_beach_2020.jpg`
+는 `page.tsx` 단 한 곳에서만 참조되고 있었음. Gallery의
+`goseong_hwajinpo_beach_2020.jpg`(경로·파일명 유사)는 grep에서
+같이 걸렸지만, MD5 해시 비교로 완전히 다른 파일(다른 사진)임을
+확인 — 착각해서 잘못 지우는 일 없도록 실측 대조함. 재사용 없음
+확인 후 `public/images/home/plz_goseong_hwajinpo_beach_2020.jpg`
+삭제.
+
+**⚠️ 발견한 문제, 코드는 건드리지 않음 — 사용자 확인 필요**:
+`home.projectImageCaption`(alt 텍스트) 값이 여전히 "Mijung IM
+performing inside a transparent dome on the beach at Hwajinpo,
+Goseong, 2020."(EN) / "2020년 고성 화진포 해변, 투명 돔 안에서
+연주하는 임미정."(KO)로, **옛 사진(투명 돔) 내용 그대로**임. 새
+사진은 돔이 없고 완전히 다른 해변에서 PLZ 페스티벌 입간판(P·L·Z)과
+함께 촬영된 사진이라 이 alt 텍스트가 이제 실제 이미지 내용과 전혀
+안 맞음 — 스크린리더 사용자에게 잘못된 설명이 전달되는 접근성
+문제. 이번 요청은 "이미지만 교체"였고 캡션 문구까지 새로 쓰는 건
+범위 밖이라 임의로 바꾸지 않았음(정확한 새 캡션은 사용자가 원하는
+표현으로 직접 정하는 게 맞다고 판단) — 다음에 새 캡션 문구를
+주면 `home.projectImageCaption` EN/KO 값만 교체하면 됨.
+
+**검증**: `tsc --noEmit`/`eslint`/`next build`(클린, dev 서버 먼저
+내리고 진행) 전부 통과. EN·KO 둘 다 `get_page_text`+콘솔 에러
+체크로 재확인(missing-key 없음, 콘솔 클린 — 첫 확인 때 뜬 에러는
+서버 재시작 전 탭에 남은 끊긴 HMR 소켓 잔여 로그였고, 새 탭에서
+재확인해 클린함을 검증). `img.complete`/`naturalWidth` DOM 조회로
+새 이미지가 실제로 로드 완료됐음을 EN 데스크톱(1280×405 렌더)·
+모바일(375×두꺼운 세로) 뷰포트 둘 다에서 확인. 375px 모바일
+스크린샷으로 새 사진(바다·모래사장·피아노)이 배너에 정상 렌더링됨을
+시각 확인. 데스크톱 스크린샷은 이 세션 내내 반복된 "스크롤 직후
+빈 화면" 브라우저 툴 아티팩트가 재현되어, 모바일 스크린샷+DOM
+로드 확인으로 대체.
