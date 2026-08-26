@@ -32,19 +32,25 @@ export default async function ProjectsPage() {
     <div>
       <PageHeaderSection>
         <h1 className="sr-only">{t("title")}</h1>
-        <PageSubtitle>{t("title")}</PageSubtitle>
-        <PageHeaderStatement className="text-sage mt-3">
-          {t("subtitle")}
-        </PageHeaderStatement>
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
+          <div>
+            <PageSubtitle>{t("title")}</PageSubtitle>
+            <PageHeaderStatement className="text-sage mt-3">
+              {t("subtitle")}
+            </PageHeaderStatement>
+          </div>
+          <div className="w-full md:w-[45%] shrink-0">
+            <NytPressPhoto />
+          </div>
+        </div>
       </PageHeaderSection>
 
       <div className="space-y-14 md:space-y-28">
-        <Section className="pt-7 md:pt-14">
-          <NytPressPhoto />
-        </Section>
-
-        {projects.map((project) => (
-          <Section key={project.title}>
+        {projects.map((project, i) => (
+          <Section
+            key={project.title}
+            className={i === 0 ? "pt-7 md:pt-14" : undefined}
+          >
             <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
               {project.title}
             </h2>

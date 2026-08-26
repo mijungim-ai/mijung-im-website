@@ -62,22 +62,22 @@ export default async function DialoguePage() {
       <div className="space-y-14 md:space-y-28">
         <Section className="pt-7 md:pt-14">
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-            {t("essaysTitle")}
+            {t("pressTitle")}
           </h2>
           <div>
-            {writings.map((entry) => (
-              <WritingEntryRow key={entry.title} entry={entry} />
+            {pressArticles.map((article) => (
+              <LinkEntry key={article.url} title={article.title} href={article.url} />
             ))}
           </div>
         </Section>
 
         <Section>
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-            {t("pressTitle")}
+            {t("essaysTitle")}
           </h2>
           <div>
-            {pressArticles.map((article) => (
-              <LinkEntry key={article.url} title={article.title} href={article.url} />
+            {writings.map((entry) => (
+              <WritingEntryRow key={entry.title} entry={entry} />
             ))}
           </div>
         </Section>

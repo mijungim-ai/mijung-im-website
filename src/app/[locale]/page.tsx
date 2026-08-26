@@ -52,6 +52,15 @@ export default async function Home() {
           </div>
         </Section>
 
+        <Section>
+          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+            {t("newsTitle")}
+          </h2>
+          <Placeholder label={tc("placeholderLabel")}>
+            <p className="text-body text-ivory/90">{t("newsBody")}</p>
+          </Placeholder>
+        </Section>
+
         <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[420px] flex items-start">
           <Image
             src="/images/home/plz_goseong_hwajinpo_beach_2020.jpg"
@@ -75,15 +84,6 @@ export default async function Home() {
             </Link>
           </div>
         </section>
-
-        <Section>
-          <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
-            {t("newsTitle")}
-          </h2>
-          <Placeholder label={tc("placeholderLabel")}>
-            <p className="text-body text-ivory/90">{t("newsBody")}</p>
-          </Placeholder>
-        </Section>
       </div>
     </div>
   );

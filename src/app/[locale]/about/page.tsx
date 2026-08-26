@@ -60,7 +60,8 @@ export default async function AboutPage() {
 
         <Section className="text-center">
           <a
-            href="/epk/mijung-im-epk.pdf"
+            href="/downloads/mijung-im-press-kit.pdf"
+            download
             className="label text-xs inline-flex items-center border border-sage text-sage px-[28px] py-[12px] hover:bg-sage hover:text-ink transition-colors"
           >
             {t("epkLabel")}

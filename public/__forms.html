@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Form detection</title>
+</head>
+<body>
+  <!--
+    This page is never linked or navigated to — it exists only so
+    Netlify's build-time HTML crawler has a real static file to find
+    the "contact" form definition in. The app itself is server-rendered
+    on every request (see docs/TODO.md), so the live ContactForm
+    component (src/components/ContactForm.tsx) is never present in any
+    prebuilt HTML file for Netlify to parse. Field names below must
+    stay in sync with ContactForm.tsx exactly (form-name, bot-field,
+    subject, email, message) or Netlify won't recognize submissions
+    from the real form.
+  -->
+  <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="contact" />
+    <input name="bot-field" />
+    <input type="text" name="subject" />
+    <input type="email" name="email" />
+    <textarea name="message"></textarea>
+  </form>
+</body>
+</html>

@@ -1430,3 +1430,133 @@ Gallery 전부 다른 파일 사용, 재사용 없음). 참조 제거 후
 href가 새 콘텐츠 해시로 갱신됐음을 DOM에서 확인, 콘솔 에러 없음
 (새 탭에서 재확인 — 기존 탭에 남아있던 건 서버 재시작 전 끊긴
 HMR 웹소켓의 잔여 로그였음).
+
+### 아티스트 피드백 6건 (2026-07-30)
+
+**1) Home 섹션 순서 교체 + PLZ 배너 이미지 — 순서만 완료, 이미지는 보류**.
+`page.tsx`에서 PLZ Festival 전면 사진 섹션과 Latest News 섹션의 JSX
+순서를 교체 — Featured Performance → Latest News → PLZ Festival로
+확정. 이미지 교체(`east_sea_plz_beach.jpg`)는 **미완료**: 사용자가
+채팅에 직접 붙여넣은 이미지라 로컬 파일시스템에 실체가 없음 —
+`Downloads`, 세션 스크래치패드, `/tmp` 전역을 grep으로 찾아봤지만
+디스크에서 발견 못 함(채팅에 직접 붙여넣은 이미지는 파일 도구로
+저장/접근할 방법이 없음, PDF처럼 `@`로 실제 경로를 준 경우와 다름).
+사용자에게 `public/images/home/east_sea_plz_beach.jpg`로 직접
+저장해달라고 요청함 — 파일이 오면 이어서 진행. 기존 이미지
+(`plz_goseong_hwajinpo_beach_2020.jpg`) 재사용 여부 확인도 이미지가
+와야 실제 교체 후 grep으로 확인 가능하므로 함께 보류.
+
+**2) About EPK 다운로드 버튼** — 먼저 확인: 버튼 자체는
+`about/page.tsx`에 원래 있었고 지난 라운드 Home CTA 삭제 때
+같이 없어지지 않았음(별개 섹션, 별개 키) — 다만 링크 대상
+`/epk/mijung-im-epk.pdf`가 애초에 존재하지 않는 파일이었음(grep+
+`ls` 확인, `public/epk/` 디렉토리 자체가 없었음 — 즉 처음부터 죽은
+링크). `public/downloads/mijung-im-press-kit.pdf`(사용자가 준 PDF,
+13페이지, 4.6MB)로 저장하고 버튼 href를 교체, `download` 속성
+추가(클릭 시 새 탭 대신 바로 다운로드).
+
+**3) Media YouTube 데이터 구조 확인 — 코드 변경 없음**. `videos.ts`
+확인 결과 `videoItems`(Performances용, 3건: `title`/`body`/`embedUrl`)
+와 `talkItems`(Talks & Interviews용, 2건: `title`/`embedUrl`)로
+이미 최대한 단순한 구조 — 유튜브 링크에서 파생되는 유일한 기술적
+필드는 `embedUrl`(`MediaTabs.tsx`가 이걸 그대로 `<iframe src>`에
+꽂아 인라인 재생, 별도 썸네일/임베드코드 수동 입력 없음). `body`는
+비디오 설명 문구로 유튜브 API로 자동 생성 불가능한 수작성 카피라
+필드 자체를 없앨 수 없음(구조 문제가 아니라 콘텐츠 문제). 결론:
+이미 게시판형 구조 — 손댈 게 없음.
+
+**4) Dialogue Press/Essays 순서 교체** — `dialogue/page.tsx`에서
+두 `<Section>` 블록 순서만 교체(Press 먼저, Essays 나중). 데이터·
+번역 키 변경 없음.
+
+**5) Projects NYT 사진 위치·크기 조정** — 기존에 `PageHeaderSection`
+아래 별도 전체너비 `<Section>`으로 있던 `<NytPressPhoto />`를
+`PageHeaderSection` 안으로 이동, 제목/부제(왼쪽)와 나란히 배치.
+데스크톱: `flex md:flex-row md:items-start md:justify-between gap-8`
+으로 2열 구성, 사진 쪽 컨테이너를 `md:w-[45%]`로 고정. "70% 축소"를
+정확한 배율이 아니라 "눈에 띄게 작아진 크기"로 해석 — 기존엔 사진이
+`Section`(`max-w-3xl`=768px) 컨테이너 안이라 실질 폭이 최대
+~720px였는데, 헤더의 `max-w-6xl`(1152px) 컨테이너 안에서 45% 폭이면
+대략 500px 안팎 — 비율상 원래의 ~70% 선에 근접. 모바일:
+`flex-col`이라 사진이 텍스트 아래로 자연스럽게 쌓임(우측 정렬은
+`md:` 접두사라 데스크톱 전용). NYT 사진이 더 이상 페이지 첫
+섹션이 아니게 되면서 잃었던 `pt-7 md:pt-14`(헤더 구분선과의 여백)를
+`projects.map`의 첫 카드(`i === 0`)에 복원.
+
+**6) Contact 전화번호 삭제 + 실제 작동하는 폼(Netlify Forms)**.
+
+*전화번호*: `<p>{t("phone")}</p>` 렌더링만 제거, `contact.phone`
+키는 고아 키로 남김(기록만).
+
+*폼 UI*: "메일 보내기" 버튼 클릭 시 같은 자리에서 폼이 펼쳐지는
+방식(모달 대신 인라인 확장 선택 — 이 페이지엔 다른 인터랙션이
+거의 없고, 모달의 포커스 트랩/ESC 머신러리를 폼 하나 때문에 새로
+갖추는 건 과함, 모바일에서도 뷰포트 제약 없이 편하게 입력 가능).
+제목/이메일(방문자 본인)/내용 3개 필드, 제출 성공 시 같은 자리에
+"Thank you" 안내로 전환.
+
+*Netlify Forms 리서치(사용자가 사전 요청)*: 공식 문서 확인 결과
+(1) 제출 건수는 확실히 **미터링됨**(무제한 아님) — 사용자가 접한
+"무제한" 정보는 틀렸거나 오래된 자료로 보임. (2) 다만 **정확한
+현재 무료 티어 숫자는 공개 문서에서 못 찾음** — 문서가 계속
+"계정의 Usage & Billing 대시보드에서 확인" 쪽으로 안내하고,
+2026-07-14 변경로그에 Pro 플랜이 크레딧 기반으로 바뀌었다는
+언급이 있어 예전에 흔히 인용되던 "월 100건 무료"라는 숫자가 지금도
+유효한지 불확실(플랫폼 자체의 과금 방식이 바뀐 것으로 보임 —
+사용자가 겪은 "상충하는 정보"의 원인일 가능성이 큼). **이 계정의
+실제 한도는 확인 못 함 — 대시보드/API 접근 권한이 없음.** 사용자가
+직접 Netlify 대시보드의 Usage & Billing에서 확인해야 정확한 숫자를
+알 수 있음. 이 조사 결과를 먼저 보고하고, 구현 자체는 숫자와
+무관하게 진행 가능하다고 판단해 계속 진행함(개인 아티스트
+사이트라 트래픽이 낮을 것으로 예상되고, 나중에 한도가 문제되면
+폼 자체를 막을 필요 없이 스팸 방지/전환 방식만 조정하면 되는
+가역적 결정).
+
+*구현*: 이 Next.js 앱은 전 페이지가 동적 렌더링(`next build`
+결과 전부 `ƒ`, next-intl 미들웨어 때문으로 추정) — Netlify의
+공식 문서에 따르면 "빌드 시점에 정적 HTML을 파싱해서 폼을 찾는다"
+고 명시되어 있고 JS/SSR로만 렌더되는 폼은 빌드 크롤러가 못 찾음
+(정확한 인용: "Netlify build system finds your forms by parsing
+the HTML of your site when the build completes... if you're using
+JavaScript to render a form client-side, our build system won't
+find it in the pre-built files"). 실측으로도 확인: `next build`
+결과 `/[locale]/contact`가 `ƒ`(요청마다 서버 렌더링)로 나와,
+Contact 페이지 자체를 아무리 정적으로 만들어도 이 앱의 다른 모든
+라우트가 이미 동적이라는 것과 별개로 위험이 있다고 판단 — 대신
+`public/__forms.html`(진짜 정적 파일, `next build`가 `public/`을
+그대로 복사하므로 라우트 렌더링 방식과 무관하게 항상 존재)에
+`name="contact"`, 같은 필드명(`subject`/`email`/`message`)의
+숨김(`hidden`) 폼을 하나 심어 빌드 크롤러가 확실히 찾게 함 — 실제
+방문자에게는 노출도 링크도 안 됨. `ContactForm.tsx`(클라이언트
+컴포넌트)의 실제 폼과 필드명이 정확히 일치해야 하므로 주석으로
+동기화 필요성 명시.
+
+제출 흐름은 Netlify 공식 AJAX 예제를 그대로 따름 —
+`fetch("/", {method:"POST", headers:{"Content-Type":
+"application/x-www-form-urlencoded"}, body: new URLSearchParams(...)})`.
+허니팟(`netlify-honeypot="bot-field"`) 필드도 포함, `hidden` 클래스로
+시각적으로만 숨김(실제 DOM엔 존재 — 봇 차단용 관례 그대로).
+
+**검증 한계(중요)**: 로컬 `next dev`에는 Netlify 엣지 레이어가
+없어서, `fetch("/")` POST가 실제로는 이 앱 자체의 next-intl 라우팅에
+걸려 307로 `/en`으로 리다이렉트된 뒤 200을 반환하는 것까지만 확인
+가능(`curl -L` 재현으로 리다이렉트 체인 확인, 메서드/바디 보존됨).
+**이건 로컬에서만 벌어지는 일** — 실제 배포 사이트에서는 Netlify가
+`form-name` 필드를 담은 POST를 자기네 엣지에서 이 앱에 닿기 전에
+가로채는 게 문서화된 동작이라, 로컬 테스트는 프론트엔드 흐름
+(열림/허니팟 존재/필드명 정확/성공 UI 전환)까지만 검증한 것이고
+**실제 Netlify 폼 등록·제출 처리는 배포 후에만 검증 가능**. 배포
+후 Netlify 대시보드의 Forms 탭에 "contact" 폼이 등록됐는지, 테스트
+제출이 실제로 잡히는지 반드시 확인 권장.
+
+**검증**: `tsc --noEmit`/`eslint .`/`next build`(클린, dev 서버
+먼저 내리고 진행) 전부 통과. EN·KO 7페이지를 `get_page_text`+
+콘솔 에러 체크로 스윕(missing-key 없음). Home 순서 교체, About
+EPK 링크(href+download 속성), Dialogue 순서 교체는 EN/KO 텍스트로
+확인. Projects는 데스크톱 스크린샷으로 텍스트-좌/사진-우 45% 레이아웃
+확인, 라이트박스 열림 재확인(포스터 아님, NYT 사진), 375px
+모바일에서 사진이 텍스트 아래로 쌓이는 것 확인. Contact 폼은
+EN/KO 둘 다: 버튼 클릭 → 필드 채움 → 허니팟 필드 존재+시각적
+숨김 확인(`getComputedStyle`) → `form-name` 값 확인 → 실제 제출 →
+성공 상태("Thank you"/"감사합니다") 전환을 데스크톱+375px 모바일
+둘 다에서 확인. 네트워크 탭에서 실제 POST 요청 발생 확인.

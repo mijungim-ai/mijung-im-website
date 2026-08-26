@@ -123,7 +123,18 @@
     "emailPlaceholder": "이메일 주소 추가 예정",
     "email": "mijungim.com@gmail.com",
     "contactPerson": "Jinyoung Lee (Artist Relations)",
-    "phone": "+1 630-518-1399"
+    "phone": "+1 630-518-1399",
+    "form": {
+      "openButton": "메일 보내기",
+      "subjectLabel": "제목",
+      "emailLabel": "이메일 주소",
+      "messageLabel": "내용",
+      "submitLabel": "보내기",
+      "submittingLabel": "전송 중…",
+      "successTitle": "감사합니다",
+      "successMessage": "메시지가 전송되었습니다. 곧 답변드리겠습니다.",
+      "errorMessage": "전송 중 문제가 발생했습니다. 다시 시도하시거나 이메일로 직접 연락해 주세요."
+    }
   },
   "home": {
     "kicker": "임미정",

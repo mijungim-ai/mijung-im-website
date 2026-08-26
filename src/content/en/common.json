@@ -119,7 +119,18 @@
     "emailPlaceholder": "Email address to be added",
     "email": "mijungim.com@gmail.com",
     "contactPerson": "Jinyoung Lee (Artist Relations)",
-    "phone": "+1 630-518-1399"
+    "phone": "+1 630-518-1399",
+    "form": {
+      "openButton": "Send an Email",
+      "subjectLabel": "Subject",
+      "emailLabel": "Your Email",
+      "messageLabel": "Message",
+      "submitLabel": "Send",
+      "submittingLabel": "Sending…",
+      "successTitle": "Thank you",
+      "successMessage": "Your message has been sent. We'll be in touch soon.",
+      "errorMessage": "Something went wrong. Please try again, or email us directly."
+    }
   },
   "home": {
     "heroTitle": "Pianist of Peace & Nature",

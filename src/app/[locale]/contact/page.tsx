@@ -3,6 +3,7 @@ import { PageSubtitle } from "@/components/PageSubtitle";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
 import { Section } from "@/components/Section";
+import { ContactForm } from "@/components/ContactForm";
 
 export default async function ContactPage() {
   const t = await getTranslations("contact");
@@ -17,23 +18,28 @@ export default async function ContactPage() {
         </PageHeaderStatement>
       </PageHeaderSection>
 
-      <Section className="pt-7 md:pt-14">
-        <h2 className="label text-xs text-grey-muted mb-4">
-          {t("generalTitle")}
-        </h2>
-        <div className="border border-hairline px-4 py-3 max-w-sm">
-          <a
-            href={`mailto:${t("email")}`}
-            className="text-body text-sage hover:text-ivory transition-colors"
-          >
-            {t("email")}
-          </a>
-          <p className="text-caption text-grey-muted mt-1">
-            {t("contactPerson")}
-          </p>
-          <p className="text-caption text-grey-muted">{t("phone")}</p>
-        </div>
-      </Section>
+      <div className="space-y-14 md:space-y-28">
+        <Section className="pt-7 md:pt-14">
+          <h2 className="label text-xs text-grey-muted mb-4">
+            {t("generalTitle")}
+          </h2>
+          <div className="border border-hairline px-4 py-3 max-w-sm">
+            <a
+              href={`mailto:${t("email")}`}
+              className="text-body text-sage hover:text-ivory transition-colors"
+            >
+              {t("email")}
+            </a>
+            <p className="text-caption text-grey-muted mt-1">
+              {t("contactPerson")}
+            </p>
+          </div>
+        </Section>
+
+        <Section>
+          <ContactForm />
+        </Section>
+      </div>
     </div>
   );
 }
