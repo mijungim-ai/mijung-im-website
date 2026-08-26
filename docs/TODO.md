@@ -1644,3 +1644,54 @@ Footer 상단 간격을 EN 데스크톱(0px)·KO 데스크톱(0px)에서 픽셀
 이어짐을 시각 확인. 콘솔 에러 없음(새 탭에서 재확인). 데스크톱
 스크린샷은 이 세션에서 반복된 "스크롤 직후 빈 화면" 아티팩트가
 재현되어, DOM 실측치로 대체.
+
+### Home 히어로 로테이션 — 클릭 가능한 점(dot) 인디케이터 추가 (2026-08-26)
+
+**구현 결정**: `HeroRotator.tsx`의 기존 hover-정지 상태(`paused`)를
+그대로 두면 "점을 클릭해 수동 전환 → 몇 초 뒤 마우스가 히어로
+영역을 벗어나면 자동 회전이 도로 재개되어 방금 고른 사진이 휙
+넘어가 버리는" 문제가 생길 것으로 판단, hover용 `hoverPaused`와
+클릭용 `manuallyPaused`를 별도 state로 분리하고 `paused =
+hoverPaused || manuallyPaused`로 결합. 점 클릭은 `setIndex` +
+`setManuallyPaused(true)`만 수행하고 절대 다시 `false`로 되돌리지
+않아, 클릭 이후에는 hover 여부와 무관하게 자동 회전이 영구
+정지됨. `useTranslations("home")`을 새로 도입해 각 점에
+`aria-label="{n}번째 사진으로 이동"`(KO)/`"Go to slide {number}"`
+(EN, ICU `{number}` 파라미터)을 부여 — 새 번역 키
+`home.heroSlideLabel`을 `content/en`·`content/ko` 양쪽에 실값으로
+추가. 활성 점은 흰색 불투명+확대(`w-2.5 h-2.5 bg-white`), 비활성
+점은 반투명(`w-2 h-2 bg-white/50`, hover 시 `bg-white/75`)으로
+구분하고 `aria-current`도 함께 부여. 밝은 야외 사진과 어두운
+흑백 사진 양쪽에서 흰 점이 묻히지 않도록, 지난 텍스트 가독성
+작업(히어로 타이틀 text-shadow, PLZ 배너 text-shadow)과 같은
+원리로 점 그룹 전체를 `bg-black/30` 반투명 pill + `shadow-[0_1px_
+6px_rgba(0,0,0,0.5)]`로 감쌈. 네이티브 `<button>` 요소라 키보드
+tab 이동은 기본 제공되며, `focus-visible:outline
+focus-visible:outline-2 focus-visible:outline-white
+focus-visible:outline-offset-2`로 포커스 시 흰 아웃라인을 명시.
+`prefers-reduced-motion` 환경에서도 `goToSlide`는 `reducedMotion`
+값을 전혀 참조하지 않으므로 클릭에 의한 수동 전환은 항상 동작
+(자동 회전 `useEffect`만 `reducedMotion`을 조건에 포함해 정지).
+
+**검증**: `tsc --noEmit`/`eslint`/`next build`(클린, dev 서버 먼저
+내리고 진행) 전부 통과. 브라우저 실측: 375px 모바일 스크린샷으로
+EN·KO 양쪽에서 점 4개가 히어로 하단 중앙 반투명 pill 안에 렌더링,
+활성/비활성 크기·불투명도 차이, 밝은 사진·어두운 사진 위 모두
+가독성 확보를 시각 확인. `document.querySelectorAll`로 버튼
+4개의 `aria-label`이 EN "Go to slide N"/KO "N번째 사진으로 이동"
+으로 정확히 나옴을 확인. JS로 점 클릭 → `aria-current` 즉시 전환
+확인, 클릭 후 7초(회전 주기 5.5초보다 길게) 대기해도 자동으로
+안 넘어감을 확인해 "클릭 시 자동 회전 영구 정지" 요구사항 검증.
+`mouseenter`로 hover-정지 상태를 만든 뒤 점 클릭 → 정상 전환,
+이어서 `mouseleave`로 hover를 벗어난 뒤 7초 대기해도 정지 상태가
+유지됨을 확인해 "hover-정지 중 클릭도 정상 동작" + "클릭 정지가
+hover 해제로 풀리지 않음" 두 요구사항을 모두 검증. 스타일시트를
+재귀 순회해 `:focus-visible` 관련 outline 규칙 4개(outline,
+outline-2, outline-offset-2, outline-white)가 실제로 컴파일되어
+있음을 확인. 데스크톱 1280×720 뷰포트에서는 점이 뷰포트 최하단
+31px 아래(y=751)에 위치해 스크롤 없이는 안 보이는데, 이는 기존
+히어로 타이틀과 동일하게 뷰포트 높이에 따라 자연스러운 것으로
+디자인 변경 대상 아님 — `getBoundingClientRect()`로 4개 버튼 모두
+DOM에 존재하고 위치·크기가 올바름을 수치로 확인. 데스크톱
+스크롤 후 스크린샷은 이 세션에서 반복된 브라우저 툴 아티팩트가
+재현되어, 375px 모바일 스크린샷 + DOM/JS 실측으로 대체.
