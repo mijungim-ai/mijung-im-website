@@ -61,7 +61,17 @@ export default async function Home() {
           </Placeholder>
         </Section>
 
-        <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[420px] flex items-start">
+        {/*
+         * -mb-24 cancels out Footer's own mt-24 (see Footer.tsx) so this
+         * photo runs flush into the footer with no white gap below it —
+         * a deliberate exception for this section only. The gap here
+         * wasn't from the space-y-14/28 rhythm above (that only adds
+         * margin-top between siblings, never below the last one); it's
+         * Footer's global top margin, which reads fine as breathing room
+         * after ordinary text/card content but leaves an odd seam under
+         * a full-bleed photo like this one.
+         */}
+        <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[420px] flex items-start -mb-24">
           <Image
             src="/images/home/east_sea_plz_beach.jpg"
             alt={t("projectImageCaption")}
