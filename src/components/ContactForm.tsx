@@ -21,7 +21,13 @@ export function ContactForm() {
     }
 
     try {
-      const res = await fetch("/", {
+      // Posting to "/" would hit the next-intl locale-redirect middleware
+      // (307 -> /en), which fetch follows and which then just re-renders
+      // the homepage with a 200 — a false "success" with no Netlify Forms
+      // submission behind it. /__forms.html is a static file matched by
+      // the middleware's own `.*\..*` exclusion, so it reaches Netlify's
+      // form-capturing edge untouched (see public/__forms.html).
+      const res = await fetch("/__forms.html", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: params.toString(),
