@@ -32,12 +32,35 @@ public_folder: "/images/uploads"
 logo_url: https://decapbridge.com/decapcms-with-bridge.svg
 site_url: https://hilarious-syrniki-c611de.netlify.app
 
-# All 9 boards are now wired to real content — see src/data/*.ts and
-# docs/TODO.md. Dialogue's Essays and Director's Letters merged into
-# one "essays" collection per artist feedback. Featured Photo is a
-# Decap "file collection" (files:), not a folder collection, since it
-# only ever holds one fixed record.
+# Collection order below = CMS sidebar order (final spec, 2026-08-27).
+# Projects — Featured Photo is deliberately NOT listed here (hidden
+# from the CMS menu) — content/featured-photo.json and the site code
+# reading it are untouched and still render on Home/Projects; see
+# docs/TODO.md.
 collections:
+  - name: home_news
+    label: "Home — Latest News"
+    label_singular: "News Item"
+    folder: content/home-news
+    create: true
+    slug: "{{slug}}"
+    extension: json
+    format: json
+    sortable_fields: [order, title]
+    fields:
+      - name: order
+        label: "Display Order"
+        widget: number
+        hint: "Lower numbers show first."
+      - { name: title, label: Title, widget: string }
+      - { name: body, label: Content, widget: text }
+      - name: image
+        label: Image
+        widget: image
+        required: false
+        media_folder: "/public/images/home-news"
+        public_folder: "/images/home-news"
+
   - name: engagements
     label: "Performances — Selected Engagements"
     label_singular: Engagement
@@ -58,6 +81,20 @@ collections:
         widget: string
         hint: 'e.g. "Sunday, March 28, 2027 at 7:00 pm" or "March 2027"'
       - { name: location, label: Location, widget: string }
+      - { name: content, label: Content, widget: text, required: false }
+      - name: image
+        label: Image
+        widget: image
+        required: false
+        media_folder: "/public/images/engagements"
+        public_folder: "/images/engagements"
+      - name: link
+        label: Link
+        widget: object
+        required: false
+        fields:
+          - { name: href, label: URL, widget: string }
+          - { name: label, label: "Link Label", widget: string }
 
   - name: concert_archive
     label: "Performances — Concert Archive"
@@ -67,38 +104,33 @@ collections:
     slug: "{{slug}}"
     extension: json
     format: json
-    sortable_fields: [order, year]
+    sortable_fields: [order, date]
     fields:
       - name: order
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first (newest concerts first)."
+      - { name: title, label: Title, widget: string }
+      - { name: date, label: Date, widget: string, hint: 'e.g. "2021" or a full date.' }
+      - { name: location, label: Location, widget: string }
+      - name: content
+        label: Content
+        widget: text
+        required: false
+        hint: "Program notes or other additional details."
       - name: image
         label: "Poster Image"
         widget: image
+        required: false
         media_folder: "/public/images/archive"
         public_folder: "/images/archive"
-      - { name: year, label: Year, widget: string }
-      - { name: title, label: Title, widget: string }
-      - { name: venue, label: Venue, widget: string, required: false }
-      - { name: program, label: Program, widget: text, required: false }
-
-  - name: press_articles
-    label: "Dialogue — Press"
-    label_singular: "Press Article"
-    folder: content/press-articles
-    create: true
-    slug: "{{slug}}"
-    extension: json
-    format: json
-    sortable_fields: [order]
-    fields:
-      - name: order
-        label: "Display Order"
-        widget: number
-        hint: "Lower numbers show first (newest articles first)."
-      - { name: title, label: Title, widget: string }
-      - { name: url, label: URL, widget: string }
+      - name: link
+        label: Link
+        widget: object
+        required: false
+        fields:
+          - { name: href, label: URL, widget: string }
+          - { name: label, label: "Link Label", widget: string }
 
   - name: videos_performances
     label: "Media — Video (Performances)"
@@ -114,8 +146,8 @@ collections:
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first."
-      - { name: title, label: Title, widget: string }
-      - { name: body, label: Description, widget: text }
+      - { name: title, label: Title, widget: string, required: false }
+      - { name: body, label: Description, widget: text, required: false }
       - name: embedUrl
         label: "YouTube Embed URL"
         widget: string
@@ -138,7 +170,9 @@ collections:
       - name: title
         label: Title
         widget: string
+        required: false
         hint: 'Usually "Talk" or "Interview".'
+      - { name: body, label: Description, widget: text, required: false }
       - name: embedUrl
         label: "YouTube Embed URL"
         widget: string
@@ -158,23 +192,32 @@ collections:
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first."
-      - name: src
+      - name: caption
+        label: Caption
+        widget: string
+        hint: "Also used as the photo's alt text for accessibility."
+      - name: image
         label: Photo
         widget: image
         media_folder: "/public/images/gallery"
         public_folder: "/images/gallery"
-      - name: alt
-        label: "Alt Text"
-        widget: string
-        hint: "Describe the photo for screen readers."
-      - { name: caption, label: Caption, widget: string, required: false }
-      - name: link
-        label: Link
-        widget: object
-        required: false
-        fields:
-          - { name: href, label: URL, widget: string }
-          - { name: label, label: "Link Label", widget: string }
+
+  - name: press_articles
+    label: "Dialogue — Press"
+    label_singular: "Press Article"
+    folder: content/press-articles
+    create: true
+    slug: "{{slug}}"
+    extension: json
+    format: json
+    sortable_fields: [order]
+    fields:
+      - name: order
+        label: "Display Order"
+        widget: number
+        hint: "Lower numbers show first (newest articles first)."
+      - { name: title, label: Title, widget: string }
+      - { name: url, label: URL, widget: string }
 
   - name: essays
     label: "Dialogue — Essays & Director's Letters"
@@ -196,6 +239,12 @@ collections:
         widget: string
         required: false
         hint: "Optional — for dated festival director's notes only."
+      - name: image
+        label: Image
+        widget: image
+        required: false
+        media_folder: "/public/images/essays"
+        public_folder: "/images/essays"
       - name: body
         label: "Body Text"
         widget: text
@@ -221,45 +270,12 @@ collections:
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first."
-      - name: src
+      - name: caption
+        label: Caption
+        widget: string
+        hint: "Also used as the photo's alt text for accessibility."
+      - name: image
         label: Photo
         widget: image
         media_folder: "/public/images/projects"
         public_folder: "/images/projects"
-      - name: alt
-        label: "Alt Text"
-        widget: string
-        hint: "Describe the photo for screen readers."
-      - { name: caption, label: Caption, widget: string, required: false }
-      - name: link
-        label: Link
-        widget: object
-        required: false
-        fields:
-          - { name: href, label: URL, widget: string }
-          - { name: label, label: "Link Label", widget: string }
-
-  - name: featured_photo
-    label: "Projects — Featured Photo"
-    files:
-      - name: featured_photo
-        label: "Featured Photo"
-        file: content/featured-photo.json
-        fields:
-          - name: src
-            label: Photo
-            widget: image
-            media_folder: "/public/images/press"
-            public_folder: "/images/press"
-          - name: alt
-            label: "Alt Text"
-            widget: string
-            hint: "Describe the photo for screen readers."
-          - { name: caption, label: Caption, widget: string, required: false }
-          - name: link
-            label: Link
-            widget: object
-            required: false
-            fields:
-              - { name: href, label: URL, widget: string }
-              - { name: label, label: "Link Label", widget: string }

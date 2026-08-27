@@ -1,7 +1,7 @@
 {
   "order": 20,
-  "image": "/images/archive/america_human_nature_tour_2016.jpg",
-  "year": "2016",
   "title": "세상의 모든 음악 시리즈 VI — 아메리카 대륙의 인간과 자연",
-  "venue": "목포·거창·서울·원주·부산 순회"
+  "date": "2016",
+  "location": "목포·거창·서울·원주·부산 순회",
+  "image": "/images/archive/america_human_nature_tour_2016.jpg"
 }

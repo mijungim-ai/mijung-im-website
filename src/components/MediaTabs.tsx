@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Lightbox } from "@/components/Lightbox";
 import type { MediaImage } from "@/data/media";
+import type { GalleryPhoto } from "@/data/mediaGallery";
 import type { VideoItem, TalkItem } from "@/data/videos";
 
 // Internal key stays "video" even though its label is now "YouTube" —
@@ -19,7 +20,7 @@ export function MediaTabs({
   videoItems,
   talkItems,
 }: {
-  galleryImages: MediaImage[];
+  galleryImages: GalleryPhoto[];
   videoItems: VideoItem[];
   talkItems: TalkItem[];
 }) {
@@ -31,6 +32,15 @@ export function MediaTabs({
     index: number;
   } | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+  // Gallery entries only carry caption+image — caption doubles as alt
+  // text, so this is the one place that shape gets converted into the
+  // fuller MediaImage shape Lightbox expects.
+  const lightboxGalleryImages: MediaImage[] = galleryImages.map((img) => ({
+    src: img.image,
+    alt: img.caption,
+    caption: img.caption,
+  }));
 
   function openLightbox(
     images: MediaImage[],
@@ -81,21 +91,25 @@ export function MediaTabs({
               {t("videoGroups.performancesTitle")}
             </h3>
             <div className="space-y-12">
-              {videoItems.map((item) => (
-                <div key={item.title}>
+              {videoItems.map((item, i) => (
+                <div key={`${item.title ?? "video"}-${i}`}>
                   <div className="aspect-video mb-4">
                     <iframe
                       className="w-full h-full"
                       src={item.embedUrl}
-                      title={item.title}
+                      title={item.title ?? `Video ${i + 1}`}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
                     />
                   </div>
-                  <h4 className="font-sans font-bold text-[22px] text-ivory mb-3">
-                    {item.title}
-                  </h4>
-                  <p className="text-body text-ivory/90">{item.body}</p>
+                  {item.title && (
+                    <h4 className="font-sans font-bold text-[22px] text-ivory mb-3">
+                      {item.title}
+                    </h4>
+                  )}
+                  {item.body && (
+                    <p className="text-body text-ivory/90">{item.body}</p>
+                  )}
                 </div>
               ))}
             </div>
@@ -107,19 +121,24 @@ export function MediaTabs({
             </h3>
             <div className="grid gap-10 sm:grid-cols-2">
               {talkItems.map((item, i) => (
-                <div key={`${item.title}-${i}`}>
+                <div key={`${item.title ?? "talk"}-${i}`}>
                   <div className="aspect-video mb-3">
                     <iframe
                       className="w-full h-full"
                       src={item.embedUrl}
-                      title={`${item.title} ${i + 1}`}
+                      title={item.title ? `${item.title} ${i + 1}` : `Video ${i + 1}`}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
                     />
                   </div>
-                  <p className="label text-xs text-grey-muted">
-                    {item.title}
-                  </p>
+                  {item.title && (
+                    <p className="label text-xs text-grey-muted">
+                      {item.title}
+                    </p>
+                  )}
+                  {item.body && (
+                    <p className="text-body text-ivory/90 mt-2">{item.body}</p>
+                  )}
                 </div>
               ))}
             </div>
@@ -128,28 +147,28 @@ export function MediaTabs({
       ) : (
         <div className="grid gap-8 grid-cols-2 sm:grid-cols-4">
           {galleryImages.map((img, i) => (
-            <div key={img.src}>
+            <div key={img.image}>
               <button
                 type="button"
-                onClick={(e) => openLightbox(galleryImages, i, e.currentTarget)}
-                aria-label={t("enlargeLabel", { alt: img.alt })}
+                onClick={(e) =>
+                  openLightbox(lightboxGalleryImages, i, e.currentTarget)
+                }
+                aria-label={t("enlargeLabel", { alt: img.caption })}
                 className="block w-full group"
               >
                 <div className="photo-frame relative aspect-[4/3] overflow-hidden">
                   <Image
-                    src={img.src}
-                    alt={img.alt}
+                    src={img.image}
+                    alt={img.caption}
                     fill
                     sizes="(min-width: 640px) 50vw, 100vw"
                     className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
                   />
                 </div>
               </button>
-              {img.caption && (
-                <p className="text-caption text-grey-muted mt-2.5">
-                  {img.caption}
-                </p>
-              )}
+              <p className="text-caption text-grey-muted mt-2.5">
+                {img.caption}
+              </p>
             </div>
           ))}
         </div>

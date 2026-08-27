@@ -12,6 +12,7 @@ export type EssayEntry = {
   order: number;
   title: string;
   date?: string;
+  image?: string;
   body?: string;
   externalUrl?: string;
 };

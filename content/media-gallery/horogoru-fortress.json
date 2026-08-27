@@ -1,6 +1,5 @@
 {
   "order": 200,
-  "src": "/images/gallery/horogoru_fortress.jpg",
-  "alt": "Piano performance at Horogoru Fortress",
-  "caption": "Horogoru Fortress"
+  "caption": "Horogoru Fortress",
+  "image": "/images/gallery/horogoru_fortress.jpg"
 }

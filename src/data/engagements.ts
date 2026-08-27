@@ -5,6 +5,9 @@ export type Engagement = {
   title: string;
   dateLabel: string;
   location: string;
+  content?: string;
+  image?: string;
+  link?: { href: string; label: string };
 };
 
 // Content now lives in content/engagements/*.json (Decap CMS folder

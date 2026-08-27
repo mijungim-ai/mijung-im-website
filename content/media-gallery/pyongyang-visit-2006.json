@@ -1,6 +1,5 @@
 {
   "order": 60,
-  "src": "/images/gallery/pyongyang_visit_2006.jpg",
-  "alt": "Mijung IM during a visit to Pyongyang, 2006",
-  "caption": "Pyongyang Visit, 2006"
+  "caption": "Pyongyang Visit, 2006",
+  "image": "/images/gallery/pyongyang_visit_2006.jpg"
 }

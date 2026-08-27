@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
@@ -7,20 +8,34 @@ import { getEssays, type EssayEntry } from "@/data/dialogue";
 import { getPressArticles } from "@/data/pressArticles";
 
 function WritingEntryRow({ entry }: { entry: EssayEntry }) {
-  if (entry.body) {
-    return (
-      <div className="border-l-2 border-sage pl-6">
-        <p className="label text-xs text-grey-muted mb-2">
-          {entry.title}
-          {entry.date ? ` — ${entry.date}` : ""}
-        </p>
-        <p className="text-body italic text-ivory/90 whitespace-pre-line">
-          {entry.body}
-        </p>
-      </div>
-    );
-  }
-  return <LinkEntry title={entry.title} href={entry.externalUrl ?? ""} />;
+  return (
+    <div>
+      {entry.image && (
+        <div className="photo-frame relative aspect-video mb-4 max-w-md overflow-hidden">
+          <Image
+            src={entry.image}
+            alt={entry.title}
+            fill
+            sizes="(min-width: 768px) 28rem, 100vw"
+            className="object-cover"
+          />
+        </div>
+      )}
+      {entry.body ? (
+        <div className="border-l-2 border-sage pl-6">
+          <p className="label text-xs text-grey-muted mb-2">
+            {entry.title}
+            {entry.date ? ` — ${entry.date}` : ""}
+          </p>
+          <p className="text-body italic text-ivory/90 whitespace-pre-line">
+            {entry.body}
+          </p>
+        </div>
+      ) : (
+        <LinkEntry title={entry.title} href={entry.externalUrl ?? ""} />
+      )}
+    </div>
+  );
 }
 
 export default async function DialoguePage() {

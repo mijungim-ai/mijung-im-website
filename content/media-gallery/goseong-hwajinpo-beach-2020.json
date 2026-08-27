@@ -1,6 +1,5 @@
 {
   "order": 10,
-  "src": "/images/gallery/goseong_hwajinpo_beach_2020.jpg",
-  "alt": "Piano performance inside a transparent dome on Hwajinpo Beach, Goseong, 2020",
-  "caption": "Goseong, Hwajinpo Beach, 2020"
+  "caption": "Goseong, Hwajinpo Beach, 2020",
+  "image": "/images/gallery/goseong_hwajinpo_beach_2020.jpg"
 }

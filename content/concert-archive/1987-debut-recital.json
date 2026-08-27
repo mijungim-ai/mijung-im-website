@@ -1,8 +1,8 @@
 {
   "order": 40,
-  "image": "/images/archive/debut_recital_poster_1987.jpg",
-  "year": "1987",
   "title": "도미기념 임미정 피아노 독주회",
-  "venue": "세종문화회관 소강당, 서울",
-  "program": "Mozart, Brahms, Chopin, Mussorgsky"
+  "date": "1987",
+  "location": "세종문화회관 소강당, 서울",
+  "content": "Program: Mozart, Brahms, Chopin, Mussorgsky",
+  "image": "/images/archive/debut_recital_poster_1987.jpg"
 }

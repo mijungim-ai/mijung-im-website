@@ -27,7 +27,7 @@ export function ConcertArchiveList({
       <div className="space-y-6">
         {concertArchive.map((entry, i) => (
           <button
-            key={entry.image}
+            key={`${entry.title}-${i}`}
             type="button"
             onClick={(e) => openModal(i, e.currentTarget)}
             className="block w-full text-left border-b border-hairline pb-6 group"
@@ -36,8 +36,7 @@ export function ConcertArchiveList({
               {entry.title}
             </p>
             <p className="text-body text-ivory/70 mt-1">
-              {entry.year}
-              {entry.venue ? ` — ${entry.venue}` : ""}
+              {entry.date} — {entry.location}
             </p>
           </button>
         ))}

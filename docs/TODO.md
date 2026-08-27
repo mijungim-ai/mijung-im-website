@@ -1942,3 +1942,124 @@ collection 전용 함수.
 Projects Gallery(6장) 순서·경로 일치 확인, caption 텍스트도
 `get_page_text`로 원본과 동일함을 확인. KO `/dialogue`·`/projects`
 둘 다 방문해 콘솔 에러 없음과 콘텐츠 동일 노출을 확인.
+
+### 9개 게시판 최종 스펙 재정비 (2026-08-27)
+
+**배경**: 3단계 이관 완료 직후, 아티스트 쪽에서 정리한 최종 필드
+스펙과 메뉴 순서가 확정되어 9개 게시판 전체를 이 사양에 맞춰
+재정비. `config.yml`의 `collections` 배열 순서 = CMS 사이드바
+순서이므로, 순서 자체도 스펙 그대로 재배열.
+
+**전수 조사(작업 전 필수 선행)**: 필드 rename/제거 대상(`year`/
+`venue`/`program`/gallery류의 `src`/`alt`)의 전체 사용처를 grep으로
+확인 — 전부 예상한 컴포넌트 파일에만 있고 숨은 참조 없음을 확인.
+가장 큰 리스크 지점 사전 점검: media-gallery 20건 중 9건, projects-
+gallery 6건 **전체**가 `caption` 없이 `alt`만 갖고 있어, 새 필수
+`caption` 요건과 충돌 — 이 15건은 기존 `alt` 텍스트를 그대로
+`caption`으로 백필하는 방식으로 해결(정보 손실 없음, 다만 이전엔
+안 보이던 캡션이 화면에 새로 노출되는 부수 효과 있음 — 의도된
+단순화 스펙의 자연스러운 결과).
+
+**최종 collections 순서(1~9)**: Home Latest News → Performances
+Selected Engagements → Performances Concert Archive → Media Video
+(Performances) → Media Video (Talks & Interviews) → Media Gallery
+→ Dialogue Press → Dialogue Essays → Projects Gallery. Projects
+Featured Photo는 `collections` 배열에서 완전히 제거해 CMS 메뉴에서
+숨김 — `content/featured-photo.json`과 이를 읽는 `getFeaturedPhoto()`
+/`NytPressPhoto.tsx`/`projects/page.tsx` 코드는 전혀 건드리지 않아
+Home·Projects 페이지엔 계속 그대로 노출.
+
+**1) Home Latest News (신규)**: `content/home-news/*.json`, 필드
+`order`/`title`(필수)/`body`(필수, "내용")/`image`(optional). 새
+로더 `src/data/homeNews.ts`(`getHomeNews()`). 현재 0건이라 폴더가
+git에 안 잡히는 문제(빈 디렉토리 미추적) 방지용
+`content/home-news/.gitkeep` 추가. `page.tsx`의 기존
+"CONTENT COMING SOON" `<Placeholder>` 섹션을
+`newsItems.length > 0 ? <NewsList .../> : <Placeholder>...`로 교체 —
+0건일 땐 기존 플레이스홀더 문구 그대로 폴백.
+
+**2) Selected Engagements**: 기존 `title`/`dateLabel`/`location`에
+`content`/`image`/`link`(전부 optional) 3개 필드 추가. 기존 3개
+레코드는 새 필드 없이 그대로 유지(옵셔널이라 마이그레이션 불필요).
+`EngagementsList`(performances/page.tsx)에 이미지·본문·링크 조건부
+렌더링 추가.
+
+**3) Concert Archive (전면 재구성)**: `image`/`year`/`title`/
+`venue?`/`program?` → `title`/`date`/`location`/`content?`/`image?`
+/`link?`로 필드 자체를 바꿈. 기존 4개 레코드 마이그레이션:
+`year`→`date`, `venue`→`location`, `program`은 "Program: {내용}"
+형태로 `content`에 병합(지시받은 정확한 포맷), `image`는 그대로
+유지하되 스키마상 optional로 전환(4건 다 실제 이미지가 있어 값
+자체는 안 비움). `ConcertArchiveList.tsx`의 `key`가 `entry.image`
+였는데 image가 이제 optional이라 값이 없는 레코드에서 key가
+undefined가 될 수 있는 문제를 발견해 `${entry.title}-${i}`로 수정.
+`ConcertArchiveModal.tsx`는 image 없는 경우 이미지 블록 자체를
+건너뛰도록 조건부 처리, `year`/`venue`/`program` 참조를 전부
+`date`/`location`/`content`로 교체, 신규 `link` 필드 렌더링(Projects
+"Visit Website →"와 동일한 스타일의 링크) 추가.
+
+**4·5) Media Video (Performances / Talks & Interviews)**: 두
+컬렉션의 필드 모양을 동일하게 통일 — `title`/`body` 둘 다
+optional로, `embedUrl`만 필수 유지. `VideoItem`/`TalkItem` 타입을
+사실상 동일한 셰이프로 재정의(`TalkItem = VideoItem`). 기존 데이터는
+전혀 안 건드림(videoItems 3건은 이미 title/body 다 채워져 있고,
+talkItems 4건은 원래도 body가 없었으므로 optional화만으로 충족).
+`MediaTabs.tsx`에 title/body 부재 시 조건부 렌더링 추가 — Talks
+그룹에도 새로 생긴 `body`를 보여줄 자리 추가(기존엔 그런 자리
+자체가 없었음, 필드가 생겼으니 표시 로직도 함께 추가하는 게
+자연스럽다고 판단). key도 title이 optional이 됐으므로 인덱스
+포함 형태로 보강.
+
+**6) Media Gallery (필드 단순화)**: `src`/`alt`/`caption?`/`link?`
+→ `caption`(필수)/`image`(필수) 둘로 축소. **필드명 자체가
+`src`→`image`로 rename**됨(스펙에 명시된 이름). `alt`는 완전히
+제거하고 컴포넌트(`MediaTabs.tsx`)가 `caption` 값을 그대로 `alt`로
+사용하도록 처리 — 사용자에게 별도 alt 입력을 받지 않음. `link`
+필드는 스펙에 없어 제거(기존 20건 전부 link 미사용이었어서 손실
+없음). 새 타입 `GalleryPhoto`(`src/data/mediaGallery.ts`)로 교체.
+Lightbox 컴포넌트 자체는 여전히 `{src, alt, caption}` 셰이프를
+기대하므로, `MediaTabs.tsx`에서 라이트박스에 넘기기 직전에만
+`{src: img.image, alt: img.caption, caption: img.caption}`로 변환 —
+Lightbox는 다른 게시판(Featured Photo 등)에서도 재사용되므로
+그대로 둠. 20개 JSON 파일 전부 재작성(`src`→`image` rename, 9건은
+`alt`→`caption` 백필).
+
+**7) Dialogue Press**: 스펙대로 무변경.
+
+**8) Essays**: 기존 `body`/`externalUrl`(택1 구조) 유지한 채
+`image`(optional) 필드 추가. `WritingEntryRow`(dialogue/page.tsx)에
+이미지 있을 때 상단에 썸네일 렌더링 추가 — body/link 분기와는
+독립적으로 항상 먼저 체크.
+
+**9) Featured Photo**: 위에서 설명한 대로 `config.yml`에서 컬렉션
+자체를 삭제, 사이트 코드는 무변경.
+
+**10) Projects Gallery**: Media Gallery(6번)와 완전히 동일한
+단순화 — `caption`(필수)/`image`(필수), `alt`/`link` 제거, 컴포넌트가
+caption을 alt로 자동 사용. 기존 6건 **전부** caption이 없었으므로
+6건 모두 `alt`→`caption` 백필 필요(media-gallery보다 비율이 높음 —
+전수 조사에서 미리 확인한 지점). `ProjectGallery.tsx`의 시각적
+레이아웃(그리드 아래 캡션 미노출, 라이트박스에서만 캡션 표시)은
+스펙이 요구한 게 필드 구성 통일이지 UI 레이아웃 통일이 아니므로
+그대로 유지 — Media Gallery처럼 그리드 아래에 캡션 텍스트를 새로
+추가하지 않음.
+
+**검증**: `tsc --noEmit`/`eslint`/클린 `next build` 전부 1회에
+통과. 브라우저 실측 — EN Home(0건 폴백 "CONTENT COMING SOON" 정상),
+EN Performances(Engagements 3건 + Concert Archive 4건, 모달 클릭해
+`date`/`location`/`content`(program 병합 문구)/`image` 전부 정확히
+표시 확인), EN Media(Video 탭 title/body 정상, Gallery 탭 20장
+전부 로드 + `get_page_text`로 21건 중 백필된 9건 caption까지
+화면에 노출 확인 + 라이트박스 열어 `alt`가 `caption`과 동일함을
+JS로 확인), EN Dialogue(Press 무변경 확인, Essays 4건 문구 그대로),
+EN Projects(Featured Photo 1장 + Gallery 6장 `img.alt`가 백필된
+caption과 정확히 일치함을 JS로 확인) 전부 마이그레이션 전과
+콘텐츠가 일치. KO Home/Performances/Media/Dialogue/Projects 5개
+페이지 전부 콘솔 에러 없음 재확인. `/admin/index.html` 방문 →
+Decap CMS 앱이 config.yml을 에러 없이 파싱해 로그인 화면까지
+정상 도달(콘솔에 config 파싱 에러 없음, "decap-cms-app 3.15.1"
+정상 로그) — git-gateway 실 로그인은 DecapBridge 실서비스가
+필요해 로컬에서 검증 불가한 예상된 한계. 메뉴 순서·Featured
+Photo 숨김 여부는 `js-yaml`로 `config.yml`을 직접 파싱해 9개
+collection이 정확히 스펙 순서대로 나열되고 `featured_photo`가
+배열에 없음을 프로그래매틱하게 확인.

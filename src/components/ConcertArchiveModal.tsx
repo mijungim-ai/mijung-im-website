@@ -169,26 +169,36 @@ export function ConcertArchiveModal({
           dialogRef.current?.focus();
         }}
       >
-        <div className="relative w-full aspect-[3/4] sm:aspect-video bg-ink-deep">
-          <Image
-            src={entry.image}
-            alt={entry.title}
-            fill
-            sizes={SIZES}
-            quality={85}
-            className="object-contain"
-          />
-        </div>
+        {entry.image && (
+          <div className="relative w-full aspect-[3/4] sm:aspect-video bg-ink-deep">
+            <Image
+              src={entry.image}
+              alt={entry.title}
+              fill
+              sizes={SIZES}
+              quality={85}
+              className="object-contain"
+            />
+          </div>
+        )}
         <div className="p-6 sm:p-8">
-          <p className="label text-xs text-sage mb-2">{entry.year}</p>
+          <p className="label text-xs text-sage mb-2">{entry.date}</p>
           <h3 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-4">
             {entry.title}
           </h3>
-          {entry.venue && (
-            <p className="text-body text-ivory/90">{entry.venue}</p>
+          <p className="text-body text-ivory/90">{entry.location}</p>
+          {entry.content && (
+            <p className="text-body text-ivory/70 mt-1">{entry.content}</p>
           )}
-          {entry.program && (
-            <p className="text-body text-ivory/70 mt-1">{entry.program}</p>
+          {entry.link && (
+            <a
+              href={entry.link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="label text-xs text-sage hover:text-ivory transition-colors mt-4 inline-block"
+            >
+              {entry.link.label} →
+            </a>
           )}
         </div>
       </div>

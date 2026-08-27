@@ -1,18 +1,17 @@
 import { readOrderedContent } from "@/lib/orderedContent";
 
-export type VideoItem = { title: string; body: string; embedUrl: string };
-export type TalkItem = { title: string; embedUrl: string };
+// Both video collections share the same shape now — only embedUrl is
+// required, title/body are optional so an entry can be "just a video".
+export type VideoItem = { order: number; title?: string; body?: string; embedUrl: string };
+export type TalkItem = VideoItem;
 
-type VideoItemFile = VideoItem & { order: number };
-type TalkItemFile = TalkItem & { order: number };
-
-// Content now lives in content/videos-performances/*.json and
+// Content lives in content/videos-performances/*.json and
 // content/videos-talks/*.json (Decap CMS folder collections) instead
 // of hardcoded arrays — see docs/TODO.md.
 export function getVideoItems(): VideoItem[] {
-  return readOrderedContent<VideoItemFile>("videos-performances");
+  return readOrderedContent<VideoItem>("videos-performances");
 }
 
 export function getTalkItems(): TalkItem[] {
-  return readOrderedContent<TalkItemFile>("videos-talks");
+  return readOrderedContent<TalkItem>("videos-talks");
 }
