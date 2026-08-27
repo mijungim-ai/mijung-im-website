@@ -4,33 +4,8 @@ import { Link } from "@/i18n/navigation";
 import { Placeholder } from "@/components/Placeholder";
 import { HeroRotator } from "@/components/HeroRotator";
 import { Section } from "@/components/Section";
-import { getHomeNews, type HomeNewsItem } from "@/data/homeNews";
-
-function NewsList({ items }: { items: HomeNewsItem[] }) {
-  return (
-    <div className="space-y-10">
-      {items.map((item) => (
-        <div key={item.title} className="border-b border-hairline pb-10">
-          {item.image && (
-            <div className="photo-frame relative aspect-video mb-4 overflow-hidden">
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                sizes="(min-width: 768px) 48rem, 100vw"
-                className="object-cover"
-              />
-            </div>
-          )}
-          <p className="text-body font-bold text-ivory">{item.title}</p>
-          <p className="text-body text-ivory/90 mt-2 whitespace-pre-line">
-            {item.body}
-          </p>
-        </div>
-      ))}
-    </div>
-  );
-}
+import { HomeNewsList } from "@/components/HomeNewsList";
+import { getHomeNews } from "@/data/homeNews";
 
 export default async function Home() {
   const t = await getTranslations("home");
@@ -85,7 +60,7 @@ export default async function Home() {
             {t("newsTitle")}
           </h2>
           {newsItems.length > 0 ? (
-            <NewsList items={newsItems} />
+            <HomeNewsList items={newsItems} />
           ) : (
             <Placeholder label={tc("placeholderLabel")}>
               <p className="text-body text-ivory/90">{t("newsBody")}</p>

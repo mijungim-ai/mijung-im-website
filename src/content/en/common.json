@@ -16,7 +16,11 @@
     "rights": "All rights reserved."
   },
   "common": {
-    "placeholderLabel": "Content coming soon"
+    "placeholderLabel": "Content coming soon",
+    "paginationLabel": "Pagination",
+    "goToPageLabel": "Go to page {page}",
+    "detailModalLabel": "Details",
+    "closeLabel": "Close"
   },
   "about": {
     "title": "Mijung IM",

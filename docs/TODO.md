@@ -2063,3 +2063,117 @@ Decap CMS 앱이 config.yml을 에러 없이 파싱해 로그인 화면까지
 Photo 숨김 여부는 `js-yaml`로 `config.yml`을 직접 파싱해 9개
 collection이 정확히 스펙 순서대로 나열되고 `featured_photo`가
 배열에 없음을 프로그래매틱하게 확인.
+
+### 9개 게시판 페이지네이션 + 표시 방식 전면 적용 (2026-08-27)
+
+**배경**: 게시판별 항목 수가 무제한(제한 없음)이라는 조사 결과를
+바탕으로, 아티스트가 확정한 최종 스펙(게시판별 페이지당 개수/
+레이아웃/표시 항목/클릭 동작)을 전부 적용. 구현 전 3가지 열린
+지점(비디오 그리드 반응형 여부, Essays 이미지 표시 위치, 범용
+모달의 link 필드 지원 여부)을 먼저 사용자에게 확인받고 — 전부
+Claude Code 추천안대로 진행하기로 확정 — 진행함.
+
+**공통 인프라**:
+- `src/components/Pagination.tsx`(신규, client) — 하단 중앙 숫자
+  버튼. 데이터는 각 리스트 컴포넌트가 소유(보드마다 페이지당
+  개수가 달라서), Pagination 자체는 `currentPage`/`totalPages`/
+  `onPageChange`만 받는 순수 프레젠테이션 컴포넌트.
+  `totalPages <= 1`이면 아무것도 렌더링 안 함(항목이 적을 땐
+  페이지네이션 UI 자체가 안 보임).
+- `src/components/DetailModal.tsx`(신규, client) — `ConcertArchive
+  Modal.tsx`와 동일한 톤(fade-in, 포커스 트랩, iOS 스크롤 락)이지만
+  prev/next 캐러셀 없이 단일 항목(title/date?/location?/content?/
+  image?/link?)만 표시하는 범용 모달. `ConcertArchiveModal.tsx`
+  자체는 스펙대로 전혀 손대지 않음 — 재사용이 아니라 별도 컴포넌트
+  신설로 처리(기존 모달에 영향 0).
+- `common` 네임스페이스에 번역 키 4개 추가(en/ko 양쪽):
+  `paginationLabel`, `goToPageLabel`(HeroRotator 점 인디케이터의
+  `heroSlideLabel` ICU 패턴과 동일하게 `{page}` 파라미터 사용),
+  `detailModalLabel`, `closeLabel` — 여러 게시판에서 공용으로
+  재사용하기 위해 보드별 네임스페이스가 아닌 `common`에 배치.
+
+**핵심 설계 원칙 — 리스트 페이지네이션과 모달/라이트박스의 인덱스
+공간을 분리**: Concert Archive의 기존 모달이 prev/next로 전체
+배열을 순회하는 캐러셀 동작을 유지해야 해서("기존 모달 유지"
+지시), 리스트 렌더링은 현재 페이지의 4개만 슬라이스하되 각 행의
+`onClick`엔 `pageStart + localIndex`로 계산한 **전체 배열 기준
+인덱스**를 넘기도록 설계. 이 패턴을 Media Gallery 라이트박스와
+Projects Gallery 라이트박스에도 동일하게 적용 — 두 곳 다 리스트는
+페이지네이션되지만 라이트박스는 항상 전체 사진 배열 기준으로
+열리고 prev/next도 페이지 경계를 넘어 전체를 순회함(브라우저
+실측으로 "21/21" → prev 클릭 → "20/21"처럼 페이지 경계를 넘는
+이동을 직접 확인).
+
+**게시판별 적용**:
+1. **Home Latest News**(3/page, 리스트, 제목만, 모달) — `src/data/
+   homeNews.ts`는 그대로, 렌더링을 새 `HomeNewsList.tsx`(client)로
+   분리해 `page.tsx`(서버)에서 props로 전달하던 기존 패턴 유지.
+   0건일 때 기존 "CONTENT COMING SOON" 폴백은 그대로.
+2. **Selected Engagements**(3/page, 리스트, 제목/날짜/장소만
+   인라인, 모달로 content/image/link 확인) — 기존엔 content/image/
+   link까지 인라인으로 다 보여줬으나 이번에 모달로 이동. 새
+   `EngagementsList.tsx`(client)로 분리.
+3. **Concert Archive**(4/page, 리스트, 기존 모달 유지) — 위 설명한
+   fullIndex 패턴으로 `ConcertArchiveList.tsx`에 페이지네이션만
+   추가, `ConcertArchiveModal.tsx`는 1바이트도 안 건드림.
+4. **Media Video (Performances)**(3/page, 1×3 그리드, 클릭 동작
+   없음) — 기존 `space-y-12` 수직 스택을 `grid grid-cols-1
+   sm:grid-cols-3 gap-x-8 gap-y-12`로 변경(모바일 1열 → sm 이상
+   3열, 사용자 확인). 영상+제목+내용 전부 인라인 유지(모달 없음,
+   스펙대로).
+5. **Media Video (Talks & Interviews)**(4/page, 2×2 그리드, 클릭
+   동작 없음) — 기존 `grid sm:grid-cols-2`가 이미 4건=2×2와 거의
+   일치해 그리드 자체는 손 안 대고 페이지네이션만 추가.
+6. **Media Gallery**(20/page, 4×5 그리드, 기존 라이트박스) — 현재
+   20건이 정확히 1페이지 분량이라 기존 화면은 그대로, 페이지네이션
+   인프라만 추가(21건 이상부터 2페이지 버튼이 뜸).
+7. **Dialogue Press**(4/page, 리스트, 제목만, 새 탭 링크) — 기존
+   `LinkEntry` 그대로, 새 `PressList.tsx`(client)로 페이지네이션만
+   래핑. 5건 존재라 실제로 2페이지가 자연스럽게 뜨는 유일한
+   보드(다른 8개는 전부 항목 수가 페이지당 개수 이하라 더미로만
+   2페이지 테스트 가능했음).
+8. **Dialogue Essays**(4/page, 리스트, 제목만, body 있으면 모달·
+   없으면(externalUrl) 새 탭 링크) — 기존엔 리스트에 본문 전체가
+   인라인으로 다 보였으나 이번에 제목만 남기고 본문은 모달로 이동.
+   새 `EssaysList.tsx`(client)에서 `entry.body`가 있으면 버튼(모달
+   트리거), 없으면 `LinkEntry`(새 탭)로 분기 — 기존 인라인 렌더링의
+   "body 있으면 우선" 규칙을 그대로 유지. image 필드는 body 타입
+   항목의 모달 안에서만 노출(사용자 확인) — externalUrl 타입
+   항목에서는 이미지가 표시될 자리 자체가 없음.
+9. **Projects Gallery**(6/page, 3×2 그리드, 기존 라이트박스) —
+   그리드 자체는 이미 `sm:grid-cols-2 md:grid-cols-3`라 손 안 댐.
+   스펙의 "썸네일/제목" 표시 항목을 맞추기 위해, 이전엔 라이트박스
+   안에서만 보이던 caption을 Media Gallery처럼 그리드 아래에도
+   새로 노출(사용자 확인).
+
+**함께 처리**: `MediaTabs.tsx`의 두 `<iframe>`(Performances/Talks)
+모두에 `loading="lazy"` 추가 — 이전 조사에서 발견한 "항목이 많아지면
+전체 iframe이 스크롤 위치와 무관하게 즉시 로드되는" 성능 위험을
+해소.
+
+**검증**: `tsc --noEmit`/`eslint`/클린 `next build` 전부 1회 통과.
+현재 실데이터로는 9개 중 Dialogue Press(5건÷4=2페이지)만 자연스럽게
+2페이지가 나와서, 나머지 8개 보드에는 각 content 폴더에 더미
+`.json` 1~4개씩 임시로 추가해 전부 2페이지 상태를 만든 뒤 브라우저로
+직접 검증: Home News(페이지네이션 전환 확인, 모달에 title+body
+정확히 표시), Engagements(페이지네이션 + 모달), Concert Archive
+(페이지 2의 더미 항목 클릭 → 모달에서 prev 클릭 → 페이지 1의
+마지막 항목으로 정확히 이동하는 것을 실측해 fullIndex 설계 검증),
+Video Performances/Talks(각각 독립적으로 페이지 전환되고 서로
+간섭 없음 확인), Media Gallery(21건→"1 2" 페이지네이션, 페이지 2의
+더미 사진 라이트박스 열면 "21/21" 카운터, prev 클릭 시 "20/21"로
+페이지 경계를 넘어 정확히 이동), Projects Gallery(7건→2페이지,
+라이트박스 "7/7" 카운터 확인), Essays(body 타입 더미 항목 클릭 →
+모달에 title+본문 줄바꿈까지 정확히 표시, externalUrl 타입은
+`<a target="_blank">`로 렌더링됨을 DOM으로 직접 확인). 검증 후
+더미 파일 전부 삭제, `git status`로 잔여물 없음을 확인.
+
+**검증 중 발견한 특이사항**: 더미 정리 직전 `git status`에서
+`origin/main`이 1커밋 앞서 있는 걸 발견 — 확인해보니 아티스트가
+실제로 배포된 Decap CMS에서 Home Latest News 게시판에 첫 실제
+뉴스("홈페이지를 오픈합니다.")를 직접 작성해 커밋한 것이었음(순수
+CMS 실사용 사례, 테스트 아님). `git pull --ff-only`로 안전하게
+병합 후 이 실데이터가 반영된 상태로 최종 `tsc`/클린 `next build`를
+재검증하고, 브라우저로 이 실제 뉴스 항목이 리스트에 제목만 뜨고
+클릭 시 모달에 본문("새롭게 단장한 임미정 피아니스트의
+홈페이지를...")까지 정확히 표시됨을 최종 확인.

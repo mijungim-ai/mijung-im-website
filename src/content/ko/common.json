@@ -16,7 +16,11 @@
     "rights": "모든 권리 보유."
   },
   "common": {
-    "placeholderLabel": "콘텐츠 준비 중"
+    "placeholderLabel": "콘텐츠 준비 중",
+    "paginationLabel": "페이지 이동",
+    "goToPageLabel": "{page}페이지로 이동",
+    "detailModalLabel": "상세 정보",
+    "closeLabel": "닫기"
   },
   "about": {
     "eyebrow": "소개",
