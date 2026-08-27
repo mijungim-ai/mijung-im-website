@@ -5,9 +5,14 @@ import { PageSubtitle } from "@/components/PageSubtitle";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
 import { Section } from "@/components/Section";
 import { SocialIconRow } from "@/components/SocialIconRow";
+import { getGalleryImages } from "@/data/mediaGallery";
+import { getVideoItems, getTalkItems } from "@/data/videos";
 
 export default async function MediaPage() {
   const t = await getTranslations("media");
+  const galleryImages = getGalleryImages();
+  const videoItems = getVideoItems();
+  const talkItems = getTalkItems();
 
   return (
     <div>
@@ -27,7 +32,11 @@ export default async function MediaPage() {
       </PageHeaderSection>
 
       <Section className="pt-7 md:pt-14">
-        <MediaTabs />
+        <MediaTabs
+          galleryImages={galleryImages}
+          videoItems={videoItems}
+          talkItems={talkItems}
+        />
       </Section>
     </div>
   );

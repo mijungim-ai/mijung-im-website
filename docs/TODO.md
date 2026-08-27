@@ -1818,3 +1818,61 @@ collection의 folder/extension/format 값을 전부 출력해 의도한 그대�
 콘텐츠 데이터 흐름을 건드리는 변경은 아님 — config.yml/정적 파일
 수정이라 렌더링 결과에는 영향 없고, CMS 쪽 동작만 고침). 실제 Decap
 관리자 화면에서 3개 게시판에 항목이 뜨는지는 배포 후 재확인 필요.
+
+### 콘텐츠 이관 2단계 — Media Video×2, Gallery (2026-08-27)
+
+**이관 대상**: 1단계와 동일한 패턴(`content/<board>/*.json` 폴더
+컬렉션, `order` 필드 정렬, `readOrderedContent` 로더 재사용)으로
+`data/videos.ts`의 `videoItems`(3건)→`content/videos-performances/`,
+`talkItems`(4건)→`content/videos-talks/`, `data/media.ts`의
+`galleryImages`(20건)→`content/media-gallery/`를 이관. `talkItems`는
+title이 "Talk"/"Interview"로 중복돼 파일명으로 못 써서
+`talk-01/02`, `interview-01/02`처럼 순번 슬러그 사용. 갤러리 20건은
+기존 이미지 파일명을 그대로 슬러그로 재사용(예: `goseong_hwajinpo_
+beach_2020.jpg` → `goseong-hwajinpo-beach-2020.json`)해 원본과의
+추적성을 유지. `config.yml`에 3개 collection 스키마 추가 — 갤러리의
+`src` 필드는 콘서트 아카이브 때와 동일하게 필드 단위
+`media_folder`/`public_folder`로 `/images/gallery`를 가리키는 image
+위젯, `link`(href+label)는 중첩 `object` 위젯으로 표현. 나머지 4개
+게시판(Dialogue Essays/Director's Letters, Projects Gallery/Featured
+Photo)은 지시대로 손대지 않고 `placeholder` 컬렉션에 그대로 남김.
+
+**소비처 리팩터링**: `MediaTabs.tsx`가 세 데이터를 전부 직접
+import하는 클라이언트 컴포넌트였으나, 1단계와 같은 이유(fs 접근은
+서버에서만 가능)로 부모 서버 컴포넌트(`media/page.tsx`)에서
+`getGalleryImages()`/`getVideoItems()`/`getTalkItems()`를 호출해
+`galleryImages`/`videoItems`/`talkItems` props로 전달하도록 변경.
+
+**빌드 에러 발견 및 수정 (범위 밖이지만 필수)**: `next build` 최초
+실행 시 `NytPressPhoto.tsx` (`Media Featured Photo`, 3단계 대상이라
+안 건드린 컴포넌트)에서 Turbopack 빌드 에러 발생 — "the chunking
+context does not support external modules (request: node:fs)".
+원인: `NytPressPhoto.tsx`는 `"use client"` 컴포넌트인데 `data/
+media.ts`에서 `pressImages`를 **값으로** import하고 있었음(다른
+소비처는 전부 `import type`이라 안전했지만 이것만 값 import).
+`galleryImages`를 fs 기반 함수로 바꾸며 `media.ts` 최상단에
+`readOrderedContent`(→`node:fs`) import를 추가했었는데, ES 모듈은
+top-level import를 전부 실행해야 하므로 `pressImages`만 쓰는
+클라이언트 컴포넌트라도 `media.ts` 전체(그 안의 `node:fs` 의존성
+포함)가 클라이언트 번들에 딸려 들어가려다 실패한 것.
+
+해결: `getGalleryImages()`를 `media.ts`에서 분리해 새 서버 전용
+파일 `src/data/mediaGallery.ts`로 옮김. `media.ts`는 다시
+`MediaImage` 타입과 정적 `pressImages` 배열만 남아 fs 의존성이
+전혀 없는 클라이언트 세이프 모듈로 복원. `media/page.tsx`는
+`getGalleryImages`를 `@/data/mediaGallery`에서 import하도록 변경.
+같은 문제가 다른 이관 파일에도 있을지 전수 조사(`grep`으로 6개
+이관 모듈에 대한 모든 `^import {` 값 import를 나열하고 각 파일이
+`"use client"`인지 확인) — `NytPressPhoto.tsx` 하나만 해당, 나머지
+클라이언트 컴포넌트(`ConcertArchiveModal`/`MediaTabs`/
+`ProjectGallery`/`ConcertArchiveList`/`Lightbox`)는 전부 `import
+type`만 사용해 문제없음을 확인.
+
+**검증**: `tsc --noEmit`/`eslint`/`next build`(클린) — 수정 전
+1회 실패(위 fs 에러) → 수정 후 통과. 브라우저로 EN `/media` 방문 →
+`get_page_text`로 Video 탭 3+4건, Gallery 탭 20건 caption 텍스트가
+마이그레이션 전 순서·문구와 정확히 일치함을 확인. JS로 갤러리 `img`
+20개의 실제 `src`(Next Image 최적화 URL에서 원본 경로 역추출)를
+전부 나열해 원본 순서·파일 경로와 1:1 일치 확인. KO `/media`도
+방문해 UI 텍스트만 번역되고 콘텐츠(Mozart/Chopin/Talk/Interview 등)는
+EN/KO 공용 정책대로 동일하게 노출됨을 확인. 콘솔 에러 없음.

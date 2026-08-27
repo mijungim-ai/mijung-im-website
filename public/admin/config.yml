@@ -32,14 +32,13 @@ public_folder: "/images/uploads"
 logo_url: https://decapbridge.com/decapcms-with-bridge.svg
 site_url: https://hilarious-syrniki-c611de.netlify.app
 
-# Step 1 of the 9-board migration: only Performances/Selected Engagements,
-# Performances/Concert Archive, and Dialogue/Press are wired to real
-# content/*/*.json folder collections (see src/data/engagements.ts,
-# concertArchive.ts, pressArticles.ts and docs/TODO.md). The other 6
-# boards (Media Video x2, Media Gallery, Dialogue Essays/Director's
-# Letters, Projects Gallery, Projects Featured Photo) are still
-# hardcoded arrays and intentionally left out of collections below —
-# they're a separate later step, not yet agreed on.
+# Steps 1-2 of the 9-board migration: Performances/Selected Engagements,
+# Performances/Concert Archive, Dialogue/Press, Media/Video (both
+# groups), and Media/Gallery are wired to real content/*/*.json folder
+# collections (see src/data/*.ts and docs/TODO.md). The remaining 4
+# boards (Dialogue Essays, Dialogue Director's Letters, Projects
+# Gallery, Projects Featured Photo) are still hardcoded arrays and
+# intentionally left out of collections below — a separate later step.
 collections:
   - name: engagements
     label: "Performances — Selected Engagements"
@@ -103,8 +102,84 @@ collections:
       - { name: title, label: Title, widget: string }
       - { name: url, label: URL, widget: string }
 
+  - name: videos_performances
+    label: "Media — Video (Performances)"
+    label_singular: "Performance Video"
+    folder: content/videos-performances
+    create: true
+    slug: "{{slug}}"
+    extension: json
+    format: json
+    sortable_fields: [order, title]
+    fields:
+      - name: order
+        label: "Display Order"
+        widget: number
+        hint: "Lower numbers show first."
+      - { name: title, label: Title, widget: string }
+      - { name: body, label: Description, widget: text }
+      - name: embedUrl
+        label: "YouTube Embed URL"
+        widget: string
+        hint: "e.g. https://www.youtube.com/embed/VIDEO_ID"
+
+  - name: videos_talks
+    label: "Media — Video (Talks & Interviews)"
+    label_singular: "Talk/Interview Video"
+    folder: content/videos-talks
+    create: true
+    slug: "{{slug}}"
+    extension: json
+    format: json
+    sortable_fields: [order, title]
+    fields:
+      - name: order
+        label: "Display Order"
+        widget: number
+        hint: "Lower numbers show first."
+      - name: title
+        label: Title
+        widget: string
+        hint: 'Usually "Talk" or "Interview".'
+      - name: embedUrl
+        label: "YouTube Embed URL"
+        widget: string
+        hint: "e.g. https://www.youtube.com/embed/VIDEO_ID"
+
+  - name: media_gallery
+    label: "Media — Gallery"
+    label_singular: "Gallery Photo"
+    folder: content/media-gallery
+    create: true
+    slug: "{{slug}}"
+    extension: json
+    format: json
+    sortable_fields: [order]
+    fields:
+      - name: order
+        label: "Display Order"
+        widget: number
+        hint: "Lower numbers show first."
+      - name: src
+        label: Photo
+        widget: image
+        media_folder: "/public/images/gallery"
+        public_folder: "/images/gallery"
+      - name: alt
+        label: "Alt Text"
+        widget: string
+        hint: "Describe the photo for screen readers."
+      - { name: caption, label: Caption, widget: string, required: false }
+      - name: link
+        label: Link
+        widget: object
+        required: false
+        fields:
+          - { name: href, label: URL, widget: string }
+          - { name: label, label: "Link Label", widget: string }
+
   - name: placeholder
-    label: "Placeholder (remaining 6 boards — TBD)"
+    label: "Placeholder (remaining 4 boards — TBD)"
     folder: content/_placeholder
     create: false
     fields:

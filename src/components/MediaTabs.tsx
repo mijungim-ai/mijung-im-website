@@ -4,8 +4,8 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Lightbox } from "@/components/Lightbox";
-import { galleryImages, type MediaImage } from "@/data/media";
-import { videoItems, talkItems } from "@/data/videos";
+import type { MediaImage } from "@/data/media";
+import type { VideoItem, TalkItem } from "@/data/videos";
 
 // Internal key stays "video" even though its label is now "YouTube" —
 // KO common.json already has a translated tabs.video entry, and
@@ -14,7 +14,15 @@ import { videoItems, talkItems } from "@/data/videos";
 const TABS = ["video", "gallery"] as const;
 type Tab = (typeof TABS)[number];
 
-export function MediaTabs() {
+export function MediaTabs({
+  galleryImages,
+  videoItems,
+  talkItems,
+}: {
+  galleryImages: MediaImage[];
+  videoItems: VideoItem[];
+  talkItems: TalkItem[];
+}) {
   const t = useTranslations("media");
   const [active, setActive] = useState<Tab>("video");
 
