@@ -2177,3 +2177,27 @@ CMS 실사용 사례, 테스트 아님). `git pull --ff-only`로 안전하게
 재검증하고, 브라우저로 이 실제 뉴스 항목이 리스트에 제목만 뜨고
 클릭 시 모달에 본문("새롭게 단장한 임미정 피아니스트의
 홈페이지를...")까지 정확히 표시됨을 최종 확인.
+
+### Media Video (Performances) 레이아웃 — 반응형 그리드 → 세로 1열로 되돌림 (2026-08-27)
+
+**원인**: 직전 라운드에서 사용자가 확정한 "모바일 1열 → sm/md 이상
+3열" 반응형 그리드가 실제로는 원하던 것과 달랐음 — 화면 폭과
+무관하게 항상 영상 하나씩 세로로 쌓이는 형태(3행×1열)를 원함.
+
+**수정**: `MediaTabs.tsx`의 Performances 그룹 컨테이너 클래스를
+`grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-12` → `space-y-12`
+(페이지네이션 도입 전 원래 클래스와 동일)로 되돌림. 이 한 줄
+외에는 손대지 않음 — 페이지네이션(3/page), `loading="lazy"`,
+영상/제목/내용 인라인 표시 전부 그대로 유지. Talks 그룹의
+`grid gap-10 sm:grid-cols-2`는 지시대로 완전히 무변경.
+
+**검증**: `tsc --noEmit`/`eslint`/클린 `next build` 통과. 브라우저로
+EN/KO `/media` 방문해 Performances 컨테이너의 `className`이
+`space-y-12`, Talks 컨테이너가 `grid gap-10 sm:grid-cols-2`로 각각
+정확함을 JS로 확인. `getBoundingClientRect()`로 데스크톱 뷰포트에서
+Performances 3개 항목이 전부 동일 x좌표·동일 width(720px, 풀와이드)에
+y좌표만 순차 증가함을 수치로 확인해 세로 1열 배치를 검증, 같은
+방식으로 Talks 4개 항목은 x=280/660 두 컬럼·y 두 행의 2×2 그리드가
+그대로임을 확인. 375px 모바일 스크린샷으로도 Performances가 풀와이드
+1열로 보임을 시각 확인. iframe `loading="lazy"` 7개 전부 유지 확인.
+콘솔 에러 없음.

@@ -119,7 +119,7 @@ export function MediaTabs({
             <h3 className="label text-xs text-grey-muted mb-8">
               {t("videoGroups.performancesTitle")}
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-12">
+            <div className="space-y-12">
               {videoPageItems.map((item, i) => (
                 <div key={`${item.title ?? "video"}-${i}`}>
                   <div className="aspect-video mb-4">
