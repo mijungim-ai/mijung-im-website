@@ -15,3 +15,12 @@ export function readOrderedContent<T extends { order: number }>(
   );
   return entries.sort((a, b) => a.order - b.order);
 }
+
+// Reads a single fixed JSON file under content/ — for Decap CMS "file
+// collections" (one fixed record, e.g. content/featured-photo.json),
+// as opposed to the folder collections read via readOrderedContent
+// above (many files, one per entry).
+export function readJsonContent<T>(relativePath: string): T {
+  const filePath = path.join(process.cwd(), "content", relativePath);
+  return JSON.parse(fs.readFileSync(filePath, "utf-8")) as T;
+}

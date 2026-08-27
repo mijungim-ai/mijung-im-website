@@ -32,13 +32,11 @@ public_folder: "/images/uploads"
 logo_url: https://decapbridge.com/decapcms-with-bridge.svg
 site_url: https://hilarious-syrniki-c611de.netlify.app
 
-# Steps 1-2 of the 9-board migration: Performances/Selected Engagements,
-# Performances/Concert Archive, Dialogue/Press, Media/Video (both
-# groups), and Media/Gallery are wired to real content/*/*.json folder
-# collections (see src/data/*.ts and docs/TODO.md). The remaining 4
-# boards (Dialogue Essays, Dialogue Director's Letters, Projects
-# Gallery, Projects Featured Photo) are still hardcoded arrays and
-# intentionally left out of collections below — a separate later step.
+# All 9 boards are now wired to real content — see src/data/*.ts and
+# docs/TODO.md. Dialogue's Essays and Director's Letters merged into
+# one "essays" collection per artist feedback. Featured Photo is a
+# Decap "file collection" (files:), not a folder collection, since it
+# only ever holds one fixed record.
 collections:
   - name: engagements
     label: "Performances — Selected Engagements"
@@ -178,9 +176,90 @@ collections:
           - { name: href, label: URL, widget: string }
           - { name: label, label: "Link Label", widget: string }
 
-  - name: placeholder
-    label: "Placeholder (remaining 4 boards — TBD)"
-    folder: content/_placeholder
-    create: false
+  - name: essays
+    label: "Dialogue — Essays & Director's Letters"
+    label_singular: Essay
+    folder: content/essays
+    create: true
+    slug: "{{slug}}"
+    extension: json
+    format: json
+    sortable_fields: [order, title]
     fields:
+      - name: order
+        label: "Display Order"
+        widget: number
+        hint: "Lower numbers show first."
       - { name: title, label: Title, widget: string }
+      - name: date
+        label: Date
+        widget: string
+        required: false
+        hint: "Optional — for dated festival director's notes only."
+      - name: body
+        label: "Body Text"
+        widget: text
+        required: false
+        hint: 'Fill in Body Text OR External URL below, not both. Use this for the full text shown directly on the page.'
+      - name: externalUrl
+        label: "External URL"
+        widget: string
+        required: false
+        hint: "Fill in External URL OR Body Text above, not both. Use this to link out to the original article/post instead."
+
+  - name: projects_gallery
+    label: "Projects — Gallery"
+    label_singular: "Gallery Photo"
+    folder: content/projects-gallery
+    create: true
+    slug: "{{slug}}"
+    extension: json
+    format: json
+    sortable_fields: [order]
+    fields:
+      - name: order
+        label: "Display Order"
+        widget: number
+        hint: "Lower numbers show first."
+      - name: src
+        label: Photo
+        widget: image
+        media_folder: "/public/images/projects"
+        public_folder: "/images/projects"
+      - name: alt
+        label: "Alt Text"
+        widget: string
+        hint: "Describe the photo for screen readers."
+      - { name: caption, label: Caption, widget: string, required: false }
+      - name: link
+        label: Link
+        widget: object
+        required: false
+        fields:
+          - { name: href, label: URL, widget: string }
+          - { name: label, label: "Link Label", widget: string }
+
+  - name: featured_photo
+    label: "Projects — Featured Photo"
+    files:
+      - name: featured_photo
+        label: "Featured Photo"
+        file: content/featured-photo.json
+        fields:
+          - name: src
+            label: Photo
+            widget: image
+            media_folder: "/public/images/press"
+            public_folder: "/images/press"
+          - name: alt
+            label: "Alt Text"
+            widget: string
+            hint: "Describe the photo for screen readers."
+          - { name: caption, label: Caption, widget: string, required: false }
+          - name: link
+            label: Link
+            widget: object
+            required: false
+            fields:
+              - { name: href, label: URL, widget: string }
+              - { name: label, label: "Link Label", widget: string }

@@ -4,10 +4,9 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Lightbox } from "@/components/Lightbox";
-import { projectGalleryImages } from "@/data/projectGallery";
 import type { MediaImage } from "@/data/media";
 
-export function ProjectGallery() {
+export function ProjectGallery({ images }: { images: MediaImage[] }) {
   const t = useTranslations("media");
 
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -26,7 +25,7 @@ export function ProjectGallery() {
   return (
     <div>
       <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
-        {projectGalleryImages.map((img: MediaImage, i) => (
+        {images.map((img, i) => (
           <button
             key={img.src}
             type="button"
@@ -48,7 +47,7 @@ export function ProjectGallery() {
       </div>
 
       <Lightbox
-        images={projectGalleryImages}
+        images={images}
         index={lightboxIndex}
         onClose={closeLightbox}
         onNavigate={setLightboxIndex}

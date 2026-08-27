@@ -4,13 +4,12 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Lightbox } from "@/components/Lightbox";
-import { pressImages } from "@/data/media";
+import type { MediaImage } from "@/data/media";
 
-export function NytPressPhoto() {
+export function NytPressPhoto({ photo }: { photo: MediaImage }) {
   const t = useTranslations("media");
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
-  const photo = pressImages[0];
 
   function openLightbox(trigger: HTMLButtonElement) {
     triggerRef.current = trigger;
@@ -47,7 +46,7 @@ export function NytPressPhoto() {
       )}
 
       <Lightbox
-        images={pressImages}
+        images={[photo]}
         index={open ? 0 : null}
         onClose={closeLightbox}
         onNavigate={() => {}}

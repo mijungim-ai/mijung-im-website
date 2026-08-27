@@ -3,47 +3,30 @@ import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
 import { Section } from "@/components/Section";
 import { LinkEntry } from "@/components/LinkEntry";
-import {
-  essays,
-  directorLetters,
-  type DirectorLetterEntry,
-} from "@/data/dialogue";
+import { getEssays, type EssayEntry } from "@/data/dialogue";
 import { getPressArticles } from "@/data/pressArticles";
 
-function WritingEntryRow({ entry }: { entry: DirectorLetterEntry }) {
-  if (entry.type === "link") {
-    return <LinkEntry title={entry.title} href={entry.href} />;
+function WritingEntryRow({ entry }: { entry: EssayEntry }) {
+  if (entry.body) {
+    return (
+      <div className="border-l-2 border-sage pl-6">
+        <p className="label text-xs text-grey-muted mb-2">
+          {entry.title}
+          {entry.date ? ` — ${entry.date}` : ""}
+        </p>
+        <p className="text-body italic text-ivory/90 whitespace-pre-line">
+          {entry.body}
+        </p>
+      </div>
+    );
   }
-  return (
-    <div className="border-l-2 border-sage pl-6">
-      <p className="label text-xs text-grey-muted mb-2">
-        {entry.title}
-        {entry.date ? ` — ${entry.date}` : ""}
-      </p>
-      <p className="text-body italic text-ivory/90 whitespace-pre-line">
-        {entry.body}
-      </p>
-    </div>
-  );
+  return <LinkEntry title={entry.title} href={entry.externalUrl ?? ""} />;
 }
 
 export default async function DialoguePage() {
   const t = await getTranslations("dialogue");
   const pressArticles = getPressArticles();
-
-  // Essays and Artistic Director's Letters merged into one section per
-  // artist feedback. Essays (undated magazine op-eds) come first, then
-  // director's letters (dated festival notes) — each group keeps its
-  // original internal order, since the essays have no known publish
-  // date to interleave chronologically against the letters' years.
-  const writings: DirectorLetterEntry[] = [
-    ...essays.map((essay) => ({
-      type: "link" as const,
-      title: essay.title,
-      href: essay.href,
-    })),
-    ...directorLetters,
-  ];
+  const essays = getEssays();
 
   return (
     <div>
@@ -77,7 +60,7 @@ export default async function DialoguePage() {
             {t("essaysTitle")}
           </h2>
           <div>
-            {writings.map((entry) => (
+            {essays.map((entry) => (
               <WritingEntryRow key={entry.title} entry={entry} />
             ))}
           </div>

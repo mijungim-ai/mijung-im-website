@@ -1876,3 +1876,69 @@ type`만 사용해 문제없음을 확인.
 전부 나열해 원본 순서·파일 경로와 1:1 일치 확인. KO `/media`도
 방문해 UI 텍스트만 번역되고 콘텐츠(Mozart/Chopin/Talk/Interview 등)는
 EN/KO 공용 정책대로 동일하게 노출됨을 확인. 콘솔 에러 없음.
+
+### 콘텐츠 이관 3단계(마지막) — Essays 통합, Projects Gallery,
+### Featured Photo (2026-08-27)
+
+**9개 게시판 전부 이관 완료**. 이번 라운드로 마지막 남은 4개(실질
+3개 파일) 처리:
+
+**1) Essays + Director's Letters 통합**: `data/dialogue.ts`의
+`essays`(EssayLink: title/href)와 `directorLetters`(DirectorLetterEntry:
+title/date?/type "link"|"text"+href|body)를 하나의 `content/essays/
+*.json` 컬렉션으로 통합. 유니언 타입(`type` 판별자로 링크/텍스트
+분기) 대신 `body?`/`externalUrl?` 두 optional 필드를 모두 두고
+"둘 중 하나만 채우라"는 걸 `config.yml` 필드 `hint` 텍스트로
+명시하는 방식 채택 — Decap CMS는 조건부 필수 검증(A 아니면 B
+필수)을 스키마 레벨에서 지원하지 않아 지시대로 실용적으로 처리.
+렌더링 분기도 단순화: `entry.body`가 있으면 본문 블록, 없으면
+`LinkEntry`(`externalUrl` 사용) — 기존에 있던 "type이 link/text 중
+뭔지" 판별 로직과 essays+directorLetters를 매 렌더마다 병합하던
+`writings` 배열 생성 로직 전부 제거, `dialogue/page.tsx`는 이제
+`getEssays()` 결과 하나만 그대로 순회. 이관된 4건 전부 원래도
+"link" 타입만 썼어서(본문 텍스트를 쓰는 항목은 아직 없었음)
+`externalUrl`만 채워짐 — `body`/`date` 필드가 실제로 쓰이는 사례는
+아직 없지만 스키마는 준비됨.
+
+**2) Projects Gallery**: `data/projectGallery.ts` → `content/
+projects-gallery/*.json`(6건), 1·2단계와 동일 패턴(order, image
+위젯 + 필드 단위 `/images/projects` 오버라이드).
+
+**3) Featured Photo — file collection**: `data/media.ts`의
+`pressImages`(배열이지만 `[0]`만 쓰이던 단일 항목)를 폴더가 아닌
+Decap "file collection"(`files:` 키, 고정 파일 하나)으로 이관 —
+`content/featured-photo.json` 단일 레코드, `order`/목록 개념 없음.
+`config.yml`의 `featured_photo` 컬렉션은 `folder` 대신 `files:
+[{file: "content/featured-photo.json", fields: [...]}]` 구조 사용.
+
+**placeholder 제거**: 9개 전부 이관됐으므로 `config.yml`의
+`placeholder` 컬렉션과 그 대상이던 `content/_placeholder/`(빈
+폴더 존재용 README) 완전 삭제.
+
+**소비처 리팩터링(1·2단계와 동일한 이유 — fs는 서버에서만)**:
+`ProjectGallery.tsx`(클라이언트)가 `projectGalleryImages`를 직접
+import하던 걸 부모 서버 컴포넌트(`projects/page.tsx`)에서
+`getProjectGalleryImages()`로 읽어 `images` prop으로 전달하도록
+변경. `NytPressPhoto.tsx`(클라이언트, `pressImages`를 값으로 직접
+import하던 컴포넌트 — 2단계에서 fs 오염 문제의 원인이었던 바로 그
+컴포넌트)도 동일하게 `photo` prop을 받도록 바꾸고, `projects/
+page.tsx`가 `getFeaturedPhoto()`로 읽어 전달. 이걸로 `data/media.ts`
+에는 이제 `MediaImage` 타입 정의만 남고 fs 의존 코드/정적 데이터가
+전부 빠져 순수 타입 모듈이 됨 — 2단계에서 겪었던 "클라이언트
+컴포넌트가 fs 의존 모듈을 값으로 import"하는 패턴이 코드베이스에
+더 이상 존재하지 않음.
+
+**새 로더**: `src/lib/orderedContent.ts`에 `readJsonContent<T>
+(relativePath)` 추가 — 폴더 전체를 정렬해 읽는 기존
+`readOrderedContent`와 달리, 고정 파일 하나를 그대로 읽는 file
+collection 전용 함수.
+
+**검증**: `tsc --noEmit`/`eslint`/클린 `next build` 전부 1회에
+통과(이번엔 fs/클라이언트 번들 에러 없음 — 소비처 리팩터링을
+미리 반영했기 때문). 브라우저로 EN `/dialogue` 방문 →
+`get_page_text` + JS로 모든 링크의 `href`까지 추출해 Essays 4건이
+문구·순서·href 전부 마이그레이션 전과 정확히 일치함을 확인. EN
+`/projects` 방문 → JS로 `img` 전체 나열, Featured Photo(1장) +
+Projects Gallery(6장) 순서·경로 일치 확인, caption 텍스트도
+`get_page_text`로 원본과 동일함을 확인. KO `/dialogue`·`/projects`
+둘 다 방문해 콘솔 에러 없음과 콘텐츠 동일 노출을 확인.

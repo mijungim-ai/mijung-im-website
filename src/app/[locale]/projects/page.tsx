@@ -5,10 +5,14 @@ import { PageHeaderSection } from "@/components/PageHeaderSection";
 import { Section } from "@/components/Section";
 import { ProjectGallery } from "@/components/ProjectGallery";
 import { NytPressPhoto } from "@/components/NytPressPhoto";
+import { getProjectGalleryImages } from "@/data/projectGallery";
+import { getFeaturedPhoto } from "@/data/featuredPhoto";
 
 export default async function ProjectsPage() {
   const t = await getTranslations("projects");
   const tm = await getTranslations("media");
+  const galleryImages = getProjectGalleryImages();
+  const featuredPhoto = getFeaturedPhoto();
 
   const projects = [
     {
@@ -40,7 +44,7 @@ export default async function ProjectsPage() {
             </PageHeaderStatement>
           </div>
           <div className="w-full md:w-[45%] shrink-0">
-            <NytPressPhoto />
+            <NytPressPhoto photo={featuredPhoto} />
           </div>
         </div>
       </PageHeaderSection>
@@ -72,7 +76,7 @@ export default async function ProjectsPage() {
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
             {tm("tabs.gallery")}
           </h2>
-          <ProjectGallery />
+          <ProjectGallery images={galleryImages} />
         </Section>
       </div>
     </div>
