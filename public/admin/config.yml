@@ -47,6 +47,8 @@ collections:
     folder: content/engagements
     create: true
     slug: "{{slug}}"
+    extension: json
+    format: json
     sortable_fields: [order, title]
     fields:
       - name: order
@@ -66,6 +68,8 @@ collections:
     folder: content/concert-archive
     create: true
     slug: "{{slug}}"
+    extension: json
+    format: json
     sortable_fields: [order, year]
     fields:
       - name: order
@@ -88,6 +92,8 @@ collections:
     folder: content/press-articles
     create: true
     slug: "{{slug}}"
+    extension: json
+    format: json
     sortable_fields: [order]
     fields:
       - name: order

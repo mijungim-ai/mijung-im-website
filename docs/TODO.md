@@ -1784,3 +1784,37 @@ Netlify CDN 레벨 규칙이라 로컬 dev 서버로 검증 불가 — 배포 �
 로드되고 `curl`로 200 확인. 콘솔 에러 없음. 기존 라우팅(`/`,
 `/en`, `/ko/contact`, `/__forms.html` POST, `/admin/index.html`)
 전부 회귀 없이 정상 동작 재확인.
+
+### Decap CMS "No Entries" 버그 수정 — 3개 게시판 (2026-08-27)
+
+**증상**: 배포 후 관리자 화면에서 Engagements/Concert Archive/Press
+3개 collection이 전부 빈 목록("No Entries")으로 표시됨.
+
+**원인 조사**: `config.yml`의 folder 경로(`content/engagements`,
+`content/concert-archive`, `content/press-articles`)가 실제 커밋
+경로와 오타·대소문자·트레일링 슬래시 전부 정확히 일치함을 확인
+(`git show de835d4 --stat`로 대조). `origin/main`도 로컬 HEAD와
+동일한 커밋을 가리키고 있어 GitHub 반영 여부도 문제 없음(`git
+fetch` 후 `git rev-parse` 일치 확인). 즉 경로·배포 동기화는 전혀
+문제가 아니었음.
+
+**진짜 원인**: 3개 collection 전부 `extension`/`format`을 지정하지
+않았음. Decap CMS의 folder collection 기본값은 `extension: md` +
+`format: frontmatter`(마크다운+프런트매터) — 실제 파일은 `.json`인데
+CMS는 각 폴더에서 `.md` 파일을 찾고 있었고, 당연히 0개라 "No
+Entries"가 뜬 것. 3개 collection 모두 `extension: json` / `format:
+json`을 명시적으로 추가해 해결.
+
+**부수 발견**: `placeholder` collection의 `folder: content/
+_placeholder`도 실제로는 커밋된 적 없는 디렉토리(Git은 빈 폴더를
+추적 안 함) — GitHub API가 해당 경로에 404를 반환해 CMS에서 클릭
+시 에러가 날 수 있는 상태였음. `create: false`라 치명적이진 않지만
+같이 발견한 김에 `content/_placeholder/README.md`를 추가해 폴더
+자체가 저장소에 존재하도록 수정.
+
+**검증**: `node -e`로 `js-yaml` 이용해 config.yml 파싱, 4개
+collection의 folder/extension/format 값을 전부 출력해 의도한 그대로
+반영됐음을 확인. `tsc --noEmit`/클린 `next build` 통과(그 자체가
+콘텐츠 데이터 흐름을 건드리는 변경은 아님 — config.yml/정적 파일
+수정이라 렌더링 결과에는 영향 없고, CMS 쪽 동작만 고침). 실제 Decap
+관리자 화면에서 3개 게시판에 항목이 뜨는지는 배포 후 재확인 필요.
