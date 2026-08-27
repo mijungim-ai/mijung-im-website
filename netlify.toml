@@ -7,3 +7,12 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Next.js's public/ static file serving has no directory-index fallback,
+# so a bare /admin request 404s even though public/admin/index.html
+# exists (only /admin/index.html resolves). Decap CMS is conventionally
+# linked as "/admin", so rewrite it explicitly.
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
