@@ -1695,3 +1695,92 @@ outline-2, outline-offset-2, outline-white)가 실제로 컴파일되어
 DOM에 존재하고 위치·크기가 올바름을 수치로 확인. 데스크톱
 스크롤 후 스크린샷은 이 세션에서 반복된 브라우저 툴 아티팩트가
 재현되어, 375px 모바일 스크린샷 + DOM/JS 실측으로 대체.
+
+### Contact 폼 — Netlify Forms 제출 누락 수정 (2026-08-26)
+
+**원인**: `ContactForm.tsx`가 `fetch("/", { method: "POST" })`로
+제출하고 있었는데, `/`는 next-intl 로케일 미들웨어(`proxy.ts`)의
+matcher에 걸림. 미들웨어가 307로 `/en`으로 리다이렉트하고, fetch가
+POST 메서드/바디를 유지한 채 이를 자동으로 따라가 `/en`에 재요청 →
+그냥 홈페이지 SSR HTML을 200으로 반환. `res.ok`만 확인하는 코드
+입장에선 "성공"으로 보였지만 실제로는 Netlify Forms가 전혀
+개입하지 않은 일반 페이지 요청이었음 — 화면엔 성공 메시지가
+뜨는데 대시보드엔 제출이 하나도 안 쌓이는 증상의 정확한 원인.
+로컬에서 `curl -X POST /`로 307→`/en`→200 체인을 직접 재현해 확인.
+
+**해결**: POST 대상을 `/__forms.html`(확장자가 있어 미들웨어의
+`.*\..*` 제외 규칙에 걸려 리다이렉트를 우회하는 정적 파일, Netlify
+Forms 빌드타임 크롤러용으로 이미 존재하던 파일)로 변경.
+
+**검증**: `tsc`/`eslint`/`next build` 통과. 브라우저로 실제 제출
+시도 → `POST /__forms.html`로 리다이렉트 없이 나감을 확인. 로컬
+dev 서버는 정적 파일에 GET/HEAD만 허용해 405가 나지만(Netlify
+Forms 엣지 인터셉트가 로컬에 없어 예상된 한계), 화면엔 정확히
+"Something went wrong" 에러가 떠 `res.ok` 체크가 낙관적 UI가
+아니라 실제 응답을 보고 판단함을 재확인. 실제 대시보드 기록
+여부는 배포 후 확인 필요.
+
+### Decap CMS 관리자 페이지 구축 — 1단계 (2026-08-27)
+
+**배경**: 로드맵 6번 "CMS 구축" 착수. 저장소가 `mijungim-ai/
+mijung-im-website`로 이전되어 "GitHub 저장소 소유권 결정"(로드맵
+4번) 선행 조건 충족, 인증 방식은 DecapBridge(PKCE)로 확정.
+
+**이번 라운드 범위**: `public/admin/index.html`(Decap CMS 공식
+표준 구조) + `public/admin/config.yml`(주어진 backend/auth 설정
+그대로) 생성. 9개 게시판 중 데이터 구조를 조사해 정리(Performances
+Engagements/Archive, Media Video×2, Media Gallery, Dialogue
+Press/Essays·Director's Letter, Projects Gallery, Projects Featured
+Photo) — 전부 `src/data/*.ts`에 TypeScript 배열로 하드코딩되어
+있어 Decap(git-gateway, 파일 기반)이 편집할 파일이 없다는 구조적
+문제를 확인. 이번 1단계에서는 이 중 3개(Selected Engagements,
+Concert Archive, Dialogue Press)만 실제 이관.
+
+**이관 방식**: `content/<board>/*.json`(폴더 컬렉션, 항목당 파일
+하나) — 파일명은 CMS가 슬러그로 자동 생성하므로 순서 정보로 쓸 수
+없어, 각 파일에 `order`(숫자) 필드를 명시적으로 추가하고 빌드
+타임에 이 값으로 정렬. 공용 로더 `src/lib/orderedContent.ts`
+(`readOrderedContent<T>(folder)`)가 `content/<folder>/*.json`을
+읽어 `order` 오름차순으로 정렬해 반환. `src/data/engagements.ts`
+/`concertArchive.ts`/`pressArticles.ts`는 하드코딩 배열 export
+대신 `getEngagements()`/`getConcertArchive()`/`getPressArticles()`
+함수로 교체(내부에서 위 로더 호출). `ConcertArchiveList.tsx`는
+기존에 데이터를 직접 import하는 클라이언트 컴포넌트였으나 fs
+접근이 불가능해, 부모 서버 컴포넌트(`performances/page.tsx`)에서
+읽어 `entries` prop으로 전달받도록 변경 — 컴포넌트 자체 렌더링
+로직은 그대로. `engagements`/`pressArticles`는 원래도 서버
+컴포넌트(`performances/page.tsx`, `dialogue/page.tsx`)에서 직접
+쓰이고 있어 최상단에서 함수 호출로만 바꾸면 충분했음.
+
+`config.yml`의 `collections`에 이 3개만 실제 필드 스키마 작성
+(order/title/dateLabel/location, order/image/year/title/venue?/
+program?, order/title/url). 콘서트 아카이브의 `image` 필드는
+기존 `/images/archive/` 사진을 그대로 참조해야 해서 필드 단위
+`media_folder`/`public_folder` 오버라이드 사용, 전역
+`media_folder`도 향후 신규 업로드용 기본값(`public/images/
+uploads`)으로 함께 추가(Decap 설정 유효성 검증에 top-level
+media_folder가 필요). 나머지 6개 게시판(Media Video×2/Gallery,
+Dialogue Essays·Director's Letter, Projects Gallery/Featured
+Photo)은 지시대로 건드리지 않고 `placeholder` 컬렉션 하나로
+남겨둠 — Essays/Director's Letter는 3단계에서 별도 안내 예정,
+Featured Photo는 list가 아닌 file collection으로 처리 예정.
+
+**부수 발견 및 수정(범위 밖이지만 CMS 접속 자체를 막는 문제라
+즉시 수정)**: Decap CMS 관례 접속 경로인 `/admin`(index.html
+생략)이 두 단계로 막혀 있었음 — ① next-intl 미들웨어가 `/admin`을
+로케일 리다이렉트 대상으로 잡아 `/en/admin`으로 307 리다이렉트 →
+`proxy.ts`의 matcher에 `admin` 제외 추가로 해결. ② 그래도 Next.js
+`public/` 정적 서빙은 디렉토리 인덱스 폴백이 없어 `/admin`이
+여전히 404 → `netlify.toml`에 `/admin → /admin/index.html` 200
+rewrite 규칙 추가. ①은 로컬 curl로 완전히 재현·검증. **②는
+Netlify CDN 레벨 규칙이라 로컬 dev 서버로 검증 불가 — 배포 후
+`/admin` 직접 접속 확인 필요.**
+
+**검증**: `tsc --noEmit`/`eslint`/`next build`(클린) 전부 통과.
+브라우저로 EN `/performances`·`/dialogue`, KO `/dialogue` 방문해
+`get_page_text`로 3개 게시판 전체 항목·순서·텍스트(특수문자 포함)가
+마이그레이션 전 하드코딩 값과 정확히 일치함을 확인. 콘서트 아카이브
+항목 클릭 → 모달에서 이미지가 `/images/archive/` 원본 경로 그대로
+로드되고 `curl`로 200 확인. 콘솔 에러 없음. 기존 라우팅(`/`,
+`/en`, `/ko/contact`, `/__forms.html` POST, `/admin/index.html`)
+전부 회귀 없이 정상 동작 재확인.

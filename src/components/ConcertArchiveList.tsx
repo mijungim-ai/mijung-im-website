@@ -2,9 +2,13 @@
 
 import { useRef, useState } from "react";
 import { ConcertArchiveModal } from "@/components/ConcertArchiveModal";
-import { concertArchive } from "@/data/concertArchive";
+import type { ConcertArchiveEntry } from "@/data/concertArchive";
 
-export function ConcertArchiveList() {
+export function ConcertArchiveList({
+  entries: concertArchive,
+}: {
+  entries: ConcertArchiveEntry[];
+}) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
 

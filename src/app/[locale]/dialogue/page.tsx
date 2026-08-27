@@ -8,7 +8,7 @@ import {
   directorLetters,
   type DirectorLetterEntry,
 } from "@/data/dialogue";
-import { pressArticles } from "@/data/pressArticles";
+import { getPressArticles } from "@/data/pressArticles";
 
 function WritingEntryRow({ entry }: { entry: DirectorLetterEntry }) {
   if (entry.type === "link") {
@@ -29,6 +29,7 @@ function WritingEntryRow({ entry }: { entry: DirectorLetterEntry }) {
 
 export default async function DialoguePage() {
   const t = await getTranslations("dialogue");
+  const pressArticles = getPressArticles();
 
   // Essays and Artistic Director's Letters merged into one section per
   // artist feedback. Essays (undated magazine op-eds) come first, then

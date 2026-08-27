@@ -3,9 +3,10 @@ import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
 import { Section } from "@/components/Section";
 import { ConcertArchiveList } from "@/components/ConcertArchiveList";
-import { engagements } from "@/data/engagements";
+import { getEngagements, type Engagement } from "@/data/engagements";
+import { getConcertArchive } from "@/data/concertArchive";
 
-function EngagementsList() {
+function EngagementsList({ engagements }: { engagements: Engagement[] }) {
   return (
     <div className="space-y-6">
       {engagements.map((engagement) => (
@@ -25,6 +26,8 @@ function EngagementsList() {
 
 export default async function PerformancesPage() {
   const t = await getTranslations("performances");
+  const engagements = getEngagements();
+  const concertArchive = getConcertArchive();
 
   return (
     <div>
@@ -46,14 +49,14 @@ export default async function PerformancesPage() {
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
             {t("engagementsTitle")}
           </h2>
-          <EngagementsList />
+          <EngagementsList engagements={engagements} />
         </Section>
 
         <Section>
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
             {t("archiveTitle")}
           </h2>
-          <ConcertArchiveList />
+          <ConcertArchiveList entries={concertArchive} />
         </Section>
       </div>
     </div>
