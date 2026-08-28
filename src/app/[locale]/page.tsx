@@ -77,8 +77,15 @@ export default async function Home() {
          * Footer's global top margin, which reads fine as breathing room
          * after ordinary text/card content but leaves an odd seam under
          * a full-bleed photo like this one.
+         *
+         * The min-h steps below are sized for this specific photo: the
+         * PLZ sign and the piano sit near its opposite edges (~8%-97%
+         * of its width), so object-cover's side crop can only stay off
+         * both of them if the section's own ratio tracks the photo's
+         * native ~3.16:1 fairly closely at every width — a flat 420px
+         * crops well into both edges below the xl breakpoint.
          */}
-        <section className="photo-frame relative bg-ink-deep border-y border-hairline overflow-hidden min-h-[420px] flex items-start -mb-24">
+        <section className="photo-frame relative bg-ink-deep border-y border-sage/25 overflow-hidden min-h-[105px] sm:min-h-[210px] md:min-h-[250px] lg:min-h-[340px] xl:min-h-[420px] flex items-start -mb-24">
           <Image
             src="/images/home/east_sea_plz_beach.jpg"
             alt={t("projectImageCaption")}
@@ -90,9 +97,6 @@ export default async function Home() {
             <h2 className="text-h2 font-display-bold! font-bold not-italic text-on-photo mb-3 [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_2px_10px_rgba(0,0,0,0.85)]">
               {t("projectTitle")}
             </h2>
-            <p className="text-body text-on-photo/90 [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_2px_10px_rgba(0,0,0,0.85)]">
-              {t("projectSubtitle")}
-            </p>
             <Link
               href="/projects"
               className="label text-xs text-on-photo hover:text-sage transition-colors mt-6 inline-block [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_2px_10px_rgba(0,0,0,0.85)]"

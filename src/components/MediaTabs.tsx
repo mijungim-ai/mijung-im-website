@@ -1,8 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { Lightbox } from "@/components/Lightbox";
 import { Pagination } from "@/components/Pagination";
 import type { MediaImage } from "@/data/media";
@@ -15,6 +17,15 @@ import type { VideoItem, TalkItem } from "@/data/videos";
 // without an explicit translation pass (see docs/TODO.md).
 const TABS = ["video", "gallery"] as const;
 type Tab = (typeof TABS)[number];
+
+// The nav dropdown links to ?tab=youtube / ?tab=gallery — "youtube"
+// rather than the internal "video" key, since that's the label users
+// actually see. This is the one place the two vocabularies meet.
+const TAB_PARAM: Record<Tab, string> = { video: "youtube", gallery: "gallery" };
+
+function tabFromParam(param: string | null): Tab {
+  return param === "gallery" ? "gallery" : "video";
+}
 
 const VIDEO_PAGE_SIZE = 3;
 const TALK_PAGE_SIZE = 4;
@@ -30,7 +41,27 @@ export function MediaTabs({
   talkItems: TalkItem[];
 }) {
   const t = useTranslations("media");
-  const [active, setActive] = useState<Tab>("video");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const [active, setActive] = useState<Tab>(() => tabFromParam(tabParam));
+
+  // Keeps the tab in sync when ?tab= changes without a full remount —
+  // e.g. clicking a Media dropdown link while already on /media only
+  // updates the URL, it doesn't recreate this component. Adjusted
+  // during render (same pattern as Nav.tsx's prevPathname) rather than
+  // in an effect, so there's no extra render where the old tab flashes.
+  const [prevTabParam, setPrevTabParam] = useState(tabParam);
+  if (tabParam !== prevTabParam) {
+    setPrevTabParam(tabParam);
+    setActive(tabFromParam(tabParam));
+  }
+
+  function selectTab(tab: Tab) {
+    setActive(tab);
+    router.replace(`${pathname}?tab=${TAB_PARAM[tab]}`, { scroll: false });
+  }
 
   const [videoPage, setVideoPage] = useState(1);
   const [talkPage, setTalkPage] = useState(1);
@@ -94,29 +125,37 @@ export function MediaTabs({
       <div
         role="tablist"
         aria-label={t("categoryLabel")}
-        className="flex gap-6 border-b border-hairline mb-8 flex-wrap"
+        className="flex items-end gap-6 border-b border-hairline mb-8 flex-wrap"
       >
-        {TABS.map((tab) => (
-          <button
-            key={tab}
-            role="tab"
-            aria-selected={active === tab}
-            onClick={() => setActive(tab)}
-            className={`label text-xs pb-3 -mb-px border-b transition-colors ${
-              active === tab
-                ? "text-sage border-sage"
-                : "text-grey-muted border-transparent hover:text-ivory"
-            }`}
-          >
-            {t(`tabs.${tab}`)}
-          </button>
-        ))}
+        {TABS.map((tab) =>
+          active === tab ? (
+            <button
+              key={tab}
+              role="tab"
+              aria-selected
+              onClick={() => selectTab(tab)}
+              className="label text-xs px-4 py-2 mt-2 mb-0 bg-sage text-ink transition-colors"
+            >
+              {t(`tabs.${tab}`)}
+            </button>
+          ) : (
+            <button
+              key={tab}
+              role="tab"
+              aria-selected={false}
+              onClick={() => selectTab(tab)}
+              className="label text-xs pb-1 -mb-px border-b border-transparent text-grey-muted hover:text-ivory transition-colors"
+            >
+              {t(`tabs.${tab}`)}
+            </button>
+          ),
+        )}
       </div>
 
       {active === "video" ? (
         <div className="space-y-20">
           <div>
-            <h3 className="label text-xs text-grey-muted mb-8">
+            <h3 className="label text-xs text-sage mb-8">
               {t("videoGroups.performancesTitle")}
             </h3>
             <div className="space-y-12">
@@ -151,7 +190,7 @@ export function MediaTabs({
           </div>
 
           <div>
-            <h3 className="label text-xs text-grey-muted mb-8">
+            <h3 className="label text-xs text-sage mb-8">
               {t("videoGroups.talksTitle")}
             </h3>
             <div className="grid gap-10 sm:grid-cols-2">

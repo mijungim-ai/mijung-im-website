@@ -57,7 +57,7 @@ export function ContactForm() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="label text-xs inline-flex items-center border border-sage text-sage px-[28px] py-[12px] hover:bg-sage hover:text-ink transition-colors"
+        className="label text-xs inline-flex items-center border border-sage bg-sage text-ink px-[28px] py-[12px] hover:bg-transparent hover:text-sage transition-colors"
       >
         {t("form.openButton")}
       </button>
@@ -126,7 +126,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="label text-xs inline-flex items-center border border-sage text-sage px-[28px] py-[12px] hover:bg-sage hover:text-ink transition-colors disabled:opacity-50 disabled:pointer-events-none"
+        className="label text-xs inline-flex items-center border border-sage bg-sage text-ink px-[28px] py-[12px] hover:bg-transparent hover:text-sage transition-colors disabled:opacity-50 disabled:pointer-events-none"
       >
         {status === "submitting" ? t("form.submittingLabel") : t("form.submitLabel")}
       </button>

@@ -16,7 +16,7 @@ export default async function PerformancesPage() {
     <div>
       <PageHeaderSection>
         <h1 className="sr-only">{t("title")}</h1>
-        <div className="space-y-4 max-w-2xl">
+        <div className="space-y-4">
           {t("headerStatement")
             .split("\n\n")
             .map((sentence, i) => (
@@ -28,7 +28,7 @@ export default async function PerformancesPage() {
       </PageHeaderSection>
 
       <div className="space-y-14 md:space-y-28">
-        <Section className="pt-7 md:pt-14">
+        <Section className="pt-5 md:pt-8">
           <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
             {t("engagementsTitle")}
           </h2>

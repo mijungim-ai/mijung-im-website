@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
-import { PageSubtitle } from "@/components/PageSubtitle";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
 import { Section } from "@/components/Section";
 
@@ -12,7 +11,6 @@ export default async function AboutPage() {
     <div>
       <PageHeaderSection>
         <h1 className="display-serif text-h1 text-ivory">{t("title")}</h1>
-        <PageSubtitle className="mt-3">{t("subtitle")}</PageSubtitle>
         <PageHeaderStatement className="text-sage mt-6 max-w-xl">
           &ldquo;{t("quoteText")}&rdquo;
           <br />
@@ -21,15 +19,15 @@ export default async function AboutPage() {
       </PageHeaderSection>
 
       <div className="space-y-14 md:space-y-28">
-        <Section className="pt-7 md:pt-14">
+        <Section className="pt-5 md:pt-8">
           <p className="label text-xs text-sage mb-6">{t("theArtistLabel")}</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+          <div className="grid grid-cols-2 gap-6 sm:gap-8">
             <div className="photo-frame relative aspect-[3/4] overflow-hidden">
               <Image
                 src="/images/about_headshot.jpg"
                 alt="Portrait of Mijung IM"
                 fill
-                sizes="(min-width: 640px) 22rem, 100vw"
+                sizes="(min-width: 1152px) 536px, 50vw"
                 className="object-cover"
               />
             </div>
@@ -38,7 +36,7 @@ export default async function AboutPage() {
                 src="/images/about/studio_portrait_piano_profile.jpg"
                 alt="Mijung IM in a formal studio portrait at the piano"
                 fill
-                sizes="(min-width: 640px) 22rem, 100vw"
+                sizes="(min-width: 1152px) 536px, 50vw"
                 className="object-cover"
               />
             </div>
@@ -46,7 +44,7 @@ export default async function AboutPage() {
         </Section>
 
         <Section>
-          <h2 className="label text-xs text-grey-muted mb-6">{t("biographyLabel")}</h2>
+          <h2 className="label text-xs text-sage mb-6">{t("biographyLabel")}</h2>
           <div className="space-y-4">
             {t("bioMedium")
               .split("\n\n")
@@ -62,7 +60,7 @@ export default async function AboutPage() {
           <a
             href="/downloads/mijung-im-press-kit.pdf"
             download
-            className="label text-xs inline-flex items-center border border-sage text-sage px-[28px] py-[12px] hover:bg-sage hover:text-ink transition-colors"
+            className="label text-xs inline-flex items-center border border-sage bg-sage text-ink px-[28px] py-[12px] hover:bg-transparent hover:text-sage transition-colors"
           >
             {t("epkLabel")}
           </a>

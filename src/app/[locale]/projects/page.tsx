@@ -4,15 +4,12 @@ import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
 import { Section } from "@/components/Section";
 import { ProjectGallery } from "@/components/ProjectGallery";
-import { NytPressPhoto } from "@/components/NytPressPhoto";
 import { getProjectGalleryImages } from "@/data/projectGallery";
-import { getFeaturedPhoto } from "@/data/featuredPhoto";
 
 export default async function ProjectsPage() {
   const t = await getTranslations("projects");
   const tm = await getTranslations("media");
   const galleryImages = getProjectGalleryImages();
-  const featuredPhoto = getFeaturedPhoto();
 
   const projects = [
     {
@@ -36,24 +33,17 @@ export default async function ProjectsPage() {
     <div>
       <PageHeaderSection>
         <h1 className="sr-only">{t("title")}</h1>
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
-          <div>
-            <PageSubtitle>{t("title")}</PageSubtitle>
-            <PageHeaderStatement className="text-sage mt-3">
-              {t("subtitle")}
-            </PageHeaderStatement>
-          </div>
-          <div className="w-full md:w-[45%] shrink-0">
-            <NytPressPhoto photo={featuredPhoto} />
-          </div>
-        </div>
+        <PageSubtitle>{t("title")}</PageSubtitle>
+        <PageHeaderStatement className="text-sage mt-3">
+          {t("subtitle")}
+        </PageHeaderStatement>
       </PageHeaderSection>
 
       <div className="space-y-14 md:space-y-28">
         {projects.map((project, i) => (
           <Section
             key={project.title}
-            className={i === 0 ? "pt-7 md:pt-14" : undefined}
+            className={i === 0 ? "pt-5 md:pt-8" : undefined}
           >
             <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
               {project.title}

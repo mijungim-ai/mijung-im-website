@@ -2201,3 +2201,353 @@ y좌표만 순차 증가함을 수치로 확인해 세로 1열 배치를 검증,
 그대로임을 확인. 375px 모바일 스크린샷으로도 Performances가 풀와이드
 1열로 보임을 시각 확인. iframe `loading="lazy"` 7개 전부 유지 확인.
 콘솔 에러 없음.
+
+### Home 배너·About 상단 "Pianist of Peace & Nature" 문구 삭제 (2026-08-29)
+
+**대상 확인**: grep으로 두 문구의 코드/번역 사용처를 전수 조사 —
+Home 하단 PLZ 배너의 "Pianist of Peace and Nature"는
+`home.projectSubtitle` 키(en/ko `common.json`)가 `page.tsx` 딱
+한 곳(L94)에서만 쓰이고, About 상단의 "Pianist of Peace & Nature"는
+`about.subtitle` 키가 `about/page.tsx` 딱 한 곳(L15, `<PageSubtitle>`
+컴포넌트)에서만 쓰임을 확인 — 두 키 모두 다른 페이지의 동명
+`subtitle`/`projectSubtitle` 키(Contact/Projects/Performances 등은
+전부 별도 값의 별도 네임스페이스라 무관)와 섞이지 않음.
+
+**처리 방식**: 텍스트만 지우지 않고 **요소 자체를 제거** — Home은
+`<p>{t("projectSubtitle")}</p>` 문단 전체를(`h2`와 `Link` 사이에
+있던, 이 문구 하나만을 위한 전용 `<p>`였으므로), About은
+`<PageSubtitle>{t("subtitle")}</PageSubtitle>` 줄 전체를(`h1`과
+인용구 사이). 빈 `<p>`/빈 컴포넌트를 남기지 않음. About에서
+`PageSubtitle` import도 더 이상 안 쓰여 함께 제거(`PageSubtitle`
+컴포넌트 자체는 Performances/Media/Dialogue/Projects/Contact가
+계속 쓰므로 컴포넌트 파일은 무변경). 번역 키(`home.projectSubtitle`,
+`about.subtitle`)는 이 세션의 기존 관례대로 JSON에서 삭제하지 않고
+코드 참조만 제거 — 고아 키로 남음(이 항목이 그 기록).
+
+**레이아웃 영향 판단**: Home은 `h2(mb-3)` 다음에 바로 `Link(mt-6,
+inline-block)`가 오는데, inline-block은 인접 형제와 마진이
+collapse되지 않으므로 실제 간격은 12px+24px=36px — 사이트 spacing
+스케일과 자연스럽게 맞아떨어지는 값이라 별도 여백 보정 없이 그대로
+둠. About은 `h1`(하단 마진 없음) 다음 바로 `PageHeaderStatement
+(mt-6)`가 와서 24px 간격 — 역시 스케일에 맞는 정상적인 값이라
+보정 불필요.
+
+**검증**: `tsc --noEmit`/`eslint`/클린 `next build` 통과. 브라우저로
+EN/KO Home·About 4개 페이지 전부 방문해 두 문구가 완전히 사라졌음을
+`get_page_text`로 확인(Home: "PLZ Festival" 바로 다음이 "VIEW
+PROJECTS →", About: "Mijung IM" 제목 바로 다음이 인용구). Home은
+`getBoundingClientRect()`로 h2 하단↔Link 상단 간격이 정확히 36px임을
+수치로 확인해 어색한 여백이 아님을 검증. 375px 모바일 스크린샷으로
+Home·About 둘 다 시각 확인. 콘솔 에러 없음.
+
+### Contact/About 아웃라인 버튼 — 기본/호버 상태 맞바꿈 (2026-08-29)
+
+**대상 확인**: `border-sage`/`hover:bg-sage` 조합을 전수 grep한
+결과, 완전히 동일한 클래스 문자열(`border border-sage text-sage
+px-[28px] py-[12px] hover:bg-sage hover:text-ink transition-colors`)
+이 코드베이스 3곳에 하드코딩(공유 컴포넌트나 유틸 클래스 없음)돼
+있음을 확인:
+1. `about/page.tsx` — EPK 다운로드 버튼(지시받은 대상)
+2. `ContactForm.tsx`의 "Send an Email" 오픈 버튼(지시받은 대상)
+3. `ContactForm.tsx`의 실제 폼 제출("Send"/"보내기") 버튼 —
+   지시에 없던 대상이라 **의도치 않게 같이 바뀌면 안 된다는 지시에
+   따라 보류**, 사용자에게 별도 확인 요청 후 답 대기 중. 1·2번만
+   우선 반영.
+
+**Pagination.tsx/Nav.tsx/MediaTabs.tsx의 `text-sage border-sage`는
+전혀 다른 패턴**(탭/페이지네이션의 active 상태 표시용, hover 시
+배경 채움 동작 자체가 없음)이라 무관 — 건드리지 않음.
+
+**수정**: 1·2번 버튼의 클래스를 `border border-sage bg-sage
+text-ink ... hover:bg-transparent hover:text-sage ...`로 교체 —
+기본 상태(배경 채움+ink 텍스트)와 호버 상태(투명 배경+sage
+텍스트, 테두리는 계속 sage라 아웃라인처럼 보임)가 정확히 맞바뀜.
+
+**검증**: `tsc --noEmit`/`eslint`/클린 `next build` 통과. 브라우저로
+EN Contact 방문해 `getComputedStyle`로 기본 상태 배경
+`rgb(74,46,109)`(sage)·텍스트 `rgb(252,252,250)`(ink)를 확인,
+스타일시트를 재귀 순회해 `.hover\:bg-transparent:hover{background-
+color: rgba(0,0,0,0)}`/`.hover\:text-sage:hover{color: var(--accent-
+sage)}` 규칙이 실제로 컴파일돼 있음을 확인, 실제 마우스 `hover`
+액션 후 스크린샷으로 아웃라인(투명 배경+보라 테두리·텍스트)로
+전환됨을 시각 확인. About EPK 버튼도 클래스·컴퓨티드 스타일 동일
+확인, 375px 모바일 스크린샷으로 기본 상태(채움) 시각 확인. KO
+Contact/About도 채워진 스타일로 정상 렌더 확인. 콘솔 에러 없음.
+트랜지션(`transition-colors`, 0.15s)도 그대로 유지되어 전환이
+끊기지 않고 부드러움을 확인.
+
+**보류 중이었던 항목 해결**: `ContactForm.tsx`의 실제 제출 버튼도
+같이 바꾸기로 확정 — 아래 항목에서 함께 처리.
+
+### 제출 버튼 스왑 마무리 + Media 탭 활성 상태 필박스화 (2026-08-29)
+
+**1) Contact 제출 버튼**: 위에서 보류했던 `ContactForm.tsx:129`
+(`type="submit"`, "Send"/"보내기")도 동일하게 `border border-sage
+bg-sage text-ink ... hover:bg-transparent hover:text-sage ...`로
+스왑 — 기본/호버 두 버튼과 완전히 통일. `disabled:opacity-50`은
+그대로 유지되므로 전송 중일 땐 채워진 배경이 반투명해지는 형태로
+바뀜(이전엔 아웃라인이 반투명해졌음) — 오히려 "비활성화됨"이 더
+잘 드러나는 방향이라 그대로 둠.
+
+**2) Media 탭 — 활성 탭만 필박스로 전환**: 기존엔 활성/비활성
+둘 다 배경색이 전혀 없는 "밑줄 인디케이터" 방식(`pb-3 -mb-px
+border-b`, 활성은 `border-sage`, 비활성은 `border-transparent`)
+이었음. 이번엔 활성 탭만 완전히 다른 마크업(필박스: `px-4 py-2
+my-2 bg-sage text-ink`, 밑줄 없음)으로 분기하고, 비활성 탭은
+`pb-3 -mb-px border-b border-transparent text-grey-muted
+hover:text-ivory`로 기존 그대로 유지 — 두 상태를 하나의
+템플릿 리터럴 클래스가 아니라 `active === tab ? <button A> :
+<button B>` JSX 분기로 완전히 분리해서 작성(동적 클래스 조합
+하나로는 "필박스 vs 밑줄"처럼 구조가 다른 두 스타일을 깔끔하게
+표현할 수 없었음).
+
+**Border-radius 통일감**: 사이트 전체에서 `rounded`가 쓰이는 곳을
+전수 검색한 결과 로고/히어로 dot pill 등 딱 3곳뿐이고 전부
+`rounded-full`(완전한 원)이었음 — 반면 방금 스왑한 CTA
+버튼(Send an Email/Download EPK/제출 버튼)은 radius가 아예 없는
+각진 사각형. 사용자가 "방금 스왑한 버튼들과 통일감"이라 명시했으므로
+필박스도 radius 없이 각진 사각형으로 구현(`rounded-*` 클래스 미사용).
+패딩은 CTA 버튼의 `px-[28px] py-[12px]`를 그대로 쓰지 않고 `px-4
+py-2`로 축소 — 탭은 여러 개가 나란히 붙는 label(text-xs) 크기의
+UI라 CTA 버튼만큼 큰 패딩은 어울리지 않는다고 판단.
+
+**정렬 처리**: 필박스(활성)와 밑줄 탭(비활성)은 높이가 서로 달라
+(`py-2 my-2` vs `pb-3`), 컨테이너에 `items-center`를 추가해 각
+탭이 크로스축 중앙 정렬되도록 함 — 브라우저 실측으로 두 탭의
+y좌표 차이가 2px에 불과함을 확인해 정렬이 자연스러움을 검증.
+
+**검증**: `tsc --noEmit`/`eslint`/클린 `next build` 통과. 브라우저로
+EN `/media` 방문 → `getComputedStyle`로 활성 탭(YouTube) 배경
+`rgb(74,46,109)`/텍스트 `rgb(252,252,250)`, 비활성 탭(Gallery) 배경
+투명/텍스트 `rgb(110,107,98)`를 확인. Gallery 탭 클릭 → 활성 상태가
+정확히 이동(Gallery가 채워짐, YouTube가 투명으로 복귀)함을 재확인,
+`border-radius: 0px`로 각진 사각형 확인, `transition-color` 계열이
+0.15s로 유지됨을 확인. Gallery 콘텐츠(20장) 정상 렌더 확인. EN
+Contact에서 폼을 열어 제출 버튼이 배경 `rgb(74,46,109)`/텍스트
+`rgb(252,252,250)`로 기본 채움 상태임을 확인. 375px 모바일
+스크린샷으로 Contact "SEND" 버튼과 KO Media "영상" 탭 필박스를
+시각 확인(KO "영상"/"갤러리" 정상, 필박스와 밑줄 텍스트 정렬
+자연스러움). 콘솔 에러 없음.
+
+### Media 탭 — 필박스/밑줄과 하단 구분선 사이 여백 축소 (2026-08-29)
+
+**원인 조사**: 정상 뷰포트에서 실측한 결과, 활성 탭(필박스)은
+구분선까지 9px, 비활성 탭은 10px 떨어져 있었음. 단순히 `pb-3`/
+`my-2` 값만 줄이는 것으로는 해결이 안 될 수 있어 구조부터 확인—
+탭 컨테이너가 `items-center`(세로 중앙 정렬)를 쓰고 있었는데, 이게
+문제의 진짜 원인이었음. 비활성 탭의 `-mb-px border-b` 트릭(자신의
+투명 밑줄을 부모의 실제 구분선과 1px 겹치게 해 정확히 위에 얹는
+방식)은 애초에 **탭이 컨테이너 하단에 붙어 있다는 전제**로
+설계된 것인데, `items-center`가 탭을 컨테이너 세로 중앙으로
+끌어올리면서 이 트릭이 깨져 있었음 — 1차 수정(`pb-3`→`pb-1`,
+`my-2`→`mt-2 mb-1`)만으로는 간격이 거의 줄지 않았던 이유가 이것.
+
+**수정**: 패딩/마진 값을 줄이는 것 외에, 탭 컨테이너 정렬을
+`items-center` → `items-end`(하단 정렬)로 변경 — 이러면 모든 탭이
+컨테이너 하단 기준으로 정렬되어 비활성 탭의 `-mb-px` 트릭이 다시
+정확히 작동하고, 활성 탭(필박스)의 실제 여백도 `mb-1`(4px) 값
+그대로 반영됨. 최종 클래스: 활성 탭 `mt-2 mb-1`(기존 `my-2`에서
+아래쪽만 축소), 비활성 탭 `pb-1`(기존 `pb-3`에서 축소).
+
+**검증**: `tsc --noEmit`/`eslint`/클린 `next build` 통과. 브라우저로
+`getBoundingClientRect()`를 이용해 탭 하단↔구분선 간격을 직접
+실측 — 비활성 탭은 정확히 0px(완전히 밀착), 활성 탭(필박스)은 5px로
+크게 축소됨을 확인(수정 전 각각 10px/9px). Gallery 탭으로 전환해도
+동일한 간격(5px/0px)이 유지됨을 확인해 활성/비활성이 바뀌어도
+일관됨을 검증. 필박스 크기(95×34px)가 잘리지 않고 텍스트 전체가
+정상 표시됨을 확인. EN/KO `/media` 둘 다 스크린샷으로 필박스가
+구분선에 훨씬 가까워졌음을 시각 확인, 콘솔 에러 없음.
+
+**참고**: 이 세션에서 브라우저 도구가 새로 연 탭에서 간헐적으로
+`window.innerWidth`/`getBoundingClientRect` 너비가 0으로 깨지는
+아티팩트가 반복됨(`navigate` 직후이거나 특정 탭에서 지속). 매번
+새 탭을 열어 재측정하는 방식으로 우회해 유효한 값만 검증에
+사용함 — 실제 렌더링(스크린샷) 자체는 항상 정상이었음.
+
+### Performances/Media/Dialogue 도입부 문구 교체 + 폭 확장 (2026-08-29)
+
+Performances/Media/Dialogue 세 페이지 상단 도입부 문구를 사용자가
+제공한 텍스트로 교체(줄바꿈 구조 그대로 유지). Performances/Media는
+EN 원문이 이미 동일해 변경 없음, Dialogue만 4문단→2문단(1·2문장
+병합, 3·4문장 병합)으로 재구성. 콘텐츠는 EN/KO 공용 게시판형이
+아니라 페이지별 헤더 카피라 `common.json`의 `headerStatement` 값을
+locale별로 직접 수정.
+
+폭 확장은 이 세 페이지의 도입부 문단 래퍼 `<div>`에서 `max-w-2xl`을
+제거해 `PageHeaderSection` 하단 구분선과 같은 폭(`max-w-6xl`)까지
+넓힘 — About/Contact/Projects는 이 래퍼 패턴을 쓰지 않아 영향 없음을
+사전에 확인.
+
+**검증**: `tsc`/`eslint` 클린. EN/KO 세 페이지 전부 dev 서버로 확인,
+문구·폭 모두 의도대로 반영됨을 확인.
+
+### KO Dialogue 도입부 2문단 병합 (2026-08-29)
+
+`src/content/ko/common.json`의 `dialogue.headerStatement`를 EN과
+동일한 구조(2문단, `\n\n` 하나)로 재구성. 기존 KO 4문장 내용/표현은
+그대로 유지하고 문단 구분 방식만 EN 병합 패턴(1·2문장 병합, 3·4문장
+병합)에 맞춤. HMR로 KO Dialogue 페이지에서 2문단으로 렌더링됨을
+확인.
+
+### About "The Artist" 사진 — 항상 2열 고정 (2026-08-29)
+
+프로필 사진 2장의 그리드를 `grid-cols-1 sm:grid-cols-2`(모바일
+1열→데스크톱 2열)에서 화면 폭과 무관한 `grid-cols-2`로 변경. 320px/
+375px에서 사진이 너무 작아지거나 잘리지 않는지 실측 확인(320px
+기준 각 이미지 약 124px 폭) — 문제없어 별도 gap 보정은 하지 않음.
+`next/image`의 `sizes` prop도 실제 렌더 폭 변화(항상 폭의 절반)에
+맞춰 `(min-width: 640px) 22rem, 100vw` → `(min-width: 1152px) 536px,
+50vw`로 갱신.
+
+### 상단 네비게이션 — Media 서브메뉴(YouTube/Gallery) 추가 (2026-08-29)
+
+`Nav.tsx`의 `ITEMS` 배열에 `media` 항목만 `submenu: [video, gallery]`
+필드를 추가하는 구조로 확장. 데스크톱은 `Media` 항목에 마우스
+호버 시(`group-hover`) 드롭다운, 모바일은 하위 항목을 토글 없이
+항상 펼쳐서 들여쓰기 표시. 서브메뉴 클릭 시 `/media?tab=youtube`
+또는 `/media?tab=gallery`로 이동하며 해당 탭이 활성화되도록
+`MediaTabs.tsx`에 URL 쿼리 파라미터 동기화를 새로 추가(이전에는
+탭 상태가 URL과 전혀 연결돼 있지 않았음) — `useSearchParams`로
+`tab` 값을 읽고, `Nav.tsx`의 `prevPathname` 패턴과 동일하게 렌더
+중 상태 비교로 동기화(프로젝트의 `react-hooks/set-state-in-effect`
+린트 규칙 때문에 `useEffect` 안에서 동기 `setState`를 쓸 수 없어,
+기존에 이미 쓰이던 "렌더 중 prev값 비교" 패턴을 재사용). `useSearchParams`
+사용에 필요한 `<Suspense>` 경계를 `media/page.tsx`에 추가. 서브메뉴
+라벨은 새 번역 키를 만들지 않고 Media 페이지 자체의 `media.tabs.
+video`/`media.tabs.gallery` 키를 재사용.
+
+**검증**: `tsc`/`eslint` 클린. EN/KO 데스크톱 호버 드롭다운, 모바일
+펼침 목록, 서브메뉴 클릭 시 탭 전환까지 dev 서버로 확인.
+
+### Contact "GENERAL" 박스/"SEND AN EMAIL" 버튼 — 상하 순서 교체 (2026-08-29)
+
+`contact/page.tsx`에서 이메일 정보 박스(GENERAL)가 위, 폼 오픈
+버튼이 아래였던 순서를 서로 바꿈. 이 박스+버튼 조합이 다른
+연락처 카테고리에도 재사용되는 구조인지 grep으로 전수 확인한 결과
+`contact/page.tsx` 한 곳에만 존재(KO/EN `common.json`의
+`concertTitle`/`masterclassTitle`/`mediaTitle` 등은 코드에서
+참조되지 않는 고아 키)해 이 파일만 수정. 두 `<Section>`의 순서만
+바꾸고, 헤더-본문 간격을 담당하는 `pt-*` 클래스도 새로 첫 번째가
+된 Section으로 함께 옮겨 간격이 자연스럽게 유지되도록 처리.
+
+이후 사용자가 버튼이 헤더에 너무 붙어 보인다고 피드백을 줘서,
+이 페이지에 한정해 첫 Section의 `pt-5 md:pt-8`을 `pt-7 md:pt-14`로
+늘리고, 두 Section 사이 `space-y-14 md:space-y-28`을 `space-y-10
+md:space-y-16`로 줄여 버튼-헤더/버튼-GENERAL 간 여백 균형을
+재조정(데스크톱 기준 32:112px→56:64px로 개선). 이 `space-y-*`는
+Contact 페이지 전용 래퍼라 다른 페이지에 영향 없음.
+
+**검증**: `tsc`/`eslint` 클린. `getBoundingClientRect()`로 간격을
+실측하며 EN/KO·데스크톱/모바일 스크린샷으로 확인.
+
+### NYT Featured Photo — Projects에서 Dialogue Press 상단으로 이동 (2026-08-29)
+
+`NytPressPhoto` 컴포넌트 호출 위치를 Projects 페이지 헤더 옆
+(`w-full md:w-[45%]` 컬럼)에서 Dialogue 페이지 Press 섹션의
+리스트 위로 이동. Projects 헤더는 이미지 컬럼을 제거하고 기존
+subtitle+statement만 남는 단순 구조로 되돌림. 데이터 파일
+(`content/featured-photo.json`, `getFeaturedPhoto()`)과 컴포넌트
+자체(`aspect-[3/2]` 비율 등)는 손대지 않고 렌더 위치만 이동 —
+사진과 Press 리스트 사이에 `mb-8`(32px) 여백을 둬 페이지네이션과도
+자연스럽게 어우러지도록 함.
+
+**검증**: `tsc`/`eslint` 클린. EN/KO Dialogue에서 사진이 Press
+상단에 정상 노출, Projects에서는 더 이상 안 보임을 DOM 조회로
+확인.
+
+### 페이지 헤더 여백 축소 — About/Performances/Media/Dialogue/Projects/Contact (2026-08-29)
+
+6개 페이지 전부 `PageHeaderSection`을 커스텀 className 없이
+동일하게 쓰고 있음을 grep으로 전수 확인(Home은 이 컴포넌트를
+쓰지 않아 자동으로 영향 밖) — 단일 지점 수정으로 안전하게 처리
+가능하다고 판단. `PageHeaderSection.tsx`의 `pt-14 md:pt-28 pb-7
+md:pb-14`를 `pt-10 md:pt-16 pb-5 md:pb-8`로, 6개 페이지 각각의 첫
+`<Section>`(헤더-본문 간격의 나머지 절반을 담당)의 `pt-7 md:pt-14`를
+`pt-5 md:pt-8`로 축소. 데스크톱 기준 네비→헤더텍스트 111→64px,
+헤더텍스트→구분선 57→32px, 구분선→본문 56→32px.
+
+**검증**: `tsc`/`eslint` 클린. 6개 페이지 전부 컴퓨티드 클래스로
+일괄 반영 확인, EN/KO·데스크톱/모바일 스크린샷으로 자연스러운
+여백 확인.
+
+### 사이트 바이올렛 컬러 확장 — 섹션 라벨/구분선/소셜 아이콘 (2026-08-29)
+
+**조사 우선 진행**: 구현 전 전수 조사 결과를 표로 보고하고 승인
+받은 뒤 진행(사용자 요청). 사이트 기본 브랜드 컬러는 Tailwind
+`sage` 토큰(`--accent-sage: #4a2e6d`)이며, 이름은 "sage"지만 실제
+값은 바이올렛/퍼플임.
+
+1. **섹션 라벨**(THE ARTIST/GENERAL/BIOGRAPHY류): 공통 컴포넌트
+없이 각 페이지에 `label text-xs text-grey-muted`로 흩어져 있었음.
+"섹션 헤딩" 역할을 하는 4곳만 `text-sage`로 변경 — About
+BIOGRAPHY, Contact GENERAL, MediaTabs의 Performances/Talks &
+Interviews 그룹 타이틀. 폼 라벨(ContactForm)·푸터 링크·탭·언어
+토글 등 같은 클래스를 쓰지만 역할이 다른 곳은 제외(사용자 확인
+후 확정).
+2. **구분선**: `border-hairline`이 리스트 행 구분선·박스 테두리·
+폼 인풋·네비/푸터 라인 등 사이트 전역에서 재사용되는 단일 토큰이라,
+전역 토큰을 바꾸는 대신 "페이지 헤더 아래" 조건에 정확히 부합하는
+2곳(`PageHeaderSection.tsx`, Home PLZ 배너 `border-y`)에만
+`border-sage/25` 로컬 오버라이드 적용(A안, 사용자 확정) — 리스트
+행 구분선/폼 인풋 등은 원래 회색 그대로 유지.
+3. **소셜 아이콘**: 아이콘을 실제 렌더링하는 곳은 `SocialIconRow.tsx`
+단 하나(사이트 전체에서 `media/page.tsx` 한 곳에서만 사용, Footer의
+소셜 항목은 텍스트 링크라 별개)라 `text-ivory hover:text-sage`→
+`text-sage hover:text-ivory`로 단일 지점 수정.
+
+**검증**: `tsc`/`eslint` 클린. `getComputedStyle`로 라벨 4곳
+`rgb(74,46,109)`, 구분선 2곳 `oklab(... / 0.25)`, 아이콘 5개 전부
+바이올렛 확인. About/Contact/Media EN/KO 스크린샷 확인. Home 배너는
+이 세션에서 반복된 스크롤 스크린샷 아티팩트로 시각 확인은 실패했으나
+컴퓨티드 스타일로는 정상 적용 확인.
+
+### Home PLZ 배너 이미지 교체 시도 → 원본 롤백 + 반응형 min-h 적용 (2026-08-29)
+
+사용자가 `public/images/home/plz-festival-banner-new.jpg`(확장자
+중복 `.jpg.jpg`로 저장돼 있어 정정)를 새 배너 후보로 전달, 3626×
+1134px(3.2:1) 확인 후 참조 교체. 크롭 검증 중 데스크톱은 문제없지만
+모바일(375px)에서 배너 컨테이너가 `min-h-[420px]` 고정이라 이미지
+폭의 27.9%만 보여 PLZ 사인판·피아노 오른쪽이 크게 잘리는 문제
+발견 — 반응형 `min-h` 조정안(`min-h-[220px] sm:min-h-[300px]
+md:min-h-[420px]`)을 제안했으나, 사용자가 이후 이 후보 이미지
+자체를 보류하고 원본(`east_sea_plz_beach.jpg`)으로 되돌리기로 결정.
+
+원본 이미지 실측 4306×1362px(3.16:1)로 새 이미지와 비율은 비슷하지만
+**구도가 전혀 다름** — PLZ 사인판(왼쪽)과 피아노(오른쪽)가 이미지
+폭의 약 7.6%~96.75%(전체 폭의 89%)에 걸쳐 있어, 새 이미지(피사체가
+27~71%, 44%만 차지)보다 훨씬 좌우로 넓게 퍼져 있음. 이 실측 구도를
+기준으로 반응형 `min-h`를 다시 계산 — 각 브레이크포인트 최소 폭에서
+"두 피사체가 모두 크롭되지 않는" 데 필요한 최소 가시폭(93.5%)을
+넘도록 `min-h-[105px] sm:min-h-[210px] md:min-h-[250px]
+lg:min-h-[340px] xl:min-h-[420px]`로 산출(기존 md:420px는 사실상
+xl 폭 이상에서만 안전했음을 계산으로 확인).
+
+**⚠️ 계산대로 반영되지 않아 발견한 근본 문제, 사용자 확인 후 현재
+상태로 확정**: 실제 렌더링에서 base 티어(min-h-[105px])가 적용되지
+않고 191px로 렌더링됨 — 배너 위에 얹힌 텍스트 오버레이("PLZ
+Festival" 제목 + "VIEW PROJECTS" 링크, `pt-12 pb-10` 패딩 포함)의
+자체 필요 높이가 189px로, `min-h`보다 크면 `flex items-start`
+컨테이너가 콘텐츠 높이에 맞춰 자동으로 늘어나기 때문. 이 텍스트
+높이는 뷰포트 폭과 거의 무관한 고정값이라, 320~375px 구간에서는
+텍스트 오버레이의 패딩/폰트 크기를 함께 줄이지 않는 한 이미지
+`min-h`만으로는 크롭을 완전히 막을 수 없음(320px 기준 안전
+마진을 위해선 컨테이너 높이가 108px 이하여야 하는데 텍스트가
+189px를 요구). 세 가지 대안(①오버레이 텍스트 축소 ②현재 상태
+유지+일부 크롭 감수 ③모바일 전용 레이아웃 분리)을 보고했고,
+사용자가 **②(반응형 min-h는 그대로 두고, 텍스트 오버레이는
+손대지 않아 모바일에서 PLZ 사인판/피아노 일부가 크롭되는 것을
+의도적으로 감수)**로 확정 — 추가 수정 없음. 피아니스트 본인은
+어느 폭에서도 잘리지 않음을 확인.
+
+새 이미지 파일(`plz-festival-banner-new.jpg`)은 나중에 다시 쓸 수
+있어 삭제하지 않고 그대로 보존, 실제로 쓰이는 참조는 원본으로
+되돌림.
+
+**검증**: `tsc`/`eslint` 클린. 데스크톱(1280px, `containerHeight`
+420px·가시폭 96.4%, 크롭 없음)과 모바일(375px·320px, 실제 높이
+191px·가시폭 각 62.1%/53.0%)을 `getBoundingClientRect()`로 실측하고
+320px 스크린샷으로 PLZ 사인판이 "Z"만 남고 피아노 오른쪽이
+잘리는 것을 시각 확인, 계산치와 정확히 일치함을 검증. 이미지 자체는
+`img.complete`/`naturalWidth`로 정상 로드 확인(스크린샷 실패는
+이 세션에서 반복된 브라우저 도구의 컴포지팅 아티팩트로 판단,
+DOM 실측으로 대체).

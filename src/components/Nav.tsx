@@ -9,7 +9,14 @@ const ITEMS = [
   { key: "home", href: "/" },
   { key: "about", href: "/about" },
   { key: "performances", href: "/performances" },
-  { key: "media", href: "/media" },
+  {
+    key: "media",
+    href: "/media",
+    submenu: [
+      { key: "video", href: "/media?tab=youtube" },
+      { key: "gallery", href: "/media?tab=gallery" },
+    ],
+  },
   { key: "dialogue", href: "/dialogue" },
   { key: "projects", href: "/projects" },
   { key: "contact", href: "/contact" },
@@ -17,6 +24,10 @@ const ITEMS = [
 
 export function Nav() {
   const t = useTranslations("nav");
+  // Media's dropdown/submenu labels reuse the Media page's own tab
+  // labels (media.tabs.video/gallery) instead of new nav-specific
+  // keys, since they mean the same thing there.
+  const tMedia = useTranslations("media");
   const locale = useLocale();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -58,7 +69,10 @@ export function Nav() {
         <div className="flex items-center gap-4 md:gap-5">
           <ul className="hidden md:flex items-center gap-5">
             {ITEMS.map((item) => (
-              <li key={item.key}>
+              <li
+                key={item.key}
+                className={"submenu" in item ? "relative group" : undefined}
+              >
                 <Link
                   href={item.href}
                   className={`nav-label text-xs pb-1 border-b-2 transition-colors ${
@@ -69,6 +83,24 @@ export function Nav() {
                 >
                   {t(item.key)}
                 </Link>
+
+                {"submenu" in item && (
+                  <ul
+                    className="absolute left-0 top-full pt-2 hidden group-hover:block group-focus-within:block"
+                  >
+                    <li className="bg-ink-deep border border-hairline min-w-[8rem] py-1">
+                      {item.submenu.map((sub) => (
+                        <Link
+                          key={sub.key}
+                          href={sub.href}
+                          className="nav-label text-xs block px-4 py-2 text-grey-muted hover:text-ivory transition-colors"
+                        >
+                          {tMedia(`tabs.${sub.key}`)}
+                        </Link>
+                      ))}
+                    </li>
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
@@ -129,6 +161,21 @@ export function Nav() {
               >
                 {t(item.key)}
               </Link>
+
+              {"submenu" in item && (
+                <ul className="pl-4 pb-5 space-y-4">
+                  {item.submenu.map((sub) => (
+                    <li key={sub.key}>
+                      <Link
+                        href={sub.href}
+                        className="nav-label text-xs block text-grey-muted hover:text-sage transition-colors"
+                      >
+                        {tMedia(`tabs.${sub.key}`)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>

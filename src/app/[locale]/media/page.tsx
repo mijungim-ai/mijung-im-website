@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import { MediaTabs } from "@/components/MediaTabs";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
@@ -19,7 +20,7 @@ export default async function MediaPage() {
       <PageHeaderSection>
         <h1 className="sr-only">{t("title")}</h1>
         <PageSubtitle>{t("headerTitle")}</PageSubtitle>
-        <div className="space-y-4 mt-6 max-w-2xl">
+        <div className="space-y-4 mt-6">
           {t("headerStatement")
             .split("\n\n")
             .map((sentence, i) => (
@@ -31,12 +32,14 @@ export default async function MediaPage() {
         <SocialIconRow className="mt-8" />
       </PageHeaderSection>
 
-      <Section className="pt-7 md:pt-14">
-        <MediaTabs
-          galleryImages={galleryImages}
-          videoItems={videoItems}
-          talkItems={talkItems}
-        />
+      <Section className="pt-5 md:pt-8">
+        <Suspense fallback={null}>
+          <MediaTabs
+            galleryImages={galleryImages}
+            videoItems={videoItems}
+            talkItems={talkItems}
+          />
+        </Suspense>
       </Section>
     </div>
   );

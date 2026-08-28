@@ -31,7 +31,7 @@ export function SocialIconRow({ className = "" }: { className?: string }) {
             rel="noopener noreferrer"
             aria-label={social.label}
             onClick={isPlaceholder ? (e) => e.preventDefault() : undefined}
-            className="text-ivory hover:text-sage transition-colors"
+            className="text-sage hover:text-ivory transition-colors"
           >
             <Glyph className="w-6 h-6" />
           </a>
