@@ -1,0 +1,14 @@
+/*
+ * Tailwind entry point used ONLY by `npm run build:preview-css` (see
+ * package.json) — never imported by the site itself, so it has zero
+ * effect on `next build`'s own CSS output.
+ *
+ * It exists because the real build's Tailwind scan only covers src/,
+ * so a class used exclusively in public/admin/preview-templates.js
+ * (e.g. a preview-only sizing tweak that doesn't match any real site
+ * component's class) silently never makes it into the compiled CSS.
+ * The @source line below widens just this build's scan to include
+ * that file too, without touching globals.css's own scan scope.
+ */
+@import "./globals.css";
+@source "../../../public/admin/preview-templates.js";

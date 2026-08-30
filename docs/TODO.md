@@ -2645,3 +2645,66 @@ fixed` 유지, 모달까지 닫히면 완전히 해제됨을 확인. Concert Arc
 추가로 라이트박스가 열린 상태에서 화살표 키를 눌러도 바깥 캐러셀
 항목이 바뀌지 않음(라이트박스 안에서 완전히 소비됨)도 확인. EN/KO
 `enlargeLabel` 번역 정상, 새 탭 기준 콘솔 에러 없음.
+
+### Decap CMS Custom Preview Templates — 인프라 + 9개 게시판 전체 (2026-08-30)
+
+**조사 우선 진행**: 구현 전 `registerPreviewTemplate`/`registerPreviewStyle`
+공식 문서, 이 프로젝트(무빌드 CDN 방식 admin) 구조, Tailwind CSS를
+프리뷰 iframe에 어떻게 로드할지, DecapBridge PKCE 인증과의 상호작용
+여부를 조사해 계획으로 먼저 보고 후 승인받아 진행(사용자 요청).
+
+**1단계 — 인프라**: `@tailwindcss/cli`(설치된 tailwindcss와 동일
+버전) 추가, `npm run build:preview-css`가 `preview-entry.css`를
+`public/admin/preview.css`(고정 경로)로 빌드하도록 신설하고 `build`
+스크립트가 이걸 먼저 실행하도록 배선 — Netlify 빌드에도 자동 반영.
+`admin/index.html`에 Babel Standalone(`data-presets="react"` 필수 —
+브라우저에서 파일시스템 접근이 없어 프리셋을 명시해야 함을 공식 문서로
+확인)과 `registerPreviewStyle` 배선. 번들러를 새로 들이는 대신 CDN +
+브라우저 내 JSX 트랜스파일 방식을 택해, 기존 "무빌드 admin" 구조와
+Next.js/Turbopack 빌드 파이프라인을 전혀 건드리지 않음.
+
+**Tailwind 스캔 범위 문제 발견 및 해결**: 처음엔 `globals.css`를 그대로
+`build:preview-css` 입력으로 썼는데, 프리뷰 전용으로 새로 쓴 클래스
+(예: `max-w-[600px]`, 실제 `src/` 컴포넌트 어디에도 없는 값)가 Tailwind의
+`src/`만 훑는 자동 스캔 범위 밖이라 컴파일된 CSS에 안 들어가는 문제를
+발견 — `max-w-[200px]`가 처음엔 우연히 실제 컴포넌트에도 있던 값이라
+안 걸렸을 뿐이었음. `globals.css`를 직접 고치는 대신 새 진입점
+`src/app/[locale]/preview-entry.css`를 만들어 `@import "./globals.css"`
++ `@source "../../../public/admin/preview-templates.js"`로 프리뷰
+빌드에서만 스캔 범위를 넓힘 — 메인 `next build`의 Tailwind 스캔에는
+전혀 영향 없음(별도 진입점이라 site 쪽에서 import 안 함).
+
+**2~3단계 — 4개 공용 컴포넌트로 9개 게시판 전체 등록** (`public/admin/
+preview-templates.js`):
+- `DetailCardPreview` → `home_news`/`essays`/`engagements`/
+`concert_archive` 4개 공용. 필드명이 컬렉션마다 다른 부분(`date` vs
+`dateLabel`, `body` vs `content`)은 둘 다 조회해서 있는 쪽을 쓰고,
+`location`/`link`처럼 없는 컬렉션도 있는 필드는 있으면 표시·없으면
+생략해 분기 없이 하나의 컴포넌트로 커버. 이미지 썸네일은 실제
+`DetailModal.tsx`의 `max-w-[200px]`(본문 옆에 곁들여지는 실제 팝업용
+크기)보다 의도적으로 크게 `max-w-[600px]`로 키움 — 프리뷰 목적엔 너무
+작다는 피드백에 따름.
+- `VideoEmbedPreview` → `videos_performances`/`videos_talks` 공용.
+실제 유튜브 iframe을 그대로 임베드하기로 판단(관리자 전용 패널에 1개만
+뜨는 거라 안 무겁고, `embedUrl` 오타를 편집 중 바로 발견 가능한 실익이
+큼) — 정적 썸네일/링크로 대체하지 않음.
+- `GalleryThumbPreview` → `media_gallery`/`projects_gallery` 공용.
+DetailCard의 600px보다 작은 300px로 판단 — 그리드 안 사진 한 장 느낌이
+목적이라 히어로 이미지 크기는 과함.
+- `LinkRowPreview` → `press_articles`. 필드 2개뿐이라 Decap 기본
+미리보기로도 충분할 수 있었지만, 실제 `LinkEntry.tsx`와 동일한 행
+스타일(sage 색상 등)을 몇 줄로 재현 가능해 커스텀 구현으로 판단 — 기본
+미리보기는 라벨:값 나열이라 실제 행 느낌이 전혀 안 남. URL 자체도
+같이 표시해 목적지 확인이 가능하도록 함(실제 행은 아이콘만 노출).
+
+**검증**: `rm -rf .next && npm run build` 클린 통과. DecapBridge PKCE
+로그인은 대표님 GitHub 계정 인증이 필요해 대신 진행할 수 없어서, 실제
+CMS 대신 `registerPreviewTemplate`/`registerPreviewStyle`을 가짜 CMS
+전역으로 가로채는 격리 테스트 페이지를 만들어 각 컬렉션의 실제 콘텐츠
+데이터로 렌더링 확인 후 매번 삭제. 9개 컬렉션 전부(4개 컴포넌트) DOM
+실측/스크린샷으로 확인 — 이미지 크기(600px/300px 정확히 일치, 좁은
+폭에서 `w-full`로 자동 축소·안 잘림), 유튜브 iframe `src`가 실제
+embedUrl 그대로 삽입됨, `date`/`dateLabel`·`body`/`content` 필드명
+분기가 컬렉션별로 정확히 동작함, `link`/`location` 있는 컬렉션만
+표시됨을 확인. 콘솔 에러 없음(새 탭 기준). 폰트는 계획대로 시스템
+폰트 폴백 상태로 남겨둠(다음 단계 대상, 이번엔 진행 안 함).

@@ -8,5 +8,26 @@
 <body>
   <!-- Include the script that builds the page and powers Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+  <!-- Babel Standalone lets preview-templates.js below be written as
+       plain JSX and transpiled in the browser, so custom previews
+       don't need a bundler added to this otherwise build-free admin
+       setup. Loaded after decap-cms.js so its React global exists. -->
+  <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+
+  <!-- Compiled Tailwind output for the preview pane, built from the
+       site's own globals.css by `npm run build:preview-css` (wired
+       into `npm run build` — see package.json) so preview templates
+       can reuse the same utility classes and design tokens (colors,
+       .label, .display-serif, etc.) as the real site components. -->
+  <script>
+    CMS.registerPreviewStyle("/admin/preview.css");
+  </script>
+
+  <!-- Custom preview components, registered per collection. Babel
+       Standalone doesn't read a config file (no filesystem access in
+       the browser), so the react preset has to be named explicitly
+       here rather than assumed. -->
+  <script type="text/babel" data-presets="react" src="/admin/preview-templates.js"></script>
 </body>
 </html>
