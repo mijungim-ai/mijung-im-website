@@ -117,17 +117,64 @@
   // transition (it didn't go through history.push), so if hasChanged is
   // still true at this exact moment, history's block shows a
   // window.confirm() with the "leave this page?" text — not a native
-  // beforeunload dialog, despite looking like one. Delaying the hash
-  // change lets the thunk's remaining dispatch (which flips hasChanged
-  // back to false) run first; 300ms comfortably covers that without
-  // being noticeable to the person clicking Publish.
-  function goToCollectionList() {
-    setTimeout(function () {
-      var match = window.location.hash.match(/^#\/collections\/([^/]+)/);
-      if (match) {
-        window.location.hash = "#/collections/" + match[1];
+  // beforeunload dialog, despite looking like one.
+  //
+  // A brand-new entry adds a SECOND source of hash churn on top of that:
+  // right after persistEntry() resolves (the same call that fires
+  // postSave/postPublish), Decap's own save thunk does
+  // `await dispatch(Xc(...)), history.replace(/collections/<name>/entries/<slug>)`
+  // to move the URL from the temporary "/new" screen to the real
+  // slug-based one — confirmed in the bundle as the Pc() helper, built
+  // on the same history.replace() that really does assign
+  // window.location.hash (and so fires a real, externally-observable
+  // hashchange). A single fixed delay raced this: short enough and we'd
+  // beat Decap's own redirect and get overwritten right after landing on
+  // the list; long enough to always lose to it and the fix stops helping
+  // at all on a slow connection. Instead of guessing a delay long enough
+  // to outlast that, and short enough to still dodge the confirm(),
+  // this waits for the hash to go quiet: every hashchange (ours or
+  // Decap's) restarts the same timer, so the list-navigation only fires
+  // once nothing has touched the hash for a full quiet window —
+  // whichever finishes last, wins, regardless of how long Decap's own
+  // redirect takes.
+  // A single "settle, then stop" pass isn't enough on its own: if
+  // Decap's own redirect lands AFTER our first quiet window fires (the
+  // exact case that broke the earlier fixed-300ms version — its own
+  // Xc()+Pc() chain is network-bound and can finish later than any
+  // fixed delay), we'd have already stopped watching by then and its
+  // redirect would win. So every check that finds the hash NOT at our
+  // target sets it and then re-checks again after another full quiet
+  // window — only a check that finds the hash ALREADY at target (i.e.
+  // nothing moved it during that whole window) releases pendingTarget
+  // and stops watching. Each hashchange, ours or Decap's, restarts the
+  // timer, so this always ends on whichever redirect happens last.
+  var SETTLE_MS = 300;
+  var settleTimer = null;
+  var pendingTarget = null;
+
+  function scheduleSettleCheck() {
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(function () {
+      if (!pendingTarget) return;
+      if (window.location.hash !== pendingTarget) {
+        window.location.hash = pendingTarget; // triggers hashchange -> re-armed below
+        return;
       }
-    }, 300);
+      pendingTarget = null; // matched and quiet for a full window — done
+    }, SETTLE_MS);
+  }
+
+  window.addEventListener("hashchange", function () {
+    if (pendingTarget) {
+      scheduleSettleCheck();
+    }
+  });
+
+  function goToCollectionList() {
+    var match = window.location.hash.match(/^#\/collections\/([^/]+)/);
+    if (!match) return;
+    pendingTarget = "#/collections/" + match[1];
+    scheduleSettleCheck();
   }
 
   // Registered on both: this project runs Decap in simple (direct-
@@ -135,8 +182,8 @@
   // outside a real login which of postSave/postPublish actually fires
   // in that mode — safer to listen on both than to guess and have this
   // silently do nothing. Confirmed harmless to fire twice: the bundle
-  // trace shows both events fire back-to-back in simple mode, but the
-  // second call's hash already matches the target, so it's a no-op.
+  // trace shows both events fire back-to-back in simple mode, and
+  // calling goToCollectionList twice just re-arms the same settle timer.
   CMS.registerEventListener({ name: "postPublish", handler: goToCollectionList });
   CMS.registerEventListener({ name: "postSave", handler: goToCollectionList });
 })();
