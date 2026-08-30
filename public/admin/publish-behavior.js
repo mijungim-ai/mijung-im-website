@@ -107,18 +107,36 @@
   // entry, #/collections/<name> for the list itself (confirmed via the
   // login-screen detection built for guide.js). Re-setting the hash to
   // just the collection segment returns to that collection's list.
+  //
+  // Traced through the actual unpkg bundle: postSave AND postPublish are
+  // both invoked from inside the same backend-layer persistEntry() call,
+  // strictly BEFORE the calling Redux thunk dispatches the save-success
+  // action that updates entryDraft (and therefore hasChanged). A plain
+  // history.block() is also registered by Decap's Editor component for
+  // as long as hasChanged is true; setting the hash here counts as a POP
+  // transition (it didn't go through history.push), so if hasChanged is
+  // still true at this exact moment, history's block shows a
+  // window.confirm() with the "leave this page?" text — not a native
+  // beforeunload dialog, despite looking like one. Delaying the hash
+  // change lets the thunk's remaining dispatch (which flips hasChanged
+  // back to false) run first; 300ms comfortably covers that without
+  // being noticeable to the person clicking Publish.
   function goToCollectionList() {
-    var match = window.location.hash.match(/^#\/collections\/([^/]+)/);
-    if (match) {
-      window.location.hash = "#/collections/" + match[1];
-    }
+    setTimeout(function () {
+      var match = window.location.hash.match(/^#\/collections\/([^/]+)/);
+      if (match) {
+        window.location.hash = "#/collections/" + match[1];
+      }
+    }, 300);
   }
 
   // Registered on both: this project runs Decap in simple (direct-
   // publish) mode, not editorial_workflow, and it's unconfirmed from
   // outside a real login which of postSave/postPublish actually fires
   // in that mode — safer to listen on both than to guess and have this
-  // silently do nothing.
+  // silently do nothing. Confirmed harmless to fire twice: the bundle
+  // trace shows both events fire back-to-back in simple mode, but the
+  // second call's hash already matches the target, so it's a no-op.
   CMS.registerEventListener({ name: "postPublish", handler: goToCollectionList });
   CMS.registerEventListener({ name: "postSave", handler: goToCollectionList });
 })();
