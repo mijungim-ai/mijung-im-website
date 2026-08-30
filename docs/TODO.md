@@ -2742,3 +2742,35 @@ Projects Gallery, home_news는 1건뿐이라 순서 무관) 전부 마이그레�
 렌더링까지는 미확인). `preSave` 핸들러는 admin/index.html과 동일한
 스크립트 구성의 격리 테스트로 3케이스(신규+비어있음/신규+값있음/
 기존 재저장) 전부 의도대로 동작함을 확인.
+
+### 관리자 화면 "사용 가이드" 모달 (2026-08-30)
+
+**조사 우선 진행**: Decap CMS의 공개 API 전체 목록(실제 배포 unpkg
+번들에서 직접 추출)에 CMS 전역 화면(로그인 화면 바깥의 편집기 chrome)에
+버튼/모달을 얹는 확장 포인트가 전혀 없음을 확인 — `registerPreviewStyle
+/Template`, `registerWidget`, `registerEditorComponent`,
+`registerRemarkPlugin`, `registerWidgetValueSerializer`,
+`registerBackend`, `registerMediaLibrary`, `registerLocale`,
+`registerEventListener`, `registerCustomFormat`이 전부. 순수 DOM
+조작이 유일한 방법이라는 결론을 보고 후 승인받아 진행.
+
+**구현**: 새 파일 `public/admin/guide.js` — React 앱이 `document.body`
+자체가 아니라 `<div id="nc-root">`에만 마운트됨을 실측 확인한 뒤, 모달과
+"사용 가이드" 버튼을 `#nc-root`의 형제로 `document.body`에 직접 삽입(React
+재조정 로직이 절대 안 건드리는 영역). 로그인 완료 감지는 공식 이벤트에
+로그인 관련 항목이 없어(`preSave`/`postSave`/`prePublish`/`postPublish`
+/`preUnpublish`/`postUnpublish`뿐) `hashchange` + `MutationObserver`(
+`#nc-root` 안의 "Login" 텍스트 소멸 여부, 이 텍스트는 CSS-in-JS
+해시 클래스보다 버전 변경에 안정적) 두 신호를 병행. 최초 여부는
+`localStorage`(이 admin 페이지는 메인 사이트 아티팩트가 아닌 별도 정적
+HTML이라 제약 없음, 브라우저/기기별로 개별 판단됨을 확인 후 진행)로 판단.
+모달 콘텐츠(제목+5개 섹션)는 대표님이 제공한 문구 그대로 사용.
+
+**검증**: `rm -rf .next && npm run build` 클린. 로그인 없이 `#nc-root`
+안의 "Login" 요소를 DOM에서 직접 제거해 "로그인 완료" 상태를 재현하는
+격리 테스트로 (1) 최초 접속 시 자동 표시(스크린샷으로 5개 섹션·문구
+전부 정확히 반영 확인), (2) localStorage 플래그 저장 후 재접속 시
+자동으로 안 뜸(버튼만 노출), (3) 버튼 클릭으로 언제든 재열람을 확인.
+정확한 `hashchange` 패턴은 실제 로그인이 필요해 대표님 확인 필요 —
+`MutationObserver`가 이미 안정적으로 트리거됨을 확인했으므로 hashchange
+패턴이 예상과 다르더라도 기능 자체는 정상 동작할 가능성 높음.
