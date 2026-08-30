@@ -12,8 +12,24 @@
   <!-- Babel Standalone lets preview-templates.js below be written as
        plain JSX and transpiled in the browser, so custom previews
        don't need a bundler added to this otherwise build-free admin
-       setup. Loaded after decap-cms.js so its React global exists. -->
+       setup. -->
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+
+  <!-- decap-cms.js exposes window.h (= its own bundled React's
+       createElement) and window.createClass, but never window.React
+       itself — confirmed by inspecting the actual unpkg-served bundle,
+       not assumed. Babel's JSX transpile always emits calls to
+       `React.createElement(...)`, so without this shim any preview
+       component reaching a JSX return throws "React is not defined" —
+       registering the template itself doesn't error (the JSX body only
+       runs when Decap actually renders that component), which is why
+       this only surfaces once an editor opens a real entry. Aliasing
+       the *same* createElement decap-cms.js already uses (rather than
+       loading a separate React/ReactDOM bundle) also avoids ending up
+       with two different React instances on the page. -->
+  <script>
+    window.React = window.React || { createElement: window.h };
+  </script>
 
   <!-- Compiled Tailwind output for the preview pane, built from the
        site's own globals.css by `npm run build:preview-css` (wired

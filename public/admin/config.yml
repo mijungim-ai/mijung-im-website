@@ -220,7 +220,7 @@ collections:
       - { name: url, label: URL, widget: string }
 
   - name: essays
-    label: "Dialogue — Essays & Director's Letters"
+    label: "Dialogue — Essays"
     label_singular: Essay
     folder: content/essays
     create: true
