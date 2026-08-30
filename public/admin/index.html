@@ -40,6 +40,32 @@
     CMS.registerPreviewStyle("/admin/preview.css");
   </script>
 
+  <!-- Auto-fills `order` with the current timestamp (ms) the first
+       time a brand-new entry is saved, across all 9 collections — the
+       "Display Order" number field now holds a Date.now()-style value
+       instead of a manually-picked small integer, and
+       readOrderedContent() (src/lib/orderedContent.ts) sorts it
+       descending, so newer entries surface first without an editor
+       ever having to enter a number themselves.
+       entry.get('newRecord') is a real Decap CMS entry-state flag
+       (confirmed by inspecting the unpkg-served bundle), true only for
+       an entry that has never been saved before — this guards against
+       re-stamping (and reordering) an entry on every subsequent edit.
+       Also guarded on the field being empty, so a value an editor
+       entered manually is never overwritten. -->
+  <script>
+    CMS.registerEventListener({
+      name: "preSave",
+      handler: ({ entry }) => {
+        var data = entry.get("data");
+        if (entry.get("newRecord") && !data.get("order")) {
+          return data.set("order", Date.now());
+        }
+        return data;
+      },
+    });
+  </script>
+
   <!-- Custom preview components, registered per collection. Babel
        Standalone doesn't read a config file (no filesystem access in
        the browser), so the react preset has to be named explicitly

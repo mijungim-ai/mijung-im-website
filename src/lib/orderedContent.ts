@@ -5,6 +5,10 @@ import path from "node:path";
 // CMS-generated slugs, which carry no ordering meaning and can change
 // whenever an entry's title changes. Editors control display order
 // explicitly via each file's `order` field instead.
+//
+// `order` now holds a Date.now() timestamp (ms) rather than a manually
+// entered small integer — set automatically on first save via the
+// admin's preSave listener — so higher/newer values sort first.
 export function readOrderedContent<T extends { order: number }>(
   folder: string,
 ): T[] {
@@ -13,7 +17,7 @@ export function readOrderedContent<T extends { order: number }>(
   const entries = files.map(
     (f) => JSON.parse(fs.readFileSync(path.join(dir, f), "utf-8")) as T,
   );
-  return entries.sort((a, b) => a.order - b.order);
+  return entries.sort((a, b) => b.order - a.order);
 }
 
 // Reads a single fixed JSON file under content/ — for Decap CMS "file
