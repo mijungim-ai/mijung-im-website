@@ -45,7 +45,7 @@ export default async function ProjectsPage() {
             key={project.title}
             className={i === 0 ? "pt-5 md:pt-8" : undefined}
           >
-            <h2 className="text-h2 font-display-bold! font-bold not-italic text-ivory mb-6">
+            <h2 className="text-h2 font-display-bold! font-bold not-italic text-sage mb-6">
               {project.title}
             </h2>
             <p className="text-body text-ivory/90">{project.body}</p>

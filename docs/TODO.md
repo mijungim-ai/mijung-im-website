@@ -2578,3 +2578,21 @@ KO는 대응 표현 "DMZ OPEN 국제음악제(2023~2024)의 총감독"에서
 
 **검증**: EN/KO 둘 다 About 페이지에서 문장이 자연스럽게 이어짐을
 확인. 콘솔 에러 없음.
+
+### Projects 소제목 3곳 — 바이올렛 색상 적용 (2026-08-30)
+
+"PLZ Festival"/"DMZ OPEN International Music Festival"/"Music for
+One Foundation" 세 소제목이 공통 컴포넌트가 아니라 `projects/
+page.tsx` 안의 `projects` 배열을 순회하는 단일 `.map()` 루프에서
+렌더링되고 있음을 확인 — 개별 하드코딩이 아니라 하나의 `<h2>`
+템플릿을 재사용하는 구조. 이 루프 안의 `<h2>` 클래스만 `text-ivory`
+→ `text-sage`(사이트 기본 브랜드 컬러, 새 색상값 추가 없이 기존
+토큰 재사용)로 변경. 같은 `<h2>` 클래스를 쓰지만 루프 밖에 있는
+"Gallery" 제목은 영향받지 않도록 그대로 둠.
+
+**검증**: `tsc`/`eslint` 클린. `getComputedStyle`로 EN/KO 둘 다
+세 소제목이 `rgb(74,46,109)`(text-sage)로, "Gallery"/"갤러리"는
+`rgb(26,26,26)`(text-ivory)로 그대로임을 확인 — 의도한 3곳에만
+정확히 적용됨을 검증. 스크린샷으로 본문/링크와 자연스럽게 어우러짐,
+레이아웃 영향 없음 확인. 콘솔 에러 없음(재사용 탭의 낡은 HMR
+웹소켓 에러는 새 탭에서 재확인해 무관함을 확인).
