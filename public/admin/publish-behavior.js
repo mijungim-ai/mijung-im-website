@@ -32,40 +32,76 @@
 // guess which button was pressed: postPublish/postSave firing at all
 // means that's the one that happened, so both listeners unconditionally
 // send the editor back to the collection list.
+//
+// The "Publish" button itself isn't a split button — traced through the
+// actual bundle: the button's only click handler calls
+// `ambManager.toggleMenu(...)`, full stop, and its caret is a CSS
+// ::after (no separate DOM element for an "arrow area" to redirect).
+// So there's no button to rewire; instead, the same observer that hides
+// the other rows auto-clicks "Publish now" the moment it appears, so
+// pressing "Publish" reads as one action instead of two.
 (function () {
   var HIDDEN_LABELS = [
     "Publish and create new",
     "Publish and duplicate",
     "Duplicate",
   ];
+  var AUTO_CLICK_LABEL = "Publish now";
 
-  function hideMatchingMenuItems() {
-    var root = document.getElementById("nc-root");
-    if (!root) return;
+  // Finds the clickable row (not just the label text inside it) for an
+  // exact label — same leaf-text-match + role="menuitem" lookup used
+  // for the rows this file hides.
+  function findRow(root, label) {
     var candidates = root.querySelectorAll("button, a, li, div, span");
     for (var i = 0; i < candidates.length; i++) {
       var el = candidates[i];
-      // Only consider leaf-ish nodes (no element children) so a label's
-      // own text match doesn't also flag every ancestor wrapping it.
       if (el.children.length > 0) continue;
-      var text = el.textContent ? el.textContent.trim() : "";
-      if (HIDDEN_LABELS.indexOf(text) === -1) continue;
-      var target =
-        el.closest('[role="menuitem"], button, a, li') || el;
-      if (target.style.display !== "none") {
-        target.style.display = "none";
+      if ((el.textContent ? el.textContent.trim() : "") !== label) continue;
+      return el.closest('[role="menuitem"], button, a, li') || el;
+    }
+    return null;
+  }
+
+  // Re-armed whenever "Publish now" isn't present (dropdown closed), so
+  // every fresh open of the dropdown gets exactly one auto-click — not
+  // guarded by marking the row itself, since closeOnSelection means the
+  // row is typically gone (unmounted, not just hidden) right after the
+  // click that closes the menu, taking any attribute we set on it with
+  // it.
+  var autoClickArmed = true;
+
+  function processDropdown() {
+    var root = document.getElementById("nc-root");
+    if (!root) return;
+
+    HIDDEN_LABELS.forEach(function (label) {
+      var row = findRow(root, label);
+      if (row && row.style.display !== "none") {
+        row.style.display = "none";
       }
+    });
+
+    var publishNowRow = findRow(root, AUTO_CLICK_LABEL);
+    if (publishNowRow) {
+      if (autoClickArmed) {
+        autoClickArmed = false;
+        publishNowRow.click();
+      }
+    } else {
+      // Dropdown is closed (or not yet opened) — ready for the next
+      // time it opens.
+      autoClickArmed = true;
     }
   }
 
   var root = document.getElementById("nc-root");
   if (root) {
-    new MutationObserver(hideMatchingMenuItems).observe(root, {
+    new MutationObserver(processDropdown).observe(root, {
       childList: true,
       subtree: true,
     });
   }
-  hideMatchingMenuItems();
+  processDropdown();
 
   // Decap's own hash router: #/collections/<name>/... while editing an
   // entry, #/collections/<name> for the list itself (confirmed via the
