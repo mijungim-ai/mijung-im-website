@@ -13,11 +13,13 @@ export function Lightbox({
   index,
   onClose,
   onNavigate,
+  lockScroll = true,
 }: {
   images: MediaImage[];
   index: number | null;
   onClose: () => void;
   onNavigate: (index: number) => void;
+  lockScroll?: boolean;
 }) {
   const t = useTranslations("media");
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -56,8 +58,11 @@ export function Lightbox({
   // iOS-safe scroll lock: fixing body position (rather than just
   // overflow:hidden) prevents Safari from scrolling the background
   // behind the lightbox, and we restore the exact scroll offset on close.
+  // Skipped when nested inside another modal (lockScroll=false) that
+  // already owns the lock — otherwise closing just the lightbox would
+  // release a lock the still-open parent modal still needs.
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || !lockScroll) return;
     const scrollY = window.scrollY;
     scrollYRef.current = scrollY;
     const body = document.body;
@@ -72,7 +77,7 @@ export function Lightbox({
       body.style.right = "";
       window.scrollTo(0, scrollYRef.current);
     };
-  }, [isOpen]);
+  }, [isOpen, lockScroll]);
 
   if (!isOpen || !image || index === null) {
     return null;
@@ -86,6 +91,11 @@ export function Lightbox({
   };
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    // Stops every key this dialog handles from also reaching a parent
+    // dialog it might be nested inside (e.g. DetailModal/
+    // ConcertArchiveModal's own Escape/arrow-key handling) — otherwise
+    // one Escape press would close both at once instead of just this one.
+    e.stopPropagation();
     if (e.key === "Escape") {
       onClose();
       return;
@@ -152,7 +162,13 @@ export function Lightbox({
       aria-modal="true"
       aria-label={t("lightbox.dialogLabel")}
       tabIndex={-1}
-      onClick={onClose}
+      onClick={(e) => {
+        // Stopped for the same reason as handleKeyDown's stopPropagation
+        // — a backdrop click closing this dialog shouldn't also bubble
+        // into a parent dialog's own backdrop-click-to-close handler.
+        e.stopPropagation();
+        onClose();
+      }}
       onKeyDown={handleKeyDown}
       className={`fixed inset-0 z-50 flex items-center justify-center bg-black/90 outline-none cursor-pointer transition-opacity duration-200 motion-reduce:transition-none ${
         visible ? "opacity-100" : "opacity-0"

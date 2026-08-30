@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Lightbox } from "@/components/Lightbox";
 
 export type DetailModalEntry = {
   title: string;
@@ -13,7 +14,7 @@ export type DetailModalEntry = {
   link?: { href: string; label: string };
 };
 
-const SIZES = "(max-width: 768px) 100vw, 60vw";
+const THUMB_SIZES = "160px";
 
 // Generic single-entry detail modal — same visual/interaction tone as
 // ConcertArchiveModal (fade-in, focus trap, scroll lock) but without
@@ -29,13 +30,25 @@ export function DetailModal({
   onClose: () => void;
 }) {
   const t = useTranslations("common");
+  const tMedia = useTranslations("media");
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const thumbButtonRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef(false);
   const scrollYRef = useRef(0);
   const [visible, setVisible] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [prevEntry, setPrevEntry] = useState(entry);
 
   const isOpen = entry !== null;
+
+  // Reset so switching to a different entry never leaves a stale
+  // lightbox open over the wrong image — adjusted during render (same
+  // pattern as Nav.tsx's prevPathname) rather than in an effect.
+  if (entry !== prevEntry) {
+    setPrevEntry(entry);
+    setLightboxOpen(false);
+  }
 
   // Same fade-in-on-open pattern as Lightbox/ConcertArchiveModal.
   useEffect(() => {
@@ -134,19 +147,30 @@ export function DetailModal({
           dialogRef.current?.focus();
         }}
       >
-        {entry.image && (
-          <div className="relative w-full aspect-[3/4] sm:aspect-video bg-ink-deep">
-            <Image
-              src={entry.image}
-              alt={entry.title}
-              fill
-              sizes={SIZES}
-              quality={85}
-              className="object-contain"
-            />
-          </div>
-        )}
         <div className="p-6 sm:p-8">
+          {entry.image && (
+            <button
+              ref={thumbButtonRef}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxOpen(true);
+              }}
+              aria-label={tMedia("enlargeLabel", { alt: entry.title })}
+              className="block w-full max-w-[200px] mb-6 group"
+            >
+              <div className="photo-frame relative aspect-[4/3] overflow-hidden">
+                <Image
+                  src={entry.image}
+                  alt={entry.title}
+                  fill
+                  sizes={THUMB_SIZES}
+                  quality={85}
+                  className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                />
+              </div>
+            </button>
+          )}
           {entry.date && (
             <p className="label text-xs text-sage mb-2">{entry.date}</p>
           )}
@@ -173,6 +197,19 @@ export function DetailModal({
           )}
         </div>
       </div>
+
+      {entry.image && (
+        <Lightbox
+          images={[{ src: entry.image, alt: entry.title }]}
+          index={lightboxOpen ? 0 : null}
+          onClose={() => {
+            setLightboxOpen(false);
+            thumbButtonRef.current?.focus();
+          }}
+          onNavigate={() => {}}
+          lockScroll={false}
+        />
+      )}
     </div>
   );
 }

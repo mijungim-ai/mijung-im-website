@@ -2596,3 +2596,52 @@ page.tsx` 안의 `projects` 배열을 순회하는 단일 `.map()` 루프에서
 정확히 적용됨을 검증. 스크린샷으로 본문/링크와 자연스럽게 어우러짐,
 레이아웃 영향 없음 확인. 콘솔 에러 없음(재사용 탭의 낡은 HMR
 웹소켓 에러는 새 탭에서 재확인해 무관함을 확인).
+
+### DetailModal/ConcertArchiveModal 이미지 — 썸네일+Lightbox 재사용 (2026-08-30)
+
+Home News/Selected Engagements/Essays(`DetailModal.tsx`)와 Concert
+Archive(별도 파일 `ConcertArchiveModal.tsx` — 자체 prev/next
+캐러셀 때문에 이전부터 의도적으로 분리 유지)에서 풀사이즈로
+렌더링되던 상세 이미지를, 작은 클릭 가능한 썸네일(`max-w-[200px]`,
+`object-cover`)로 바꾸고 클릭 시 Media Gallery/Projects Gallery에서
+이미 쓰던 `Lightbox.tsx`를 재사용해 원본 크기로 확대하도록 변경.
+조사 결과 `Lightbox.tsx`는 이미 완전히 범용(props: `images:
+MediaImage[]`, `index`, `onClose`, `onNavigate`)이라 재사용 자체엔
+문제 없었음.
+
+**중첩 시 발견한 충돌 2건, 둘 다 `Lightbox.tsx`에서 해결**:
+1. ESC/배경클릭 이중 닫힘 — Lightbox가 부모 모달(DetailModal/
+ConcertArchiveModal) 안에 중첩되므로, 이벤트가 버블링돼 ESC 한 번에
+둘 다 닫히던 문제. `handleKeyDown` 최상단과 배경 `onClick`에
+`e.stopPropagation()`을 추가해 라이트박스가 열려있는 동안 모든
+키 입력(Escape/화살표/Tab)이 부모로 새지 않도록 격리 — ConcertArchiveModal의
+자체 화살표 캐러셀도 라이트박스가 열려있으면 더 이상 같이 반응하지
+않음.
+2. 스크롤 잠금 충돌 — 부모 모달과 Lightbox가 각자 독립적으로 body
+스크롤을 잠그던 구조라, 라이트박스만 닫아도(부모는 계속 열려있는데)
+Lightbox의 cleanup이 body 스타일을 초기화해버려 스크롤이 풀리고
+위치가 튀는 문제. `Lightbox`에 `lockScroll?: boolean`(기본 `true`)
+prop을 추가해 중첩 사용 시 `lockScroll={false}`로 넘겨, 스크롤
+잠금은 부모 모달만 소유하도록 정리.
+
+`DetailModal.tsx`/`ConcertArchiveModal.tsx`는 각자 자기만의
+`lightboxOpen` 상태를 소유하고(ProjectGallery/MediaTabs와 동일한
+패턴), 다른 항목으로 전환될 때(entry/index 변경) 라이트박스가
+자동으로 닫히도록 렌더 중 prev값 비교로 처리(`useEffect` 안
+`setState`는 이 프로젝트의 `react-hooks/set-state-in-effect`
+린트 규칙에 걸려 Nav.tsx의 기존 패턴을 재사용).
+
+**검증**: `tsc`/`eslint` 클린. Home News/Engagements/Essays는
+실제 콘텐츠에 아직 이미지가 채워진 항목이 없어(CMS 스키마엔 필드가
+있음을 확인) 검증용으로 각 1건씩 임시로 이미지 필드를 넣어
+확인 후 완전히 원복(`git diff content/` 무변화 확인) — Concert
+Archive는 기존 실 데이터로 바로 확인. 4개 게시판 전부: (1) z-index —
+DOM `elementFromPoint`로 라이트박스 `<img>`가 항상 최상단임을,
+스크린샷으로 모달 전체를 덮고 원본 크기로 확대됨을 확인. (2) ESC
+순서 — 1번째는 라이트박스만 닫힘(`role="dialog"` 목록에서 "Photo
+viewer"만 사라짐), 2번째에 모달까지 닫힘을 확인. (3) 스크롤 잠금 —
+라이트박스만 닫아도 모달이 열려있는 동안 `body.style.position:
+fixed` 유지, 모달까지 닫히면 완전히 해제됨을 확인. Concert Archive는
+추가로 라이트박스가 열린 상태에서 화살표 키를 눌러도 바깥 캐러셀
+항목이 바뀌지 않음(라이트박스 안에서 완전히 소비됨)도 확인. EN/KO
+`enlargeLabel` 번역 정상, 새 탭 기준 콘솔 에러 없음.
