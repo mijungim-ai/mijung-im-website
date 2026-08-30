@@ -15,6 +15,19 @@
 // hiding via style, never removing the node, so React's own re-renders
 // of the dropdown never fight this.
 //
+// The row itself, not just its label text, has to be hidden or its
+// background/divider/"+" icon are left behind as an empty strip — traced
+// through the actual unpkg bundle to confirm what that row really is:
+// every dropdown item (Decap uses react-simple-dropdown) renders through
+// that library's MenuItem, whose render() hardcodes
+// `role: "menuitem"` and defaults its wrapping tag to a plain <div> —
+// *not* a <button>/<a>/<li>, which is what the first version of this
+// file assumed and why only the inner <span> label ended up hidden.
+// role="menuitem" is a value the library's own code sets on every item
+// alike (not a version-churny generated class), so it's what this
+// closest() call targets, ahead of button/a/li as a fallback for markup
+// this trace didn't cover.
+//
 // With only "Publish now" left clickable, there's no longer a need to
 // guess which button was pressed: postPublish/postSave firing at all
 // means that's the one that happened, so both listeners unconditionally
@@ -37,7 +50,8 @@
       if (el.children.length > 0) continue;
       var text = el.textContent ? el.textContent.trim() : "";
       if (HIDDEN_LABELS.indexOf(text) === -1) continue;
-      var target = el.closest("button, a, li") || el;
+      var target =
+        el.closest('[role="menuitem"], button, a, li') || el;
       if (target.style.display !== "none") {
         target.style.display = "none";
       }
