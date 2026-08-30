@@ -15,6 +15,14 @@ const nextConfig: NextConfig = {
     // Next 16 defaults to only serving quality 75; the Lightbox requests
     // 85, so it must be added or Next silently coerces it back to 75.
     qualities: [75, 85],
+    // next/image refuses to optimize a src on a host that isn't
+    // explicitly allowed here — an editor pasting an external image
+    // URL into a CMS image field (instead of uploading a file, which
+    // is what media_folder/public_folder in config.yml expect) breaks
+    // as a plain broken-image icon otherwise. This is a safety net for
+    // that case, not the fix for it — the content itself should still
+    // move to an uploaded file where practical.
+    remotePatterns: [{ protocol: "https", hostname: "ik.imagekit.io" }],
   },
 };
 

@@ -2774,3 +2774,45 @@ HTML이라 제약 없음, 브라우저/기기별로 개별 판단됨을 확인 �
 정확한 `hashchange` 패턴은 실제 로그인이 필요해 대표님 확인 필요 —
 `MutationObserver`가 이미 안정적으로 트리거됨을 확인했으므로 hashchange
 패턴이 예상과 다르더라도 기능 자체는 정상 동작할 가능성 높음.
+
+### Publish 후 목록 이동 / Home News 이미지 X박스 / DetailModal 이미지 크롭 (2026-08-30)
+
+**1. Publish 드롭다운 단순화 + 발행 후 목록 이동**: "Publish and create new"/
+"Publish and duplicate" 옵션만 config.yml로 끄는 방법을 먼저 조사 — 실제
+배포 번들을 뒤져 `canCreate`가 컬렉션의 `create:` 설정값 그 자체임을
+확인, 끄면 "New [Collection]" 버튼까지 통째로 사라져 세분화된 스위치가
+없음을 확정. 새 파일 `public/admin/publish-behavior.js` — `guide.js`와
+동일한 DOM 방식(요소 제거 아닌 `display:none`, React 재렌더링과
+충돌 없음)으로 "Publish and create new"/"Publish and duplicate"/
+"Duplicate"(기존 글 수정 시) 메뉴 항목을 `MutationObserver`로 찾아 숨김.
+"Publish now"만 남으므로 `postPublish`/`postSave` 둘 다에 리스너를 걸어
+무조건 현재 컬렉션의 목록 화면(`#/collections/<name>`)으로 이동 —
+어느 이벤트가 실제 발동하는지 실측 불가해 안전하게 양쪽 다 등록.
+
+**2. Home News 이미지 X박스**: 원격에 실제 CMS로 발행된 새 커밋
+(`d28793e` "반갑습니다")을 pull해서 확인 — `image` 필드에 로컬 업로드가
+아니라 외부 URL(ImageKit)이 직접 들어가 있었고, `next.config.ts`에 이
+도메인이 허용 안 돼 `next/image`가 거부한 게 원인. `remotePatterns`에
+`ik.imagekit.io` 추가로 방어 처리(콘텐츠 자체를 실제 업로드로 교체하는
+근본 조치는 대표님 재량으로 남겨둠).
+
+**3. DetailModal/ConcertArchiveModal 이미지 크롭**: `aspect-[4/3]` 고정
+박스+`object-cover`가 세로로 긴 사진을 크롭하던 문제를, `width`/`height`
+힌트 + `style={{width:'auto',height:'auto',maxWidth/maxHeight:600px}}`로
+교체해 원본 비율 유지 + 긴 변 600px 제한으로 변경. 검증 중 원본이
+600px보다 작을 때(예: 1987년 포스터 401×540) `next/image`의 srcset이
+브라우저를 오도해 실제 렌더링이 원본의 절반(200×270)으로 나오는 문제를
+추가로 발견 — 브라우저가 "1200w"로 선언된 후보를 요청했는데 서버가
+확대 없이 원본을 그대로 반환하자 이를 "2배 밀도 이미지"로 오인한 것.
+`unoptimized`로 전환해 해결(이 썸네일 하나에 한해 next/image의 자동
+압축/포맷 변환을 포기하는 트레이드오프, 부가 이미지 한 장 규모라
+감내 가능하다고 판단).
+
+**검증**: `tsc`/`eslint`/`rm -rf .next && npm run build` 클린. 1번은
+`publish-behavior.js`를 실제 admin/index.html과 동일한 스크립트
+구성으로 로드해 가짜 메뉴 DOM으로 격리 테스트 — "Publish now"만 남고
+나머지 3개 숨김, `postSave` 핸들러 호출 시 해시가 정확히 목록 화면으로
+바뀜을 확인. 2·3번은 실제 발행된 "반갑습니다"(가로 3500×2333 원본,
+600×400으로 정확히 캡) 및 Concert Archive "도미기념"(세로 401×540
+포스터, 원본 그대로·크롭 없음) 두 항목으로 EN 실측 확인, 클릭 시
+라이트박스 정상 작동도 확인. 콘솔 에러 없음.

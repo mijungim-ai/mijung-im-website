@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { Lightbox } from "@/components/Lightbox";
 import type { ConcertArchiveEntry } from "@/data/concertArchive";
 
-const THUMB_SIZES = "160px";
+const MAX_IMAGE_SIZE = 600;
 
 export function ConcertArchiveModal({
   entries,
@@ -185,6 +185,25 @@ export function ConcertArchiveModal({
       >
         <div className="p-6 sm:p-8">
           {entry.image && (
+            // No fixed aspect-ratio box here on purpose — a cropping
+            // container (aspect-[4/3] + object-cover) chopped off tall
+            // portrait photos. width/height below are just a layout
+            // hint; the style overrides let the browser size the
+            // rendered <img> from the file's own intrinsic ratio,
+            // capped at MAX_IMAGE_SIZE on whichever side is longer.
+            //
+            // unoptimized is required here, not just a shortcut: when
+            // the source file is SMALLER than MAX_IMAGE_SIZE (e.g. an
+            // old poster scan), next/image's srcset still advertises a
+            // "600px-wide" (or DPR-multiplied, e.g. 1200w) candidate,
+            // the optimizer serves the original un-enlarged, and the
+            // browser — trusting the advertised width it asked for —
+            // renders the auto-sized <img> at a fraction of the file's
+            // real size (observed: a 401px-wide file rendering at
+            // ~200px). Skipping next/image's own srcset generation
+            // avoids that; the tradeoff is no format/size optimization
+            // for this one thumbnail, which is acceptable at this
+            // scale (a single small accompanying image, not a hero).
             <button
               ref={thumbButtonRef}
               type="button"
@@ -193,18 +212,22 @@ export function ConcertArchiveModal({
                 setLightboxOpen(true);
               }}
               aria-label={tMedia("enlargeLabel", { alt: entry.title })}
-              className="block w-full max-w-[200px] mb-6 group"
+              className="block mb-6 group"
             >
-              <div className="photo-frame relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src={entry.image}
-                  alt={entry.title}
-                  fill
-                  sizes={THUMB_SIZES}
-                  quality={85}
-                  className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-                />
-              </div>
+              <Image
+                src={entry.image}
+                alt={entry.title}
+                width={MAX_IMAGE_SIZE}
+                height={MAX_IMAGE_SIZE}
+                unoptimized
+                className="photo-frame transition-transform duration-200 group-hover:scale-[1.02]"
+                style={{
+                  width: "auto",
+                  height: "auto",
+                  maxWidth: `${MAX_IMAGE_SIZE}px`,
+                  maxHeight: `${MAX_IMAGE_SIZE}px`,
+                }}
+              />
             </button>
           )}
           <p className="label text-xs text-sage mb-2">{entry.date}</p>
