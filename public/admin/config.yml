@@ -53,6 +53,7 @@ collections:
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first."
+        required: false
       - { name: title, label: Title, widget: string }
       - { name: body, label: Content, widget: text }
       - name: image
@@ -77,6 +78,7 @@ collections:
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first."
+        required: false
       - { name: title, label: Title, widget: string }
       - name: dateLabel
         label: "Date Label"
@@ -113,6 +115,7 @@ collections:
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first (newest concerts first)."
+        required: false
       - { name: title, label: Title, widget: string }
       - { name: date, label: Date, widget: string, hint: 'e.g. "2021" or a full date.' }
       - { name: location, label: Location, widget: string }
@@ -150,6 +153,7 @@ collections:
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first."
+        required: false
       - { name: title, label: Title, widget: string, required: false }
       - { name: body, label: Description, widget: text, required: false }
       - name: embedUrl
@@ -172,6 +176,7 @@ collections:
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first."
+        required: false
       - name: title
         label: Title
         widget: string
@@ -198,6 +203,7 @@ collections:
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first."
+        required: false
       - name: caption
         label: Caption
         widget: string
@@ -223,6 +229,7 @@ collections:
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first (newest articles first)."
+        required: false
       - { name: title, label: Title, widget: string }
       - { name: url, label: URL, widget: string }
 
@@ -241,6 +248,7 @@ collections:
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first."
+        required: false
       - { name: title, label: Title, widget: string }
       - name: date
         label: Date
@@ -279,6 +287,7 @@ collections:
         label: "Display Order"
         widget: number
         hint: "Lower numbers show first."
+        required: false
       - name: caption
         label: Caption
         widget: string
