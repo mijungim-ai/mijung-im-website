@@ -18,12 +18,8 @@ export default async function ContactPage() {
         </PageHeaderStatement>
       </PageHeaderSection>
 
-      <div className="space-y-10 md:space-y-16">
-        <Section className="pt-7 md:pt-14">
-          <ContactForm />
-        </Section>
-
-        <Section>
+      <div className="space-y-14 md:space-y-28">
+        <Section className="pt-5 md:pt-8">
           <h2 className="label text-xs text-sage mb-4">
             {t("generalTitle")}
           </h2>
@@ -38,6 +34,10 @@ export default async function ContactPage() {
               {t("contactPerson")}
             </p>
           </div>
+        </Section>
+
+        <Section>
+          <ContactForm />
         </Section>
       </div>
     </div>

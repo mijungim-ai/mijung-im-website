@@ -2551,3 +2551,30 @@ Festival" 제목 + "VIEW PROJECTS" 링크, `pt-12 pb-10` 패딩 포함)의
 `img.complete`/`naturalWidth`로 정상 로드 확인(스크린샷 실패는
 이 세션에서 반복된 브라우저 도구의 컴포지팅 아티팩트로 판단,
 DOM 실측으로 대체).
+
+### Contact 폼 즉시 노출 + GENERAL/폼 순서 변경 (2026-08-29)
+
+`ContactForm.tsx`의 `open` 상태와 "SEND AN EMAIL" 토글 버튼 분기를
+제거해 폼이 페이지 로드 시 바로 보이도록 변경(제출 상태 `status`는
+그대로 유지). `contact/page.tsx`에서 GENERAL Section을 첫 번째,
+ContactForm Section을 두 번째로 순서 변경 — 버튼이 사라지면서 이전에
+"버튼만 위에 떠 있는" 특수 배치에 맞춰 조정했던 여백값(`pt-7
+md:pt-14`, `space-y-10 md:space-y-16`)이 더 이상 맞지 않아, 다른
+6개 페이지와 동일한 사이트 표준값(`pt-5 md:pt-8`, `space-y-14
+md:space-y-28`)으로 되돌림.
+
+**검증**: `tsc`/`eslint` 클린. EN/KO·데스크톱/모바일 스크린샷으로
+GENERAL이 위/폼이 바로 아래 노출, 버튼 없음, 여백 자연스러움을
+확인. 콘솔 에러 없음.
+
+### About Biography — "International Music" 문구 삭제 (2026-08-29)
+
+`bioMedium`의 "General Director of the DMZ OPEN International Music
+Festival (2023–2024)" 문장에서 "International Music"을 삭제해
+"General Director of the DMZ OPEN Festival (2023–2024)"로 정리(EN).
+KO는 대응 표현 "DMZ OPEN 국제음악제(2023~2024)의 총감독"에서
+"국제음악제"를 같은 문단의 "PLZ 페스티벌" 표기와 일관되게
+"페스티벌"로 바꿔 "DMZ OPEN 페스티벌(2023~2024)의 총감독"으로 정리.
+
+**검증**: EN/KO 둘 다 About 페이지에서 문장이 자연스럽게 이어짐을
+확인. 콘솔 에러 없음.

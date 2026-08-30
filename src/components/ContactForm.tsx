@@ -7,7 +7,6 @@ type Status = "idle" | "submitting" | "success" | "error";
 
 export function ContactForm() {
   const t = useTranslations("contact");
-  const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -49,18 +48,6 @@ export function ContactForm() {
           {t("form.successMessage")}
         </p>
       </div>
-    );
-  }
-
-  if (!open) {
-    return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="label text-xs inline-flex items-center border border-sage bg-sage text-ink px-[28px] py-[12px] hover:bg-transparent hover:text-sage transition-colors"
-      >
-        {t("form.openButton")}
-      </button>
     );
   }
 
