@@ -137,20 +137,26 @@
   // once nothing has touched the hash for a full quiet window —
   // whichever finishes last, wins, regardless of how long Decap's own
   // redirect takes.
-  // A single "settle, then stop" pass isn't enough on its own: if
-  // Decap's own redirect lands AFTER our first quiet window fires (the
-  // exact case that broke the earlier fixed-300ms version — its own
-  // Xc()+Pc() chain is network-bound and can finish later than any
-  // fixed delay), we'd have already stopped watching by then and its
-  // redirect would win. So every check that finds the hash NOT at our
-  // target sets it and then re-checks again after another full quiet
-  // window — only a check that finds the hash ALREADY at target (i.e.
-  // nothing moved it during that whole window) releases pendingTarget
-  // and stops watching. Each hashchange, ours or Decap's, restarts the
-  // timer, so this always ends on whichever redirect happens last.
-  var SETTLE_MS = 300;
+  // A single "settle, then stop" pass isn't enough on its own: this
+  // project's backend is real GitHub, so the network round-trip behind
+  // Decap's own Xc()+Pc() redirect (see above) isn't bounded by
+  // anything we control — a first version of this fix that stopped
+  // watching after just one 300ms-quiet pass still lost to a redirect
+  // that happened to land slightly later than that in production, even
+  // though it worked in every isolated test (which could only ever
+  // simulate a guessed timing, never the real GitHub latency). Rather
+  // than guess a single bigger number and risk the same failure mode at
+  // a different threshold, this keeps re-checking every 300ms — fast
+  // enough that the common, uncontested case still returns to the list
+  // almost immediately — but keeps doing so for a full 6 SECONDS from
+  // the initial trigger before finally giving up, which comfortably
+  // outlasts a slow save round-trip without permanently hijacking the
+  // hash for the rest of the session.
+  var CHECK_INTERVAL_MS = 300;
+  var MAX_WATCH_MS = 6000;
   var settleTimer = null;
   var pendingTarget = null;
+  var watchDeadline = 0;
 
   function scheduleSettleCheck() {
     clearTimeout(settleTimer);
@@ -160,8 +166,14 @@
         window.location.hash = pendingTarget; // triggers hashchange -> re-armed below
         return;
       }
-      pendingTarget = null; // matched and quiet for a full window — done
-    }, SETTLE_MS);
+      if (Date.now() < watchDeadline) {
+        // Quiet for now, but still within the watch window — Decap's
+        // own redirect may simply not have arrived yet. Keep checking.
+        scheduleSettleCheck();
+        return;
+      }
+      pendingTarget = null; // watch window elapsed with nothing left to correct — done
+    }, CHECK_INTERVAL_MS);
   }
 
   window.addEventListener("hashchange", function () {
@@ -174,6 +186,7 @@
     var match = window.location.hash.match(/^#\/collections\/([^/]+)/);
     if (!match) return;
     pendingTarget = "#/collections/" + match[1];
+    watchDeadline = Date.now() + MAX_WATCH_MS;
     scheduleSettleCheck();
   }
 
