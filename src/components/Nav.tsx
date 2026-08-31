@@ -153,6 +153,7 @@ export function Nav() {
             <li key={item.key} className="border-b border-hairline">
               <Link
                 href={item.href}
+                onClick={() => setIsOpen(false)}
                 className={`nav-label text-sm py-5 block transition-colors ${
                   isActive(item.href)
                     ? "text-sage"
@@ -168,6 +169,7 @@ export function Nav() {
                     <li key={sub.key}>
                       <Link
                         href={sub.href}
+                        onClick={() => setIsOpen(false)}
                         className="nav-label text-xs block text-grey-muted hover:text-sage transition-colors"
                       >
                         {tMedia(`tabs.${sub.key}`)}

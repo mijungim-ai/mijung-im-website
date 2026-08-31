@@ -2816,3 +2816,28 @@ HTML이라 제약 없음, 브라우저/기기별로 개별 판단됨을 확인 �
 600×400으로 정확히 캡) 및 Concert Archive "도미기념"(세로 401×540
 포스터, 원본 그대로·크롭 없음) 두 항목으로 EN 실측 확인, 클릭 시
 라이트박스 정상 작동도 확인. 콘솔 에러 없음.
+
+### 모바일 메뉴 — Media 서브메뉴 클릭 시 안 닫히는 문제 (2026-08-31)
+
+Home/About 등 상위 메뉴는 클릭 시 모바일 햄버거 메뉴가 자동으로
+닫히는데, Media 서브메뉴(YouTube/Gallery, 2026-08-29에 추가)만 클릭해도
+페이지는 이동하지만 메뉴가 안 닫히는 문제. 원인 조사: `Nav.tsx`의 닫힘
+로직이 `usePathname()`의 pathname 변경만 감지해서 동작하는데
+(`if (pathname !== prevPathname) setIsOpen(false)`), 서브메뉴 두
+링크(`/media?tab=youtube`, `/media?tab=gallery`)는 pathname이 둘 다
+`/media`로 동일하고 쿼리스트링만 다름 — 이미 Media 페이지에 있는
+상태에서 서브메뉴를 클릭하면 pathname이 안 바뀐 것으로 감지돼 닫힘
+로직 자체가 발동하지 않았음. 서브메뉴 추가 당시 pathname 전용 감지
+방식이 쿼리스트링 전환 케이스를 놓친다는 걸 놓친 것.
+
+**수정**: 기존 pathname 감지 로직은 그대로 두고, 모바일 드로어의 모든
+링크(상위 메뉴 + Media 서브메뉴)에 `onClick={() => setIsOpen(false)}`를
+명시적으로 추가해 클릭 시점에 즉시 닫히도록 보강.
+
+**검증**: `rm -rf .next && npm run build` 클린. 375px 모바일 뷰에서
+실제 클릭 테스트(이 세션의 마우스 클릭 자동화 도구가 환경 문제로
+타임아웃돼, DOM에 실제 click 이벤트를 디스패치하는 방식으로 대체
+검증) — Media 페이지에서 메뉴를 연 채 Gallery 서브메뉴 클릭 시
+`/media?tab=gallery`로 이동하며 메뉴가 정상적으로 닫힘(`aria-hidden`
+true 전환)을 확인, YouTube 서브메뉴도 동일하게 확인. 회귀 확인으로
+About 등 상위 메뉴 클릭도 여전히 정상적으로 닫힘을 확인.
