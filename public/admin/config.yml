@@ -46,7 +46,9 @@ collections:
     slug: "{{slug}}"
     extension: json
     format: json
-    sortable_fields: [order, title]
+    sortable_fields:
+      - { field: order, default_sort: desc }
+      - title
     summary: "{{title}} (#{{order}})"
     fields:
       - name: order
@@ -71,7 +73,9 @@ collections:
     slug: "{{slug}}"
     extension: json
     format: json
-    sortable_fields: [order, title]
+    sortable_fields:
+      - { field: order, default_sort: desc }
+      - title
     summary: "{{title}} (#{{order}})"
     fields:
       - name: order
@@ -108,7 +112,9 @@ collections:
     slug: "{{slug}}"
     extension: json
     format: json
-    sortable_fields: [order, date]
+    sortable_fields:
+      - { field: order, default_sort: desc }
+      - date
     summary: "{{title}} (#{{order}})"
     fields:
       - name: order
@@ -146,7 +152,9 @@ collections:
     slug: "{{slug}}"
     extension: json
     format: json
-    sortable_fields: [order, title]
+    sortable_fields:
+      - { field: order, default_sort: desc }
+      - title
     summary: "{{title}} (#{{order}})"
     fields:
       - name: order
@@ -169,7 +177,9 @@ collections:
     slug: "{{slug}}"
     extension: json
     format: json
-    sortable_fields: [order, title]
+    sortable_fields:
+      - { field: order, default_sort: desc }
+      - title
     summary: "{{title}} (#{{order}})"
     fields:
       - name: order
@@ -196,7 +206,8 @@ collections:
     slug: "{{slug}}"
     extension: json
     format: json
-    sortable_fields: [order]
+    sortable_fields:
+      - { field: order, default_sort: desc }
     summary: "{{caption}} (#{{order}})"
     fields:
       - name: order
@@ -222,7 +233,8 @@ collections:
     slug: "{{slug}}"
     extension: json
     format: json
-    sortable_fields: [order]
+    sortable_fields:
+      - { field: order, default_sort: desc }
     summary: "{{title}} (#{{order}})"
     fields:
       - name: order
@@ -241,7 +253,9 @@ collections:
     slug: "{{slug}}"
     extension: json
     format: json
-    sortable_fields: [order, title]
+    sortable_fields:
+      - { field: order, default_sort: desc }
+      - title
     summary: "{{title}} (#{{order}})"
     fields:
       - name: order
@@ -280,7 +294,8 @@ collections:
     slug: "{{slug}}"
     extension: json
     format: json
-    sortable_fields: [order]
+    sortable_fields:
+      - { field: order, default_sort: desc }
     summary: "{{caption}} (#{{order}})"
     fields:
       - name: order
