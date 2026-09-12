@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
@@ -6,6 +7,16 @@ import { ConcertArchiveList } from "@/components/ConcertArchiveList";
 import { EngagementsList } from "@/components/EngagementsList";
 import { getEngagements } from "@/data/engagements";
 import { getConcertArchive } from "@/data/concertArchive";
+import { pageMetadata } from "@/lib/siteMeta";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return pageMetadata({ locale, path: "/performances", navKey: "performances" });
+}
 
 export default async function PerformancesPage() {
   const t = await getTranslations("performances");

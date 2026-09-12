@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
 import { PageHeaderSection } from "@/components/PageHeaderSection";
@@ -8,6 +9,16 @@ import { NytPressPhoto } from "@/components/NytPressPhoto";
 import { getEssays } from "@/data/dialogue";
 import { getPressArticles } from "@/data/pressArticles";
 import { getFeaturedPhoto } from "@/data/featuredPhoto";
+import { pageMetadata } from "@/lib/siteMeta";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return pageMetadata({ locale, path: "/dialogue", navKey: "dialogue" });
+}
 
 export default async function DialoguePage() {
   const t = await getTranslations("dialogue");

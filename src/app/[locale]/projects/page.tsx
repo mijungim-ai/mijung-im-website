@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { PageSubtitle } from "@/components/PageSubtitle";
 import { PageHeaderStatement } from "@/components/PageHeaderStatement";
@@ -5,6 +6,16 @@ import { PageHeaderSection } from "@/components/PageHeaderSection";
 import { Section } from "@/components/Section";
 import { ProjectGallery } from "@/components/ProjectGallery";
 import { getProjectGalleryImages } from "@/data/projectGallery";
+import { pageMetadata } from "@/lib/siteMeta";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return pageMetadata({ locale, path: "/projects", navKey: "projects" });
+}
 
 export default async function ProjectsPage() {
   const t = await getTranslations("projects");

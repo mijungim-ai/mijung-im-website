@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Manrope, Bricolage_Grotesque, Merriweather } from "next/font/google";
 import localFont from "next/font/local";
 import { routing } from "@/i18n/routing";
+import { SITE_URL } from "@/lib/siteMeta";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import "./globals.css";
@@ -41,11 +43,27 @@ const pretendard = localFont({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Mijung IM — Pianist of Peace & Nature",
-  description:
-    "Mijung IM, international concert pianist. Performances at the intersection of music, peace, and nature.",
-};
+// Site-wide defaults. metadataBase is what turns the relative canonical
+// and hreflang URLs the pages emit into absolute ones — without it Next
+// silently drops them. Title and description here are only a fallback:
+// every page sets its own through pageMetadata().
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const active = hasLocale(routing.locales, locale)
+    ? locale
+    : routing.defaultLocale;
+  const t = await getTranslations({ locale: active, namespace: "meta" });
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: t("title"),
+    description: t("description"),
+  };
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

@@ -1,4 +1,9 @@
 {
+  "meta": {
+    "siteName": "Mijung IM",
+    "title": "Mijung IM — Concert Pianist",
+    "description": "Official site of Mijung IM, internationally acclaimed concert pianist. Performances, media, projects, and news."
+  },
   "nav": {
     "home": "Home",
     "about": "About",

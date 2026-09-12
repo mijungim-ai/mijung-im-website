@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import { MediaTabs } from "@/components/MediaTabs";
@@ -8,6 +9,16 @@ import { Section } from "@/components/Section";
 import { SocialIconRow } from "@/components/SocialIconRow";
 import { getGalleryImages } from "@/data/mediaGallery";
 import { getVideoItems, getTalkItems } from "@/data/videos";
+import { pageMetadata } from "@/lib/siteMeta";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return pageMetadata({ locale, path: "/media", navKey: "media" });
+}
 
 export default async function MediaPage() {
   const t = await getTranslations("media");
