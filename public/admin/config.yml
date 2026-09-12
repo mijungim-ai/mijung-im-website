@@ -30,7 +30,7 @@ media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
 logo_url: https://decapbridge.com/decapcms-with-bridge.svg
-site_url: https://hilarious-syrniki-c611de.netlify.app
+site_url: https://mijungim.com
 
 # Collection order below = CMS sidebar order (final spec, 2026-08-27).
 # Projects — Featured Photo is deliberately NOT listed here (hidden
