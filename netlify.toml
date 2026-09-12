@@ -16,3 +16,17 @@
   from = "/admin"
   to = "/admin/index.html"
   status = 200
+
+# The Korean locale is /ko (ISO 639-1 language code), but /kr (the ISO
+# 3166 country code for Korea) is the more intuitive guess and is easy
+# to get wrong on a business card or in a programme note. Send it to
+# the Korean site rather than a 404.
+[[redirects]]
+  from = "/kr"
+  to = "/ko"
+  status = 301
+
+[[redirects]]
+  from = "/kr/*"
+  to = "/ko/:splat"
+  status = 301
