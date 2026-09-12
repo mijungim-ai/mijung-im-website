@@ -54,7 +54,7 @@ collections:
       - name: order
         label: "Display Order"
         widget: number
-        hint: "Lower numbers show first."
+        hint: "숫자가 클수록 위에 표시됩니다. 새 글은 자동으로 채워지니, 순서를 바꿀 때만 수정하세요."
         required: false
       - { name: title, label: Title, widget: string }
       - { name: body, label: Content, widget: text }
@@ -81,7 +81,7 @@ collections:
       - name: order
         label: "Display Order"
         widget: number
-        hint: "Lower numbers show first."
+        hint: "숫자가 클수록 위에 표시됩니다. 새 글은 자동으로 채워지니, 순서를 바꿀 때만 수정하세요."
         required: false
       - { name: title, label: Title, widget: string }
       - name: dateLabel
@@ -120,7 +120,7 @@ collections:
       - name: order
         label: "Display Order"
         widget: number
-        hint: "Lower numbers show first (newest concerts first)."
+        hint: "숫자가 클수록 위에 표시됩니다(최신 공연이 맨 위). 새 글은 자동으로 채워지니, 순서를 바꿀 때만 수정하세요."
         required: false
       - { name: title, label: Title, widget: string }
       - { name: date, label: Date, widget: string, hint: 'e.g. "2021" or a full date.' }
@@ -160,7 +160,7 @@ collections:
       - name: order
         label: "Display Order"
         widget: number
-        hint: "Lower numbers show first."
+        hint: "숫자가 클수록 위에 표시됩니다. 새 글은 자동으로 채워지니, 순서를 바꿀 때만 수정하세요."
         required: false
       - { name: title, label: Title, widget: string, required: false }
       - { name: body, label: Description, widget: text, required: false }
@@ -185,7 +185,7 @@ collections:
       - name: order
         label: "Display Order"
         widget: number
-        hint: "Lower numbers show first."
+        hint: "숫자가 클수록 위에 표시됩니다. 새 글은 자동으로 채워지니, 순서를 바꿀 때만 수정하세요."
         required: false
       - name: title
         label: Title
@@ -213,7 +213,7 @@ collections:
       - name: order
         label: "Display Order"
         widget: number
-        hint: "Lower numbers show first."
+        hint: "숫자가 클수록 위에 표시됩니다. 새 글은 자동으로 채워지니, 순서를 바꿀 때만 수정하세요."
         required: false
       - name: caption
         label: Caption
@@ -240,7 +240,7 @@ collections:
       - name: order
         label: "Display Order"
         widget: number
-        hint: "Lower numbers show first (newest articles first)."
+        hint: "숫자가 클수록 위에 표시됩니다(최신 기사가 맨 위). 새 글은 자동으로 채워지니, 순서를 바꿀 때만 수정하세요."
         required: false
       - { name: title, label: Title, widget: string }
       - { name: url, label: URL, widget: string }
@@ -261,7 +261,7 @@ collections:
       - name: order
         label: "Display Order"
         widget: number
-        hint: "Lower numbers show first."
+        hint: "숫자가 클수록 위에 표시됩니다. 새 글은 자동으로 채워지니, 순서를 바꿀 때만 수정하세요."
         required: false
       - { name: title, label: Title, widget: string }
       - name: date
@@ -301,7 +301,7 @@ collections:
       - name: order
         label: "Display Order"
         widget: number
-        hint: "Lower numbers show first."
+        hint: "숫자가 클수록 위에 표시됩니다. 새 글은 자동으로 채워지니, 순서를 바꿀 때만 수정하세요."
         required: false
       - name: caption
         label: Caption
