@@ -8,9 +8,14 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 Never run `git push` on this repo unless the user explicitly requests it in that turn. Commit freely, but do not push automatically after committing.
 
-**Why:** Netlify auto-deploys production on every push to `main`. Each deploy costs 15 credits, and the free plan caps out at 20 deploys/month — an unrequested push can burn a meaningful chunk of the monthly budget in one action.
+**Why:** Netlify auto-deploys production on every push to `main`, and every deploy draws build credits from the team's monthly allowance (Personal plan, 1,000 credits/month). Saving an entry in the CMS commits through DecapBridge and therefore also triggers a deploy, so the allowance is shared with the site's editors — an unrequested push spends part of their budget, not just yours.
 
 **How to apply:**
 - Commit-on-request is fine as before; push only when the user separately says so (e.g. "push해", "push it").
 - When push is requested and multiple commits are sitting unpushed locally, push them all together in one `git push` rather than pushing after each commit — collapse what could be several deploys into as few as possible.
 - If a change seems like it would benefit from being deployed, ask the user first rather than pushing proactively.
+- Check `git log origin/main..HEAD` and `git fetch` before pushing: the CMS writes to `main` directly, so the branch is often diverged and the local commits need rebasing onto the remote first.
+
+# Internal notes are not committed
+
+`docs/`, `Mijung_IM_Content_Package_v1.md` and `Mijung_IM_Website_Status_Summary.md` are gitignored on purpose — they hold third-party contact details and the full project work log. Keep writing to them locally, but never `git add -f` them back in.

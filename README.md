@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# mijungim.com
 
-## Getting Started
+Official website of the pianist **Mijung IM** — [mijungim.com](https://mijungim.com)
 
-First, run the development server:
+Bilingual (EN/KO) Next.js site with a Git-backed CMS, so the artist and her
+manager can publish news, concert listings, media and essays without a
+developer in the loop.
+
+## Stack
+
+| | |
+|---|---|
+| Framework | Next.js (App Router) |
+| i18n | next-intl — `/en` and `/ko`, locale-prefixed routes |
+| Styling | Tailwind CSS |
+| CMS | Decap CMS at `/admin`, authenticated through DecapBridge (PKCE) |
+| Hosting | Netlify, with Netlify DNS and Netlify Forms for the contact page |
+
+## Running locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000 — it redirects to `/en`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`npm run build` also rebuilds `public/admin/preview.css`, the stylesheet that
+makes the CMS preview pane resemble the live site.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Layout
 
-## Learn More
+```
+src/app/[locale]/     Pages — home, about, performances, media, dialogue,
+                      projects, contact
+src/app/sitemap.ts    /sitemap.xml, both locales with hreflang pairs
+src/app/robots.ts     /robots.txt
+src/content/{en,ko}/  UI strings and long-form copy per locale
+src/lib/siteMeta.ts   Canonical/hreflang/Open Graph metadata helper
+content/              CMS-managed entries (news, concerts, gallery, essays…)
+public/admin/         Decap CMS config and its preview/behaviour scripts
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Content under `content/` is written by the CMS and committed straight to
+`main`, so that branch moves on its own — fetch and rebase before pushing.

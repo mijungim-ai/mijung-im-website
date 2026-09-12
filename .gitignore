@@ -42,3 +42,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Internal working notes — kept locally, never committed.
+# These hold third-party contact details and the full project work log,
+# neither of which belongs in a public repository.
+/Mijung_IM_Content_Package_v1.md
+/Mijung_IM_Website_Status_Summary.md
+/docs/
+
+# Claude Code local, per-machine settings
+.claude/settings.local.json
